@@ -22,7 +22,7 @@
     <scm>
         <connection>scm:git:git@github.com:sebglon/evasion-en-ligne.git</connection>
         <url>https://github.com/sebglon/evasion-en-ligne</url>
-        <developerConnection>scm:git:git@github.com:sebglon/evasion-en-ligne.git</developerConnection>
+        <developerConnection>scm:git:ssh://sebglon@buildhive.cloudbees.com/sebglon/evasion-en-ligne</developerConnection>
     </scm>
     <developers>
         <developer>
@@ -34,7 +34,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+    <modules>
+        <module>web</module>
+    </modules>
     <build>
         <pluginManagement>
             <plugins>
