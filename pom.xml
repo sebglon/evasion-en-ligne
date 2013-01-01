@@ -57,7 +57,7 @@
                 <plugin>
                     <groupId>com.github.github</groupId>
                     <artifactId>downloads-maven-plugin</artifactId>
-                    <version></version>
+                    <version>0.6</version>
                     <configuration>
                         <description>Official ${project.name} build of the ${project.version} release</description>
                         <override>true</override>
