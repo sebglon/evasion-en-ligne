@@ -60,8 +60,7 @@
                     <configuration>
                         <description>Official ${project.name} build of the ${project.version} release</description>
                         <override>true</override>
-                        <includeAttached>true</includeAttached>
-                        <server>github</server>
+                       <includeAttached>true</includeAttached>
                     </configuration>
                     <executions>
                         <execution>
@@ -78,7 +77,6 @@
                     <version>0.7</version>
                     <configuration>
                         <message>Building site for ${project.version}</message>
-                        <server>github</server>
                     </configuration>
                     <executions>
                         <execution>
