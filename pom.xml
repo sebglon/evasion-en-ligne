@@ -45,7 +45,8 @@
         -->
         <gae.application.version>test</gae.application.version>
 
-        <datanucleus.version>1.1.5</datanucleus.version>        
+        <datanucleus.version>1.1.5</datanucleus.version> 
+        <github.global.server>github</github.global.server>             
     </properties>
     <modules>
         <module>web</module>
@@ -56,11 +57,11 @@
                 <plugin>
                     <groupId>com.github.github</groupId>
                     <artifactId>downloads-maven-plugin</artifactId>
-                    <version>0.6</version>
+                    <version></version>
                     <configuration>
                         <description>Official ${project.name} build of the ${project.version} release</description>
                         <override>true</override>
-                       <includeAttached>true</includeAttached>
+                        <includeAttached>true</includeAttached>
                     </configuration>
                     <executions>
                         <execution>
