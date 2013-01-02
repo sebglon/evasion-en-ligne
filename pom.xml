@@ -62,6 +62,7 @@
                         <description>Official ${project.name} build of the ${project.version} release</description>
                         <override>true</override>
                         <includeAttached>true</includeAttached>
+                        <repositoryOwner>${github.global.userName}</repositoryOwner>
                     </configuration>
                     <executions>
                         <execution>
