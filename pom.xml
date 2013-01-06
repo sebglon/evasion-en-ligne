@@ -45,12 +45,27 @@
         -->
         <gae.application.version>test</gae.application.version>
 
-        <datanucleus.version>1.1.5</datanucleus.version>            
+        <datanucleus.version>1.1.5</datanucleus.version>
+        <github.global.server>github</github.global.server>            
     </properties>
     <modules>
         <module>web</module>
     </modules>
     <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>downloads-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -291,14 +306,10 @@
                 <version>1.1</version>
             </dependency>
 
-            <!--
-            J2EE Servlet API. We need it to compile IndexServlet class. You can
-            probably remove it, if you don't explicitly use Servlets
-            -->
             <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-servlet_2.5_spec</artifactId>
-                <version>1.2</version>
+                <groupId>javax</groupId>
+                <artifactId>javaee-web-api</artifactId>
+                <version>6.0</version>
                 <scope>provided</scope>
             </dependency>
 
