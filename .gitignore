@@ -6,3 +6,5 @@
 *.ear
 /web/target/
 /target/
+/api/target/
+/service/target/

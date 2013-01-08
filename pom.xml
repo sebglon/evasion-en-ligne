@@ -49,9 +49,9 @@
     </properties>
     <modules>
         <module>web</module>
-    <module>api</module>
-    <module>service</module>
-  </modules>
+        <module>api</module>
+        <module>service</module>
+    </modules>
     <build>
         <pluginManagement>
             <plugins>
@@ -298,11 +298,12 @@
             probably remove it, if you don't explicitly use Servlets
             -->
             <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-servlet_2.5_spec</artifactId>
-                <version>1.2</version>
+                <groupId>javax</groupId>
+                <artifactId>javaee-web-api</artifactId>
+                <version>6.0</version>
                 <scope>provided</scope>
             </dependency>
+
 
             <!--
             Make use of JSP tags. Remove, if you don't use JSPs
