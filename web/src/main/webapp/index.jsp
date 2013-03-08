@@ -1,6 +1,5 @@
-
 <!doctype html>
-<html lang="en" ng-app="evasionClientApp">
+<html lang="en" ng-app="evasionVisiteurApp">
 <head>
   <meta charset="utf-8">
   <title>Evasion en ligne</title>
@@ -15,7 +14,7 @@
 
   <div ng-view></div>
 
-  <div>Angular seed app: v<span app-version></span></div>
+  <div>Evasion en ligne visiteur: v<span app-version></span></div>
 
   <!-- In production use: -->
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
