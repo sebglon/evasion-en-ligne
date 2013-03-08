@@ -1,17 +1,32 @@
-<%-- 
-    Document   : index
-    Created on : Dec 30, 2012, 11:00:14 AM
-    Author     : seglon
---%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
+<!doctype html>
+<html lang="en" ng-app="evasionClientApp">
+<head>
+  <meta charset="utf-8">
+  <title>Evasion en ligne</title>
+  <link rel="stylesheet" href="css/app.css"/>
+</head>
+<body>
+  <ul class="menu">
+    <li><a href="#/booktravel">booktravel</a></li>
+    <li><a href="#/roadMap">roadmap</a></li>
+    <li><a href="#/author">author</a></li>
+  </ul>
+
+  <div ng-view></div>
+
+  <div>Angular seed app: v<span app-version></span></div>
+
+  <!-- In production use: -->
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+  
+  <!-- instead of
+  <script src="lib/angular/angular.js"></script>
+  -->
+  <script src="js/app.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/directives.js"></script>
+</body>
 </html>
