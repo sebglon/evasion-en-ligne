@@ -4,7 +4,7 @@
     <application>x2-centering-keep-z</application>
     <version>1</version>
     
-    <sessions-enabled>true</sessions-enabled>
+    <sessions-enabled>false</sessions-enabled>
 
     <threadsafe>true</threadsafe>
 </appengine-web-app>
