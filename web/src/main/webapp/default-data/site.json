@@ -1,0 +1,8 @@
+{
+    "title": "Titre du site",
+    "Author":"Moi auteur",
+    "header": {
+        "img":"xxx.jpg",
+        "height":"80px"
+    } 
+}

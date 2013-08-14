@@ -1,0 +1,6 @@
+.cadreLogo{
+    background-image:url(../img/logo.png);
+    background-repeat: no-repeat;
+    background-position: top center;
+    min-height: 100px !important;
+}

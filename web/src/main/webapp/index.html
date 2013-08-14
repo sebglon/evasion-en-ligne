@@ -1,0 +1,77 @@
+<!doctype html>
+<html ng-app="evasionVisiteurApp" ng-controller="SiteCtrl">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/app.css"/>
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css"/>
+        <link rel="shortcut icon" href="img/favicon.ico" />
+        <title ng:bind-template="Evasion en ligne v{{app-version}}- {{site.title}}"></title>
+        <!-- A supprimer après mise en page du site -->
+        <style>
+            [class*="span"] {
+                background-color: lightgreen;
+                margin-bottom: 5px;
+                border-radius: 5px 5px 5px 5px;
+                /*line-height: 80px;*/
+                text-align: center;
+            }
+            [class="span10"] {
+                background-color: green;
+            }
+        </style> 
+    </head>
+    <body class="ng-cloak" ng>
+        <div class="container">
+
+            <!-- Transparent toolbar with fixed position - application status -->
+                        <div id="fixed-toolbar" ng-show="isViewLoading"><div class="app-status">L o a d i n g . . .</div></div> 
+
+            <!-- Gray Header with page title -->
+            <div class="row-fluid">
+                <div class="span12 cadreLogo">
+                    <h1></h1>
+                </div>
+            </div>
+            <!-- Nav bar -->
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <ul class="nav">
+                        <li class="active divider-vertical"><a href="#/">menu 1</a></li>
+                        <li class="divider-vertical"><a href="#/booktravel">menu 2</a></li>
+                    </ul>
+                    <form class="navbar-form  pull-right">
+                        <input type="text" class="search-query" placeholder="Search">
+                    </form>
+                </div>
+            </div>
+            
+            <div id="containerLeft" class="row-fluid">
+                <div class="span3"> Conteneur de droite
+                    <div class="row-fluid">
+                        bloc 1
+                    </div>
+                    <div class="row-fluid">
+                        bloc 2
+                    </div>
+                </div>
+                <div class="span9" ng-view></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">Evasion-en-ligne© version: {{app-version}}</span> tous droits réservés</div>
+            </div>
+
+        </div>
+
+        <!-- In production use: 
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+        -->
+        <!-- instead of -->
+        <script src="lib/angular/angular.js"></script>
+        <script src="lib/angular/angular-resource.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/services.js"></script>
+        <script src="js/controllers.js"></script>
+        <!--<script src="js/filters.js"></script>
+        <script src="js/directives.js"></script>-->
+    </body>
+</html>
