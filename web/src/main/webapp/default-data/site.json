@@ -1,8 +1,16 @@
 {
     "title": "Titre du site",
-    "Author":"Moi auteur",
+    "author":"Moi auteur",
+    "description":"",
+    "keywords":"",
+    "date-creation":"01/01/1900",
+    "date-revision":"01/01/1900",
     "header": {
         "img":"xxx.jpg",
         "height":"80px"
-    } 
+    },
+    "blocs": [
+	{"title":"bloc1","type":"linkList"},
+	{"title":"bloc2","type":"linkList"}
+    ] 
 }
