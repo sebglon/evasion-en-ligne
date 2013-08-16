@@ -9,6 +9,10 @@
         "img":"xxx.jpg",
         "height":"80px"
     },
+    "views": [
+        {"title":"Home","url":""},
+        {"title":"booktravel", "url":"booktravel"}
+    ],
     "blocs": [
 	{"title":"bloc1","type":"linkList"},
 	{"title":"bloc2","type":"linkList"}
