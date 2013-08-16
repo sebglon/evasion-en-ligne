@@ -27,10 +27,15 @@
         </style> 
     </head>
     <body class="ng-cloak" ng>
+        <!-- Transparent toolbar with fixed position - application status -->
+        <div ng-show="isViewLoading" class="modal">
+            <div class="modal-body">L o a d i n g . . .</div>                
+            </div>
+        </div> 
+        <!-- backgroud pour block modal -->
+        <div ng-show="isViewLoading" class="modal-backdrop fade in"></div>
         <div class="container">
 
-            <!-- Transparent toolbar with fixed position - application status -->
-                        <div id="fixed-toolbar" ng-show="isViewLoading"><div class="app-status">L o a d i n g . . .</div></div> 
 
             <!-- Gray Header with page title -->
             <div class="row-fluid">

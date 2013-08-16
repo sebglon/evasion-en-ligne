@@ -1,3 +1,7 @@
+
+.container {
+    width: 1200px;
+}
 .cadreLogo{
     background-image:url(../img/logo.png);
     background-repeat: no-repeat;
