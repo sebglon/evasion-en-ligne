@@ -4,8 +4,8 @@
 var evasionVisiteurApp = angular.module('evasionVisiteurApp', ['evasionVisiteurApp.services','evasionVisiteurApp.siteServices', 'evasionVisiteurApp.controllers']);
 
 evasionVisiteurApp.config(['$routeProvider', function($routeProvider) {
-        $routeProvider.when('/', {templateUrl: 'partials/basic-page.html'});
-        $routeProvider.when('/booktravel', {templateUrl: 'partials/booktravel.html'});
+       // $routeProvider.when('/', {templateUrl: 'partials/basic-page.html'});
+        //$routeProvider.when('/booktravel', {templateUrl: 'partials/booktravel.html'});
         $routeProvider.otherwise({redirectTo: '/'});
     }]);
 

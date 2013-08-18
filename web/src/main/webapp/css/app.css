@@ -8,3 +8,7 @@
     background-position: top center;
     min-height: 100px !important;
 }
+
+.active {
+    background-color: green;
+}

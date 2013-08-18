@@ -34,7 +34,7 @@
         </div> 
         <!-- backgroud pour block modal -->
         <div ng-show="isViewLoading" class="modal-backdrop fade in"></div>
-        
+
         
         <div class="container">
             <!-- Gray Header with page title -->
@@ -54,22 +54,23 @@
                     </form>
                 </div>
             </div>
-            
+
             <div id="containerLeft" class="row-fluid">
                 <div class="span3">
-                    <div class="row-fluid" ng-repeat="bloc in site.blocs">
-                        {{bloc.title}}
+                    <div class="row-fluid" ng-repeat="bloc in view.blocs">
                         <div ng-switch on="bloc.type">
                             <div ng-switch-when="linkList">linkList : {{bloc.title}}</div>
                             <div ng-switch-when="pub">pub : {{bloc.title}}</div>
+                            <div ng-switch-default><ng:include src="'block-'+bloc.type+'.html'"></ng:include></div>
                         </div>
                     </div>
                 </div>
-                <div class="span9" ng-view></div>
+                <div class="span9" ng-view> Default content</div
             </div>
             <div class="row-fluid">
                 <div class="span12">Evasion-en-ligne© version: {{app-version}}</span> tous droits réservés</div>
             </div>
+            
 
         </div>
 
@@ -78,11 +79,12 @@
         -->
         <!-- instead of -->
         <script src="lib/angular/angular.js"></script>
-        <script src="lib/angular/angular-resource.js"></script>
+        <script src="lib/restangular/restangular.js"></script>
+        <script src="lib/underscore/underscore-min.js"></script>
         <script src="js/app.js"></script>
         <script src="js/services.js"></script>
         <script src="js/controllers.js"></script>
         <!--<script src="js/filters.js"></script>
         <script src="js/directives.js"></script>-->
-    </body>
+</body>
 </html>
