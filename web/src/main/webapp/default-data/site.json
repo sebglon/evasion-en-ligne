@@ -16,7 +16,7 @@
                 {"title": "bloc2", "type": "linkList"}
             ]
         },
-        {"title": "booktravel", "url": "/booktravel",  "content":"ma view booktrtavel", "blocs": [
+        {"title": "booktravel", "url": "/booktravel",  "templateUrl":"/partials/booktravel.html", "blocs": [
                 {"title": "bloc1", "type": "linkList"},
                 {"title": "bloc2", "type": "linkList"},
                 {"title": "bloc plugin", "type": "bookList"}

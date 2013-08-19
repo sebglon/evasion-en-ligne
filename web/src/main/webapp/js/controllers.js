@@ -15,7 +15,7 @@ angular.module('evasionVisiteurApp.controllers', []).
                     if (view.content !== undefined) {
                         route.template = view.content;
                     } else if (view.template !== undefined) {
-                        route.template = view.content;template;
+                        route.template = view.content;
                     } else {
                         route.templateUrl = view.templateUrl;
                     }
