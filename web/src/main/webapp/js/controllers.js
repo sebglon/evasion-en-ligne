@@ -7,11 +7,19 @@ angular.module('evasionVisiteurApp.controllers', []).
             console.log(response);
             function createRoute(views) {
                 angular.forEach(views, function(view) {
-                    $route.routes['/' + view.url] = {templateUrl: 'partials/basic-page.html', controller: function($rootScope) {
+                    var route = { controller: function($rootScope) {
                             console.log('test ' + angular.toJson(view.blocs));
                             $rootScope.view = view;
                         }
                     };
+                    if (view.content !== undefined) {
+                        route.template = view.content;
+                    } else if (view.template !== undefined) {
+                        route.template = view.content;template;
+                    } else {
+                        route.templateUrl = view.templateUrl;
+                    }
+                    $route.routes[view.url] = route;
                     if (view.views !== undefined) {
                         createRoute(view.views);
                     }
@@ -19,6 +27,7 @@ angular.module('evasionVisiteurApp.controllers', []).
             }
             ;
             createRoute(response.views);
+            $route.reload();
         });
         $scope.$location = $location;
     }]);

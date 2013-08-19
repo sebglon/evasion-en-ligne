@@ -10,22 +10,21 @@
         "height": "80px"
     },
     "views": [
-        {"title": "Home", "url": "", "content": "mon contenu de page d'accueil",
+        {"title": "Home", "url": "/", "content": "mon contenu de page d'accueil",
             "blocs": [
                 {"title": "bloc1", "type": "linkList"},
-                {"title": "bloc2", "type": "linkList"},
-                {"title": "bloc plugin", "type": "bookList"}
+                {"title": "bloc2", "type": "linkList"}
             ]
         },
-        {"title": "booktravel", "url": "booktravel", "blocs": [
+        {"title": "booktravel", "url": "/booktravel",  "content":"ma view booktrtavel", "blocs": [
                 {"title": "bloc1", "type": "linkList"},
                 {"title": "bloc2", "type": "linkList"},
                 {"title": "bloc plugin", "type": "bookList"}
             ],
             "views": [
-                {"title": "sub view 1", "url": "sub1",
+                {"title": "sub view 1", "url": "/booktravel/sub1",
                     "views": [
-                        {"title": "sub view l2", "url": "sub1/subl2"}
+                        {"title": "sub view l2", "url": "booktravel/sub1/subl2"}
                     ]
                 }
             ]
