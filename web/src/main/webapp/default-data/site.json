@@ -24,7 +24,7 @@
             "views": [
                 {"title": "sub view 1", "url": "/booktravel/sub1",
                     "views": [
-                        {"title": "sub view l2", "url": "booktravel/sub1/subl2"}
+                        {"title": "sub view l2", "url": "/booktravel/sub1/subl2"}
                     ]
                 }
             ]
