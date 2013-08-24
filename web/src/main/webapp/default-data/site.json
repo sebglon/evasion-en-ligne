@@ -22,9 +22,9 @@
                 {"title": "bloc plugin", "type": "bookList"}
             ],
             "views": [
-                {"title": "sub view 1", "url": "/booktravel/sub1",
+                {"title": "sub view 1", "url": "/booktravel/sub1","content":"content sub view 1",
                     "views": [
-                        {"title": "sub view l2", "url": "/booktravel/sub1/subl2"}
+                        {"title": "sub view l2", "url": "/booktravel/sub1/subl2", "content":"sub view 1-2"}
                     ]
                 }
             ]
