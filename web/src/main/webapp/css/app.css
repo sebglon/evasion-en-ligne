@@ -12,3 +12,13 @@
 .active {
     background-color: green;
 }
+.options {
+    position: absolute;
+    left: -17px;
+    top:0px;
+    z-index: 9999;
+    width: 17px;
+}
+.content {
+    position: relative;
+}

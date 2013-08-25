@@ -71,7 +71,7 @@
                     </div>
                 </div>
             </div>
-            <div class="span9" ng-view> Default content</div
+            <div class="span9 content" ng-view> Default content</div
         </div>
         <div class="row-fluid">
             <div class="span12">Evasion-en-ligne© version: {{app-version}}</span> tous droits réservés</div>
@@ -80,6 +80,15 @@
 
     </div>
 
+    
+    <script id='staticContent_TPL.html' type='text/ng-template'>
+        <div class="options">
+        <a class="icon icon-edit" href=""></a>
+        <a class="icon icon-move" href=""></a>
+        <a class="icon-black icon-trash" href=""></a>
+        </div>
+        {{view.content}}
+    </script>
     <!-- In production use: 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
     -->

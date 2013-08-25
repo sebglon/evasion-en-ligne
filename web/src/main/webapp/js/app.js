@@ -23,7 +23,7 @@ angular.injector(['ng', 'restangular']).invoke(function(Restangular, $rootScope)
                         }
                     };
                     if (view.content !== undefined) {
-                        route.template = view.content;
+                        route.template = "<ng:include src=\"'staticContent_TPL.html'\">";
                     } else if (view.template !== undefined) {
                         route.template = view.content;
                     } else {
