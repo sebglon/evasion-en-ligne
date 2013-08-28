@@ -1,7 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on filters, and services
-var evasionVisiteurApp = angular.module('evasionVisiteurApp', ['restangular']);
+var evasionVisiteurApp = angular.module('evasionVisiteurApp', ['restangular','evasionVisiteurApp.controllers']);
 
 evasionVisiteurApp.config(['$routeProvider', 'RestangularProvider', function($routeProvider, RestangularProvider) {
         // $routeProvider.when('/', {templateUrl: 'partials/basic-page.html'});
