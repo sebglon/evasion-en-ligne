@@ -18,7 +18,12 @@
     top:0px;
     z-index: 9999;
     width: 17px;
+    display: none;
 }
 .content {
     position: relative;
+}
+
+.content:hover .options {
+    display: block;
 }
