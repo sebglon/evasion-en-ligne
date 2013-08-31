@@ -11,6 +11,7 @@
     },
     "views": [
         {"title": "Home", "url": "/", "content": "mon contenu de page d'accueil",
+            "description":"test",
             "blocs": [
                 {"title": "bloc1", "type": "linkList"},
                 {"title": "bloc2", "type": "linkList"}
