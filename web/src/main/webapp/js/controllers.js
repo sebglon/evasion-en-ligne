@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('evasionVisiteurApp.controllers', []).
+angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap']).
         controller('EditStaticContent', ['$scope', function($scope) {
         $scope.tinymceOptions = {
             handle_event_callback: function(e) {
@@ -28,5 +28,21 @@ angular.module('evasionVisiteurApp.controllers', []).
         };
 
         $scope.reset();
-    }]);
+    }])
+
+.controller('LoginCtrl',['$scope', '$dialog', function($scope, $dialog) {
+  $scope.openLoginForm = function () {
+    $scope.showLoginBox = true;
+  };
+
+  $scope.closeLoginForm = function () {
+    $scope.showLoginBox = false;
+  };
+
+  $scope.optsLoginForm = {
+    backdropFade: true,
+    dialogFade:true
+  };
+
+}]);
 

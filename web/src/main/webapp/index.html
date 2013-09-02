@@ -36,12 +36,32 @@
     <!-- backgroud pour block modal -->
     <div ng-show="isViewLoading" class="modal-backdrop fade in"></div>
 
-
     <div class="container">
         <!-- Gray Header with page title -->
         <div class="row-fluid">
             <div class="span12 cadreLogo">
                 <h1></h1>
+                <div ng-controller="LoginCtrl">
+                    <a type="button" class="btn pull-right" ng-click="openLoginForm()">Me connecter</a>
+                    <!--  fenêtre modal pour le login-->
+                    <div modal="showLoginBox" close="closeFormLogin()" options="optsLoginForm">
+                        <div class="modal-header">
+                            <h3>Connection</h3>
+                        </div>
+                        <div class="modal-body">
+                            <form style="margin: 0px" accept-charset="UTF-8">
+                                <fieldset class='textbox' style="padding:10px">
+                                    <input style="margin-top: 8px" type="text" placeholder="Identifiant" />
+                                    <input style="margin-top: 8px" type="password" placeholder="Passsword" />
+                                    <input class="btn-primary" name="commit" type="submit" value="Log In" />
+                                </fieldset>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-warning cancel" ng-click="closeLoginForm()">Cancel</button>
+                        </div
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Nav bar -->
@@ -141,6 +161,7 @@
     <script src="js/lib/restangular/restangular.js"></script>
     <script src="js/lib/underscore/underscore-min.js"></script>
     <script src="js/lib/tinymce/tinymce.min.js"></script>
+    <script src="js/lib/ui-bootstrap/ui-bootstrap-0.5.0.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>
     <script src="js/controllers.js"></script>
