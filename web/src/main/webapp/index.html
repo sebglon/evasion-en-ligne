@@ -50,11 +50,18 @@
                         </div>
                         <div class="modal-body">
                             <form style="margin: 0px" accept-charset="UTF-8">
-                                <fieldset class='textbox' style="padding:10px">
-                                    <input style="margin-top: 8px" type="text" placeholder="Identifiant" />
-                                    <input style="margin-top: 8px" type="password" placeholder="Passsword" />
-                                    <input class="btn-primary" name="commit" type="submit" value="Log In" />
-                                </fieldset>
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <fieldset class='textbox' style="padding:10px">
+                                            <input style="margin-top: 8px" type="text" placeholder="Identifiant" />
+                                            <input style="margin-top: 8px" type="password" placeholder="Passsword" />
+                                            <input class="btn-primary" name="commit" type="submit" value="Log In" />
+                                        </fieldset>
+                                    </div>
+                                    <div class="span6">
+                                        <button gsignin></button>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -165,7 +172,6 @@
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>
     <script src="js/controllers.js"></script>
-    <!--<script src="js/filters.js"></script>
-    <script src="js/directives.js"></script>-->
+    <script src="js/googleapi.js"></script>
 </body>
 </html>

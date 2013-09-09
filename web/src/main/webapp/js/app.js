@@ -1,13 +1,26 @@
 'use strict';
 
 // Declare app level module which depends on filters, and services
-var evasionVisiteurApp = angular.module('evasionVisiteurApp', ['restangular', 'evasionVisiteurApp.controllers']);
+var evasionVisiteurApp = angular.module('evasionVisiteurApp', ['restangular', 'evasionVisiteurApp.controllers', 'evasionVisiteurApp.googleapi']);
 
-evasionVisiteurApp.config(['$routeProvider', 'RestangularProvider', function($routeProvider, RestangularProvider) {
+evasionVisiteurApp.config(['$routeProvider', 'RestangularProvider', 'GoogleConfigProvider', function($routeProvider, RestangularProvider, GoogleConfigProvider) {
         // $routeProvider.when('/', {templateUrl: 'partials/basic-page.html'});
         //$routeProvider.when('/booktravel', {templateUrl: 'partials/booktravel.html'});
         $routeProvider.otherwise({redirectTo: '/'});
         RestangularProvider.setBaseUrl("default-data");
+        GoogleConfigProvider.setApiKey('AIzaSyCwFjSAZbiEA9YDl0mm2S8oR9uWN3SKeUs');
+        GoogleConfigProvider.setClientId('312493519025');
+        GoogleConfigProvider.setScopes('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile');
+        GoogleConfigProvider.setHandleAuthResult(
+                function handleAuthResult(authResult) {
+                    var authorizeButton = document.getElementById('authorize-button');
+                    if (authResult && !authResult.error) {
+                        console.log('authentification reussi');
+                    } else {
+                        console.log('échec d\'authentification');
+                    }
+                }
+        );
     }]);
 
 angular.injector(['ng', 'restangular']).invoke(function(Restangular, $rootScope) {
@@ -69,9 +82,7 @@ evasionVisiteurApp
         "insertdatetime media table contextmenu paste"
     ],
     toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-
-
-            browser_spellcheck: true, object_resizing: true, menubar: false, content_css: "/css/app.css, /css/lib/bootstrap/bootstrap.css"
+    browser_spellcheck: true, object_resizing: true, menubar: false, content_css: "/css/app.css, /css/lib/bootstrap/bootstrap.css"
 })
         .directive('uiTinymce', ['uiTinymceConfig', function(uiTinymceConfig) {
         uiTinymceConfig = uiTinymceConfig || {};
