@@ -15,7 +15,7 @@ evasionVisiteurApp.config(['$routeProvider', 'RestangularProvider', 'GoogleConfi
                 function handleAuthResult(authResult) {
                     var authorizeButton = document.getElementById('authorize-button');
                     if (authResult && !authResult.error) {
-                        console.log('authentification reussi');
+                        console.log('authentification reussi:'+ authResult);
                     } else {
                         console.log('échec d\'authentification');
                     }
