@@ -17,15 +17,15 @@
                 {"title": "bloc2", "type": "linkList"}
             ]
         },
-        {"title": "booktravel", "url": "/booktravel",  "templateUrl":"/partials/booktravel.html", "blocs": [
+        {"title": "booktravel", "url": "/booktravel.html",  "templateUrl":"/partials/booktravel.html", "blocs": [
                 {"title": "bloc1", "type": "linkList"},
                 {"title": "bloc2", "type": "linkList"},
                 {"title": "bloc plugin", "type": "bookList"}
             ],
             "views": [
-                {"title": "sub view 1", "url": "/booktravel/sub1","content":"content sub view 1",
+                {"title": "sub view 1", "url": "/booktravel/sub1.html","content":"content sub view 1",
                     "views": [
-                        {"title": "sub view l2", "url": "/booktravel/sub1/subl2", "content":"sub view 1-2"}
+                        {"title": "sub view l2", "url": "/booktravel/sub1/subl2.html", "content":"sub view 1-2"}
                     ]
                 }
             ]

@@ -13,12 +13,21 @@
         <servlet-name>ServletAdaptor</servlet-name>
         <url-pattern>/ws/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>StaticServlet</servlet-name>
+        <jsp-file>/index.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>StaticServlet</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

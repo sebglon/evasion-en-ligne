@@ -2,8 +2,8 @@
 <html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="evasionVisiteurApp">
     <head>
         <meta http-EQUIV="content-type" CONTENT="text/html; charset=utf-8">
-        <link rel="stylesheet" href="css/lib/bootstrap/bootstrap.css"/>
-        <link rel="stylesheet" href="css/app.css"/>
+        <link rel="stylesheet" href="/css/lib/bootstrap/bootstrap.css"/>
+        <link rel="stylesheet" href="/css/app.css"/>
         <link rel="shortcut icon" href="img/favicon.ico" />
         <title ng:bind-template="Evasion en ligne v{{app-version}}- {{site.title}}"></title>
         <meta name="description" content="{{site.description}}">
@@ -13,6 +13,9 @@
         <meta name="date-creation-yyyymmdd" content="{{site.date-creation}}">
         <meta name="Date-Revision-yyyymmdd" content="{{site.date-revision}}">
         <meta  content="--allow-file-access-from-files" />
+        <script>
+            document.write('<base href="' + document.location + '" />');
+        </script>
         <!-- A supprimer après mise en page du site -->
         <style>
             [class*="span"] {
@@ -27,7 +30,7 @@
             }
         </style> 
     </head>
-    <body class="ng-cloak" ng>
+    <body class="ng-cloak" ng-controller="AppCtrl" ng-init="init()">
         <!-- Transparent toolbar with fixed position - application status -->
         <div ng-show="isViewLoading" class="modal">
             <div class="modal-body">L o a d i n g . . .</div>                
@@ -46,7 +49,7 @@
                     <!--  fenêtre modal pour le login-->
                     <div modal="showLoginBox" close="closeFormLogin()" options="optsLoginForm">
                         <div class="modal-header">
-                            <h3>Connection</h3>
+                            <h3>Connection {{accessToken}}</h3>
                         </div>
                         <div class="modal-body">
                             <form style="margin: 0px" accept-charset="UTF-8">
@@ -75,7 +78,7 @@
         <div class="navbar">
             <div class="navbar-inner">
                 <ul class="nav" ng-repeat="view in site.views">
-                    <li ng-class="{active : $location.path()==view.url}" class="divider-vertical"><a href="#{{view.url}}">{{view.title}}</a></li>
+                    <li ng-class="{active : $location.path()==view.url}" class="divider-vertical"><a href="{{view.url}}">{{view.title}}</a></li>
                 </ul>
                 <form class="navbar-form  pull-right">
                     <input type="text" class="search-query" placeholder="Search">
@@ -87,7 +90,7 @@
             <div class="span3">
                 <div class="row-fluid">
                     <ul>
-                        <li ng-repeat="subview in view.views"><a ng-href="#{{subview.url}}">{{subview.title}}</a></li>
+                        <li ng-repeat="subview in view.views"><a ng-href="{{subview.url}}">{{subview.title}}</a></li>
                     </ul>
                 </div>
 
@@ -111,8 +114,6 @@
                     <script type="text/javascript"
                             src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                     </script>
-                    <!--<ng:include src="'block-google-pub.html'"></ng:include>-->
-
                 </div>
 
             </div>
@@ -128,12 +129,14 @@
 
     <script id='staticContent_TPL.html' type='text/ng-template'>
         <div ng-controller="EditStaticContent">
+        <div ng-switch on="token && !token.error">
+        <div ng-switch-when="true">
         <div class="options">
         <a class="icon icon-edit" href="" ng-click="edit()"></a>
         <a class="icon icon-move" href=""></a>
         <a class="icon-black icon-trash" href=""></a>
-        </div>
-        <div ng-switch on="onEditContent">
+        </div></div></div>
+        <div ng-switch on="token && !token.error && onEditContent ">
         <div ng-switch-when="true">
         <form name="formStaticContent" novalidate class="form-horizontal">
         <div class="control-group">
@@ -164,14 +167,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
     -->
     <!-- instead of -->
-    <script src="js/lib/angular/angular.js"></script>
-    <script src="js/lib/restangular/restangular.js"></script>
-    <script src="js/lib/underscore/underscore-min.js"></script>
-    <script src="js/lib/tinymce/tinymce.min.js"></script>
-    <script src="js/lib/ui-bootstrap/ui-bootstrap-0.5.0.min.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/services.js"></script>
-    <script src="js/controllers.js"></script>
-    <script src="js/googleapi.js"></script>
+    <script src="/js/lib/angular/angular.js"></script>
+    <script src="/js/lib/restangular/restangular.js"></script>
+    <script src="/js/lib/underscore/underscore-min.js"></script>
+    <script src="/js/lib/tinymce/tinymce.min.js"></script>
+    <script src="/js/lib/ui-bootstrap/ui-bootstrap-0.5.0.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/services.js"></script>
+    <script src="/js/controllers.js"></script>
+    <script src="/js/googleapi.js"></script>
 </body>
 </html>

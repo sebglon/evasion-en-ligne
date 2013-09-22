@@ -1,30 +1,20 @@
 'use strict';
 
 // Declare app level module which depends on filters, and services
-var evasionVisiteurApp = angular.module('evasionVisiteurApp', ['restangular', 'evasionVisiteurApp.controllers', 'evasionVisiteurApp.googleapi']);
+var evasionVisiteurApp = angular.module('evasionVisiteurApp', ['restangular', 'evasionVisiteurApp.controllers']);
 
-evasionVisiteurApp.config(['$routeProvider', 'RestangularProvider', 'GoogleConfigProvider', function($routeProvider, RestangularProvider, GoogleConfigProvider) {
+evasionVisiteurApp.config(['$routeProvider', 'RestangularProvider','$locationProvider',  function($routeProvider, RestangularProvider, $locationProvider) {
+        $locationProvider.html5Mode(true);
+        $locationProvider.hashPrefix = '!';
         // $routeProvider.when('/', {templateUrl: 'partials/basic-page.html'});
-        //$routeProvider.when('/booktravel', {templateUrl: 'partials/booktravel.html'});
-        $routeProvider.otherwise({redirectTo: '/'});
-        RestangularProvider.setBaseUrl("default-data");
-        GoogleConfigProvider.setApiKey('AIzaSyCwFjSAZbiEA9YDl0mm2S8oR9uWN3SKeUs');
-        GoogleConfigProvider.setClientId('312493519025');
-        GoogleConfigProvider.setScopes('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile');
-        GoogleConfigProvider.setHandleAuthResult(
-                function handleAuthResult(authResult) {
-                    var authorizeButton = document.getElementById('authorize-button');
-                    if (authResult && !authResult.error) {
-                        console.log('authentification reussi:'+ authResult);
-                    } else {
-                        console.log('échec d\'authentification');
-                    }
-                }
-        );
+        $routeProvider.when('/oauth2callback.html', {templateUrl: 'partials/basic-page.html', controller: 'CallbackCtrl'});
+        $routeProvider.otherwise({redirectTo: ''});
+        RestangularProvider.setBaseUrl("/default-data");
     }]);
 
 angular.injector(['ng', 'restangular']).invoke(function(Restangular, $rootScope) {
-    evasionVisiteurApp.run(function($rootScope, Restangular, $route, $location) {
+    evasionVisiteurApp.run(function($rootScope, Restangular, $route, $location, Token) {
+        console.log('run app');
         Restangular.one('site.json').get().then(function(response) {
             $rootScope.site = response;
             console.log(response);
