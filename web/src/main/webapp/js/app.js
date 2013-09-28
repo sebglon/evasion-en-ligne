@@ -5,7 +5,7 @@ var evasionVisiteurApp = angular.module('evasionVisiteurApp', ['restangular', 'e
 
 evasionVisiteurApp.config(['$routeProvider', 'RestangularProvider','$locationProvider',  function($routeProvider, RestangularProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
-        $locationProvider.hashPrefix = '!';
+        $locationProvider.hashPrefix = '';
         // $routeProvider.when('/', {templateUrl: 'partials/basic-page.html'});
         $routeProvider.when('/oauth2callback.html', {templateUrl: 'partials/basic-page.html', controller: 'CallbackCtrl'});
         $routeProvider.otherwise({redirectTo: ''});
@@ -13,7 +13,7 @@ evasionVisiteurApp.config(['$routeProvider', 'RestangularProvider','$locationPro
     }]);
 
 angular.injector(['ng', 'restangular']).invoke(function(Restangular, $rootScope) {
-    evasionVisiteurApp.run(function($rootScope, Restangular, $route, $location, Token) {
+    evasionVisiteurApp.run(function($rootScope, Restangular, $route, $location) {
         console.log('run app');
         Restangular.one('site.json').get().then(function(response) {
             $rootScope.site = response;
