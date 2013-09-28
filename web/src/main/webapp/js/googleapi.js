@@ -3,7 +3,7 @@
 /*
  * Module d'authentification à Google API.
  */
-var googleapi = angular.module('evasionVisiteurApp.googleapi', []);
+var googleapi = angular.module('evasionVisiteurApp.googleapi', ['restangular']);
 googleapi.provider('Token', function() {
 
     var objectToQueryString = function(obj) {
@@ -179,27 +179,28 @@ googleapi.constant('TokenVerifier', function(config, accessToken) {
             var verificationEndpoint = 'https://www.googleapis.com/oauth2/v1/tokeninfo';
 
             $rootScope.$apply(function() {
+                delete $http.defaults.headers.common['X-Requested-With'];
                 $http({method: 'GET', url: verificationEndpoint, params: {access_token: accessToken}}).
                         success(function(data) {
                     if (data.audience == config.clientId) {
-                        deferred.resolve(data);
-                    } else {
-                        deferred.reject({name: 'invalid_audience'});
-                    }
-                    
+                                deferred.resolve(data);
+                            } else {
+                                deferred.reject({name: 'invalid_audience'});
+                            }
+
                 }).
                         error(function(data, status, headers, config) {
-                    deferred.reject({
-                        name: 'error_response',
-                        data: data,
-                        status: status,
-                        headers: headers,
-                        config: config
-                    });
-                });
+                            deferred.reject({
+                                name: 'error_response',
+                                data: data,
+                                status: status,
+                                headers: headers,
+                                config: config
+                            });
+                        });
             });
 
-            return deferred.promise;
+                return deferred.promise;
         }]);
 });
 googleapi.config(function(TokenProvider, TokenVerifier) {
@@ -210,22 +211,18 @@ googleapi.config(function(TokenProvider, TokenVerifier) {
     });
 });
 
-googleapi.directive('gsignin', ['Token', '$rootScope', function(Token, $rootScope) {
+googleapi.directive('gsignin', ['$rootScope', 'Token', function($rootScope, Token) {
         return {
             restrict: 'A',
             scope: true,
             template: '<a>Google SignIn</a>',
             replace: true,
-            controller: function($scope, Provider) {
-                $scope.config = Provider.callAuth($rootScope, false);
+            controller: function($scope, Token) {
+               
             },
             link: function(scope, element, attrs) {
                 element.bind("click", function() {
-                    gapi.auth.authorize(scope.config, function(authResult) {
-                        $rootScope.token = authResult;
-                        $rootScope.$emit('handleAuthResult'.concat((authResult && authResult.error) ? 'Error' : 'Success', authResult), authResult);
-
-                    });
+                    $rootScope.authenticate();
                     return true;
                 });
             }
@@ -234,11 +231,11 @@ googleapi.directive('gsignin', ['Token', '$rootScope', function(Token, $rootScop
 ]);
 
 
- /**
-   * A controller for the redirect endpoint that inspects the URL redirected to by the authorization server and sends
-   * it back to other windows using.
-   */
-  googleapi.controller('CallbackCtrl', function($scope, $location) {
+/**
+ * A controller for the redirect endpoint that inspects the URL redirected to by the authorization server and sends
+ * it back to other windows using.
+ */
+googleapi.controller('CallbackCtrl', function($scope, $location) {
 
     /**
      * Parses an escaped url query string into key-value pairs.
@@ -248,18 +245,17 @@ googleapi.directive('gsignin', ['Token', '$rootScope', function(Token, $rootScop
      * @returns Object.<(string|boolean)>
      */
     function parseKeyValue(/**string*/keyValue) {
-      var obj = {}, key_value, key;
-      angular.forEach((keyValue || "").split('&'), function(keyValue){
-        if (keyValue) {
-          key_value = keyValue.split('=');
-          key = decodeURIComponent(key_value[0]);
-          obj[key] = angular.isDefined(key_value[1]) ? decodeURIComponent(key_value[1]) : true;
-        }
-      });
-      return obj;
+        var obj = {}, key_value, key;
+        angular.forEach((keyValue || "").split('&'), function(keyValue) {
+            if (keyValue) {
+                key_value = keyValue.split('=');
+                key = decodeURIComponent(key_value[0]);
+                obj[key] = angular.isDefined(key_value[1]) ? decodeURIComponent(key_value[1]) : true;
+            }
+        });
+        return obj;
     }
-
-    var queryString = $location.path().substring(1);  // preceding slash omitted
+    var queryString = $location.hash();  // preceding slash omitted
     var params = parseKeyValue(queryString);
 
     // TODO: The target origin should be set to an explicit origin.  Otherwise, a malicious site that can receive
@@ -268,4 +264,4 @@ googleapi.directive('gsignin', ['Token', '$rootScope', function(Token, $rootScop
 
     window.opener.postMessage(params, "*");
     window.close();
-  });
+});
