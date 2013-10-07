@@ -38,14 +38,13 @@
         version pointed to by ${gae.home} property (Typically, one used by
         your Eclipse plug-in)
         -->
-        <gae.version>1.7.3</gae.version>
-
+        <gae-runtime.version>1.8.4</gae-runtime.version>
+        <gae.version>1.8.4</gae.version>
         <!--
         Upload to http://test.latest.<applicationName>.appspot.com by default
         -->
         <gae.application.version>test</gae.application.version>
 
-        <datanucleus.version>1.1.5</datanucleus.version>
         <github.global.server>github</github.global.server>            
     </properties>
     <modules>
@@ -180,61 +179,6 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!--
-                This plug-in "enhances" your domain model objects (i.e. makes them
-                persistent for datanucleus)
-                -->
-                <plugin>
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>maven-datanucleus-plugin</artifactId>
-                    <version>1.1.4</version>
-                    <configuration>
-                        <!--
-                        Make sure this path contains your persistent classes!
-                        -->
-                        <mappingIncludes>**/model/*.class</mappingIncludes>
-                        <verbose>true</verbose>
-                        <enhancerName>ASM</enhancerName>
-                        <api>JDO</api>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <phase>compile</phase>
-                            <goals>
-                                <goal>enhance</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.datanucleus</groupId>
-                            <artifactId>datanucleus-core</artifactId>
-                            <version>${datanucleus.version}</version>
-                            <exclusions>
-                                <exclusion>
-                                    <groupId>javax.transaction</groupId>
-                                    <artifactId>transaction-api</artifactId>
-                                </exclusion>
-                            </exclusions>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.datanucleus</groupId>
-                            <artifactId>datanucleus-rdbms</artifactId>
-                            <version>${datanucleus.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.datanucleus</groupId>
-                            <artifactId>datanucleus-enhancer</artifactId>
-                            <version>1.1.4</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>javax.jdo</groupId>
-                            <artifactId>jdo2-api</artifactId>
-                            <version>2.3-ec</version>
-                            <scope>runtime</scope>
-                        </dependency>
-                    </dependencies>
-                </plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -260,10 +204,20 @@
                 <plugin>
                     <groupId>net.kindleit</groupId>
                     <artifactId>maven-gae-plugin</artifactId>
-                    <version>0.9.5</version>
+                    <version>0.9.6</version>
                     <configuration>
+                        <unpackVersion>${gae.version}</unpackVersion>
+                        
                         <serverId>appengine.google.com</serverId>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>net.kindleit</groupId>
+                            <artifactId>gae-runtime</artifactId>
+                            <version>${gae-runtime.version}</version>
+                            <type>pom</type>
+                        </dependency>
+                    </dependencies>                    
                 </plugin>
 
                 <!--
@@ -275,6 +229,45 @@
                     <configuration>
                         <goals>gae:deploy</goals>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.google.appengine</groupId>
+                    <artifactId>appengine-maven-plugin</artifactId>
+                    <version>${gae.version}</version>
+                    <configuration>
+                        <enhancerApi>JDO</enhancerApi>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.datanucleus</groupId>
+                    <artifactId>maven-datanucleus-plugin</artifactId>
+                    <version>3.1.3</version>
+                    <configuration>
+                        <!--<log4jConfiguration>${basedir}webapp/WEB-INF/classes/log4j.properties</log4jConfiguration>-->
+                        <verbose>true</verbose>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>process-classes</phase>
+                            <goals>
+                                <goal>enhance</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>javax.jdo</groupId>
+                            <artifactId>jdo-api</artifactId>
+                            <version>3.0.1</version>
+                        </dependency>
+                    <dependency>
+                        <!-- Force the enhancer to use the same version of core
+                         that's already on the classpath. -->
+                        <groupId>org.datanucleus</groupId>
+                        <artifactId>datanucleus-core</artifactId>
+                        <version>3.1.3</version>
+                    </dependency>
+                </dependencies>                        
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -291,17 +284,9 @@
             <dependency>
                 <groupId>net.kindleit</groupId>
                 <artifactId>gae-runtime</artifactId>
-                <version>${gae.version}</version>
+                <version>${gae-runtime.version}</version>
                 <type>pom</type>
             </dependency>
-
-            <dependency>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-core</artifactId>
-                <version>${datanucleus.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-
             <dependency>
                 <groupId>javax.transaction</groupId>
                 <artifactId>jta</artifactId>
@@ -339,17 +324,17 @@
                 <artifactId>logback-classic</artifactId>
                 <version>0.9.24</version>
             </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>1.16</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-servlet</artifactId>
-            <version>1.16</version>
-        </dependency>
-        <!--
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-server</artifactId>
+                <version>1.16</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-servlet</artifactId>
+                <version>1.16</version>
+            </dependency>
+            <!--
             GAE libraries for local testing as described here:
             http://code.google.com/appengine/docs/java/howto/unittesting.html
             -->
@@ -359,14 +344,41 @@
                 <version>${gae.version}</version>
                 <scope>test</scope>
             </dependency>
-
+   
+            
+            <!-- Compile/runtime dependencies -->
             <dependency>
                 <groupId>com.google.appengine</groupId>
-                <artifactId>appengine-api-stubs</artifactId>
+                <artifactId>appengine-api-1.0-sdk</artifactId>
                 <version>${gae.version}</version>
-                <scope>test</scope>
             </dependency>
-
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.5</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>jstl</groupId>
+                <artifactId>jstl</artifactId>
+                <version>1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.appengine.orm</groupId>
+                <artifactId>datanucleus-appengine</artifactId>
+                <version>2.1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.jdo</groupId>
+                <artifactId>jdo-api</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+           <dependency>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-api-jdo</artifactId>
+                <version>3.1.3</version>
+           </dependency>
+            <!-- Test Dependencies -->
             <dependency>
                 <groupId>com.google.appengine</groupId>
                 <artifactId>appengine-testing</artifactId>
@@ -374,16 +386,11 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>javax.jdo</groupId>
-                <artifactId>jdo2-api</artifactId>
-                <version>2.3-eb</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.transaction</groupId>
-                        <artifactId>transaction-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>            
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-api-stubs</artifactId>
+                <version>${gae.version}</version>
+                <scope>test</scope>
+            </dependency>      
         </dependencies>
     </dependencyManagement>
     <profiles>
