@@ -24,7 +24,7 @@
             <groupId>javax.jdo</groupId>
             <artifactId>jdo-api</artifactId>
         </dependency>-->
-             <dependency>
+        <dependency>
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-api-jdo</artifactId>
         </dependency>
@@ -58,10 +58,10 @@
                 <groupId>com.google.appengine</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
             </plugin>
-       <!--     <plugin>
+            <plugin>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>maven-datanucleus-plugin</artifactId>
-            </plugin>    -->        
+            </plugin>        
         </plugins>
     </build>
 </project>
