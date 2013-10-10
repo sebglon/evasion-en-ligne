@@ -243,7 +243,7 @@
                     <artifactId>maven-datanucleus-plugin</artifactId>
                     <version>3.1.3</version>
                     <configuration>
-                        <!--<log4jConfiguration>${basedir}webapp/WEB-INF/classes/log4j.properties</log4jConfiguration>-->
+                        <log4jConfiguration>${basedir}webapp/WEB-INF/classes/log4j.properties</log4jConfiguration>
                         <verbose>true</verbose>
                     </configuration>
                     <executions>
@@ -260,14 +260,14 @@
                             <artifactId>jdo-api</artifactId>
                             <version>3.0.1</version>
                         </dependency>
-                    <dependency>
-                        <!-- Force the enhancer to use the same version of core
-                         that's already on the classpath. -->
-                        <groupId>org.datanucleus</groupId>
-                        <artifactId>datanucleus-core</artifactId>
-                        <version>3.1.3</version>
-                    </dependency>
-                </dependencies>                        
+                        <dependency>
+                            <!-- Force the enhancer to use the same version of core
+                            that's already on the classpath. -->
+                            <groupId>org.datanucleus</groupId>
+                            <artifactId>datanucleus-core</artifactId>
+                            <version>3.1.3</version>
+                        </dependency>
+                    </dependencies>                        
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -292,15 +292,6 @@
                 <artifactId>jta</artifactId>
                 <version>1.1</version>
             </dependency>
-
-            <dependency>
-                <groupId>javax</groupId>
-                <artifactId>javaee-web-api</artifactId>
-                <version>6.0</version>
-                <scope>provided</scope>
-            </dependency>
-
-
             <!--
             Make use of JSP tags. Remove, if you don't use JSPs
             -->
@@ -316,17 +307,26 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.6.1</version>
+                <version>1.7.5</version>
             </dependency>
-
             <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>0.9.24</version>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.5</version>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.17</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-server</artifactId>
+                <version>1.16</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-json</artifactId>
                 <version>1.16</version>
             </dependency>
             <dependency>
@@ -373,11 +373,11 @@
                 <artifactId>jdo-api</artifactId>
                 <version>3.0.1</version>
             </dependency>
-           <dependency>
+            <dependency>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-api-jdo</artifactId>
                 <version>3.1.3</version>
-           </dependency>
+            </dependency>
             <!-- Test Dependencies -->
             <dependency>
                 <groupId>com.google.appengine</groupId>
@@ -390,7 +390,21 @@
                 <artifactId>appengine-api-stubs</artifactId>
                 <version>${gae.version}</version>
                 <scope>test</scope>
-            </dependency>      
+            </dependency> 
+            
+                      
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>6.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-web-api</artifactId>
+                <version>6.0</version>
+                <scope>provided</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <profiles>
