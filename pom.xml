@@ -269,6 +269,30 @@
                         </dependency>
                     </dependencies>                        
                 </plugin>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>jarjar-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jarjar</goal>
+            </goals>
+            <configuration>
+              <includes>
+                <include>asm:asm:3.1</include>
+                <include>com.sun.jersey:jersey-server</include>
+              </includes>
+              <rules>
+                <rule>
+                  <pattern>org.objectweb.asm.** </pattern>
+                  <result>org.objectweb.asm3.@1</result>
+                </rule>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -322,17 +346,17 @@
             <dependency>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-server</artifactId>
-                <version>1.16</version>
+                <version>1.17.1</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-json</artifactId>
-                <version>1.16</version>
+                <version>1.17.1</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-servlet</artifactId>
-                <version>1.16</version>
+                <version>1.17.1</version>
             </dependency>
             <!--
             GAE libraries for local testing as described here:
@@ -344,7 +368,17 @@
                 <version>${gae.version}</version>
                 <scope>test</scope>
             </dependency>
-   
+            <dependency>
+                <groupId>com.google.oauth-client</groupId>
+                <artifactId>google-oauth-client</artifactId>
+                <version>1.17.0-rc</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.jdo</groupId>
+                        <artifactId>jdo2-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
             
             <!-- Compile/runtime dependencies -->
             <dependency>
@@ -352,7 +386,7 @@
                 <artifactId>appengine-api-1.0-sdk</artifactId>
                 <version>${gae.version}</version>
             </dependency>
-            <dependency>
+           <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
                 <version>2.5</version>
@@ -405,6 +439,12 @@
                 <version>6.0</version>
                 <scope>provided</scope>
             </dependency>
+    <dependency>
+        <groupId>com.google.api-client</groupId>
+        <artifactId>google-api-client-appengine</artifactId>
+        <version>1.17.0-rc</version>
+    </dependency>   
+        
         </dependencies>
     </dependencyManagement>
     <profiles>
