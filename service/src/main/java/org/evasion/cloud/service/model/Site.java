@@ -13,17 +13,21 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author sgl
  */
+@XmlRootElement
 @PersistenceCapable
 public class Site {
 
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Key key;
+    @Persistent
+    private String subdomain;
     @Persistent
     private String title;
     @Persistent
@@ -98,4 +102,13 @@ public class Site {
     public void setViews(SortedSet<View> views) {
         this.views = views;
     }
+
+    public String getSubdomain() {
+        return subdomain;
+    }
+
+    public void setSubdomain(String subdomain) {
+        this.subdomain = subdomain;
+    }
+    
 }
