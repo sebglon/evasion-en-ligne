@@ -69,6 +69,10 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-tools-sdk</artifactId>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>            
         </dependency> 
@@ -76,6 +80,15 @@
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client-appengine</artifactId>
         </dependency>  
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-oauth2</artifactId>
+        </dependency>  
+        <dependency>
+            <groupId>com.google.http-client</groupId>
+            <artifactId>google-http-client-jackson</artifactId>
+        </dependency>
+                          
     </dependencies>
     <build>
         <plugins>
