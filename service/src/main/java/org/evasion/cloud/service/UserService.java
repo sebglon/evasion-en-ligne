@@ -16,6 +16,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.oauth2.Oauth2Scopes;
 import com.google.api.services.oauth2.model.Userinfo;
+import com.google.appengine.api.utils.SystemProperty;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -51,12 +52,16 @@ public class UserService {
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 
-    private static final String clientid ="148280693971.apps.googleusercontent.com";
+    private static final String clientid = "148280693971.apps.googleusercontent.com";
     private static final HttpExecuteInterceptor clientCredential = new ClientParametersAuthentication(clientid, "UMTJRicVrvN572uLTQ_6i8l9");
     @Context
     private UriInfo uri;
 
     private AuthorizationCodeFlow flow;
+
+    private boolean isSecureMode() {
+        return SystemProperty.environment.value()==SystemProperty.Environment.Value.Production;
+    }
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public User get() {
@@ -70,10 +75,10 @@ public class UserService {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getAuth(@QueryParam("redirect") String redirect) {
         try {
-            if (flow==null) {
+            if (flow == null) {
                 flow = initializeFlow();
             }
-            return Response.temporaryRedirect(flow.newAuthorizationUrl().setState("monetat").setScopes(scopes).setRedirectUri(redirect).toURI()).build();
+            return Response.temporaryRedirect(flow.newAuthorizationUrl().setState(redirect).setScopes(scopes).setRedirectUri(getUrlBase(isSecureMode()) + "/callback.html").toURI()).build();
         } catch (IOException ex) {
             LOG.error("Can not Access to AuthorizationCodeFlow", ex);
             return Response.serverError().build();
@@ -85,15 +90,14 @@ public class UserService {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getToken(@QueryParam("code") String code) throws IOException, URISyntaxException {
         try {
-        final String userId = UUID.randomUUID().toString();
+            final String userId = UUID.randomUUID().toString();
             NewCookie userIdCookie = new NewCookie(COOKIE_NAME, userId, "/", uri.getBaseUri().toASCIIString(), null, NewCookie.DEFAULT_MAX_AGE, false);
 
-            LOG.debug("ClientID fount on cookie :{}" , userId);
-            if (flow==null) {
+            LOG.debug("ClientID fount on cookie :{}", userId);
+            if (flow == null) {
                 flow = initializeFlow();
             }
-            LOG.debug("redurect uri {}",uri.getBaseUri().toASCIIString() + "user/token");
-            TokenResponse token = flow.newTokenRequest(code).setRedirectUri(uri.getBaseUri().toASCIIString() + "user/token").execute();
+            TokenResponse token = flow.newTokenRequest(code).setRedirectUri(getUrlBase(isSecureMode()) + "/callback.html").execute();
             LOG.debug("http response {}", token);
             initializeFlow().createAndStoreCredential(token, userId);
             return Response.ok(token, MediaType.APPLICATION_JSON).cookie(userIdCookie).build();
@@ -120,7 +124,17 @@ public class UserService {
                 HTTP_TRANSPORT,
                 JSON_FACTORY,
                 new GenericUrl("https://accounts.google.com/o/oauth2/token"),
-                clientCredential, clientid,"https://accounts.google.com/o/oauth2/auth").setScopes(scopes).build();
+                clientCredential, clientid, "https://accounts.google.com/o/oauth2/auth").setScopes(scopes).build();
+    }
+
+    private String getUrlBase(boolean secure) {
+        StringBuilder build = new StringBuilder();
+        if (secure) {
+            build.append("https://");
+        } else {
+            build.append("http://");
+        }
+        return build.append(uri.getBaseUri().getAuthority()).toString();
     }
 
 }
