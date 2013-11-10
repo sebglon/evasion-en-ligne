@@ -183,7 +183,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
-                    <version>2.3</version>
+                    <version>2.4</version>
                     <configuration>
                         <webResources>
                             <resource>
@@ -219,6 +219,28 @@
                         </dependency>
                     </dependencies>                    
                 </plugin>
+                <plugin>
+                    <groupId>com.google.appengine</groupId>
+                    <artifactId>appengine-maven-plugin</artifactId>
+                    <version>${gae.version}</version>
+                    <configuration>
+                        <unpackVersion>${gae.version}</unpackVersion>
+                        
+                        <serverId>appengine.google.com</serverId>
+                        <debugSuspend>true</debugSuspend>
+                        <outputFile>${project.build.outputDirectory}/gae.log</outputFile>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>net.kindleit</groupId>
+                            <artifactId>gae-runtime</artifactId>
+                            <version>${gae-runtime.version}</version>
+                            <type>pom</type>
+                        </dependency>
+                    </dependencies>                    
+                </plugin>
+                
+
 
                 <!--
                 Upload application to the appspot automatically, during
@@ -269,30 +291,30 @@
                         </dependency>
                     </dependencies>                        
                 </plugin>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>jarjar-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>jarjar</goal>
-            </goals>
-            <configuration>
-              <includes>
-                <include>asm:asm:3.1</include>
-                <include>com.sun.jersey:jersey-server</include>
-              </includes>
-              <rules>
-                <rule>
-                  <pattern>org.objectweb.asm.** </pattern>
-                  <result>org.objectweb.asm3.@1</result>
-                </rule>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>jarjar-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jarjar</goal>
+                            </goals>
+                            <configuration>
+                                <includes>
+                                    <include>asm:asm:3.1</include>
+                                    <include>com.sun.jersey:jersey-server</include>
+                                </includes>
+                                <rules>
+                                    <rule>
+                                        <pattern>org.objectweb.asm.** </pattern>
+                                        <result>org.objectweb.asm3.@1</result>
+                                    </rule>
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -386,7 +408,13 @@
                 <artifactId>appengine-api-1.0-sdk</artifactId>
                 <version>${gae.version}</version>
             </dependency>
-           <dependency>
+            <dependency>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-tools-sdk</artifactId>
+                <version>${gae.version}</version>
+                <type>jar</type>
+            </dependency>
+            <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
                 <version>2.5</version>
@@ -439,12 +467,23 @@
                 <version>6.0</version>
                 <scope>provided</scope>
             </dependency>
-    <dependency>
-        <groupId>com.google.api-client</groupId>
-        <artifactId>google-api-client-appengine</artifactId>
-        <version>1.17.0-rc</version>
-    </dependency>   
-        
+            <dependency>
+                <groupId>com.google.api-client</groupId>
+                <artifactId>google-api-client-appengine</artifactId>
+                <version>1.17.0-rc</version>
+            </dependency>   
+            <!-- Dépendance vers les API Google-->
+            <dependency>
+                <groupId>com.google.apis</groupId>
+                <artifactId>google-api-services-oauth2</artifactId>
+                <version>v2-rev51-1.17.0-rc</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.http-client</groupId>
+                <artifactId>google-http-client-jackson</artifactId>
+                <version>1.17.0-rc</version>
+            </dependency>
+                            
         </dependencies>
     </dependencyManagement>
     <profiles>

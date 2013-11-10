@@ -1,3 +1,5 @@
+/web/src/main/webapp/WEB-INF/appengine-web.xml~
+/web/src/main/webapp/css/app.css~
 *.class
 
 # Package Files #
@@ -9,3 +11,4 @@
 /api/target/
 /service/target/
 nbactions.xml
+nb-configuration.xml
