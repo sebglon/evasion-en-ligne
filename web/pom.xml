@@ -28,11 +28,16 @@
                     <jsSrcDir>${project.basedir}/src/main/webapp/js</jsSrcDir>
                     <jsTestSrcDir>${project.basedir}/src/test/javascript</jsTestSrcDir>
                     <preloadSources>
-                        <!-- libraries and frameworks here -->
+                        <source>http://code.jquery.com/jquery-1.10.1.min.js</source> 
+                        <source>lib/angular/angular.js</source>
+                        <source>http://code.angularjs.org/1.1.5/angular-mocks.js</source>
+                        <source>lib/angular/angular-cookies.js</source>
+                        <source>lib/restangular/restangular.js</source>
+                        <source>lib/underscore/underscore-min.js</source>                     
                     </preloadSources>
-                    <sourceIncludes>
-                        <!-- AngularJS components here -->
-                    </sourceIncludes>
+                    <sourceExcludes>
+                        <exclude>lib/tinymce/**</exclude>
+                    </sourceExcludes>
                 </configuration>
             </plugin>  
             <plugin>
@@ -74,6 +79,10 @@
                 <groupId>net.kindleit</groupId>
                 <artifactId>maven-gae-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
     <repositories>
@@ -91,11 +100,12 @@
             <scope>test</scope>
         </dependency>
 
-     <!--   <dependency>
+        <!--   <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
         </dependency>
-        --><dependency>
+        -->
+        <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-servlet</artifactId>
         </dependency>

@@ -28,3 +28,32 @@
 .content:hover .options {
     display: block;
 }
+
+// Style pour le bouton signin de Google
+    #gSignIn {
+      display: inline-block;
+      background: #cc3732;
+      color: white;
+      width: 175px;
+      border-radius: 5px;
+    }
+    #gSignIn:hover {
+      background: #e74b37;
+      cursor: hand;
+    }
+    #gSignIn span.label {
+      font-weight: bold;
+    }
+    #gSignIn span.icon {
+      background: url('/+/images/branding/btn_red_32.png') transparent 10px 50% no-repeat;
+      display: inline-block;
+      vertical-align: middle;
+      width: 40px;
+      height: 40px;
+    }
+    #gSignIn span.buttonText {
+      display: inline-block;
+      vertical-align: middle;
+      padding-left: 40px;
+      padding-right: 40px;
+    }

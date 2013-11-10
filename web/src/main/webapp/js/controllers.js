@@ -1,65 +1,67 @@
 'use strict';
 
-angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisiteurApp.googleapi'])
-        .config(['GoogleApiProvider', function(GoogleApiProvider) {
-        GoogleApiProvider.extendConfig({
-            clientId: '148280693971.apps.googleusercontent.com',
-            apiKey: 'AIzaSyC1B4WyTqDhWJaRotdugXiDYGN2XEq7lIE',
-            scopes: ['https://www.googleapis.com/auth/userinfo.email',
-                'https://www.googleapis.com/auth/userinfo.profile']
-        });
-    }])
+angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisiteurApp.services'])
+        .config(['apiProvider', function(apiProvider) {
+                apiProvider.setServerUrl('http://localhost:8080');
+            }])
         .controller('EditStaticContent', ['$scope', function($scope) {
-        $scope.tinymceOptions = {
-            handle_event_callback: function(e) {
-                // put logic here for keypress
-            }
-        };
+                $scope.tinymceOptions = {
+                    handle_event_callback: function(e) {
+                        // put logic here for keypress
+                    }
+                };
 
-        $scope.edit = function() {
-            $scope.title = angular.copy($scope.view.title);
-            $scope.content = angular.copy($scope.view.content);
-            $scope.onEditContent = true;
-        }
-        $scope.update = function(content, title) {
-            $scope.view.title = angular.copy(title);
-            $scope.view.content = angular.copy(content);
-            $scope.onEditContent = false;
-        };
+                $scope.edit = function() {
+                    $scope.title = angular.copy($scope.view.title);
+                    $scope.content = angular.copy($scope.view.content);
+                    $scope.onEditContent = true;
+                }
+                $scope.update = function(content, title) {
+                    $scope.view.title = angular.copy(title);
+                    $scope.view.content = angular.copy(content);
+                    $scope.onEditContent = false;
+                };
 
-        $scope.reset = function() {
-            $scope.onEditContent = false;
-        };
+                $scope.reset = function() {
+                    $scope.onEditContent = false;
+                };
 
-        $scope.isUnchanged = function(content, title) {
-            return angular.equals(content, $scope.view.content) && angular.equals(title, $scope.view.title);
-        };
+                $scope.isUnchanged = function(content, title) {
+                    return angular.equals(content, $scope.view.content) && angular.equals(title, $scope.view.title);
+                };
 
-        $scope.reset();
-    }])
+                $scope.reset();
+            }])
+        .controller('CallbackCtrl', ['api', function(api) {
 
-        .controller('LoginCtrl', ['$scope', '$dialog', function($scope, $dialog) {
-        $scope.openLoginForm = function() {
-            $scope.showLoginBox = true;
-        };
+                api.user.token();
 
-        $scope.closeLoginForm = function() {
-            $scope.showLoginBox = false;
-        };
 
-        $scope.optsLoginForm = {
-            backdropFade: true,
-            dialogFade: true
-        };
+            }])
+        .controller('LoginCtrl', ['$rootScope', '$scope', 'api', function($rootScope, $scope, api) {
+                $scope.openLoginForm = function() {
+                    api.user.auth(function(data) {
+                        $rootScope.auth = data;
+                    });
+                };
 
-    }])
-        .controller('AppCtrl', ['$scope', '$document', 'GoogleApi', function($scope, $document, GoogleApi) {
-        console.log('init app Ctrl');
+                $scope.closeLoginForm = function() {
+                    $scope.showLoginBox = false;
+                };
 
-        $scope.init = function() {
-            $document.ready(function() {
-                //GoogleApi.clientLoadPlus();
-                 GoogleApi.clientLoadOAuth2();
-            });
-        };
-    }]);
+                $scope.optsLoginForm = {
+                    backdropFade: true,
+                    dialogFade: true
+                };
+
+            }])
+        .controller('AppCtrl', ['$scope', '$document', '$location', '$http', function($scope, $document, $location, $http) {
+                console.log('init app Ctrl');
+
+                $scope.init = function() {
+                    $scope.loggin = false;
+                    $document.ready(function() {
+
+                    });
+                };
+            }]);

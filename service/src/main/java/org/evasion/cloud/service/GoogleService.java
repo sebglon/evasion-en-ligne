@@ -24,18 +24,16 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.UUID;
+import java.util.logging.Level;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,9 +43,9 @@ import org.slf4j.LoggerFactory;
  * @author seglon
  */
 @Path("user")
-public class UserService {
+public class GoogleService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleService.class);
 
     private static final Collection scopes = Arrays.asList(Oauth2Scopes.USERINFO_EMAIL, Oauth2Scopes.USERINFO_PROFILE);
 
@@ -58,6 +56,9 @@ public class UserService {
     private static final HttpExecuteInterceptor clientCredential = new ClientParametersAuthentication(clientid, "UMTJRicVrvN572uLTQ_6i8l9");
     @Context
     private UriInfo uri;
+
+    @Context
+    private SecurityContext securityContext;
 
     private AuthorizationCodeFlow flow;
 
@@ -96,12 +97,24 @@ public class UserService {
             }
             TokenResponse token = flow.newTokenRequest(code).setRedirectUri(getUrlBase(isSecureMode()) + "/callback.html").execute();
             LOG.debug("http response {}", token);
-            initializeFlow().createAndStoreCredential(token, userId);
+            flow.createAndStoreCredential(token, userId);
+            LOG.debug("UPN: {}", securityContext.getUserPrincipal().toString());
             return Response.ok(token, MediaType.APPLICATION_JSON).build();
         } catch (IOException ex) {
             LOG.error("Can't optain token", ex);
             throw ex;
         }
+    }
+
+    @GET
+    @Path("logout")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getLogout(@CookieParam(Constant.COOKIE_NAME) String userId) throws IOException {
+            if (flow == null) {
+                return Response.serverError().build();
+            }
+            flow.getCredentialDataStore().delete(userId);
+            return Response.ok().build();
     }
 
     @GET
@@ -148,7 +161,9 @@ public class UserService {
 
     /**
      * Détermise le protocole à utiliser.
-     * @return {@cod true} en environneent de production, sinon {@code false}
+     *
+     * @return {
+     * @cod true} en environneent de production, sinon {@code false}
      */
     private boolean isSecureMode() {
         return SystemProperty.environment.value() == SystemProperty.Environment.Value.Production;
