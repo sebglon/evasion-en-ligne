@@ -65,7 +65,7 @@ angular.module('evasionVisiteurApp.services', ['restangular']).
                                     deferred.resolve(data);
                                 }).
                                 error(function() {
-                                    deferred.reject("error")
+                                    deferred.reject("error");
                                 });
                         return deferred.promise;
                     };

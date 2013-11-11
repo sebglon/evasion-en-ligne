@@ -37,23 +37,23 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                 api.user.token();
 
 
+
             }])
         .controller('LoginCtrl', ['$rootScope', '$scope', 'api', function($rootScope, $scope, api) {
-                $scope.openLoginForm = function() {
+                $scope.loginForm = function() {
                     api.user.auth(function(data) {
-                        $rootScope.auth = data;
+                        $rootScope.auth = {token: data};
+                        api.user.info().then(function(data) {
+                            $rootScope.auth.user = data;
+                        });
                     });
                 };
 
-                $scope.closeLoginForm = function() {
-                    $scope.showLoginBox = false;
+                $scope.logoutForm = function() {
+                    api.user.logout().then(function() {
+                        $rootScope.auth=undefined;
+                    });
                 };
-
-                $scope.optsLoginForm = {
-                    backdropFade: true,
-                    dialogFade: true
-                };
-
             }])
         .controller('AppCtrl', ['$scope', '$document', '$location', '$http', function($scope, $document, $location, $http) {
                 console.log('init app Ctrl');
