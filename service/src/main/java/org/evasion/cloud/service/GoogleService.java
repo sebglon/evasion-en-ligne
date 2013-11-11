@@ -25,6 +25,7 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.logging.Level;
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -35,6 +36,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
+import org.evasion.cloud.service.security.EvasionSecurityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,20 +49,11 @@ public class GoogleService {
 
     private static final Logger LOG = LoggerFactory.getLogger(GoogleService.class);
 
-    private static final Collection scopes = Arrays.asList(Oauth2Scopes.USERINFO_EMAIL, Oauth2Scopes.USERINFO_PROFILE);
-
-    private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    private static final JsonFactory JSON_FACTORY = new JacksonFactory();
-
-    private static final String clientid = "148280693971.apps.googleusercontent.com";
-    private static final HttpExecuteInterceptor clientCredential = new ClientParametersAuthentication(clientid, "UMTJRicVrvN572uLTQ_6i8l9");
     @Context
     private UriInfo uri;
 
     @Context
     private SecurityContext securityContext;
-
-    private AuthorizationCodeFlow flow;
 
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -74,73 +67,36 @@ public class GoogleService {
     @Path("auth")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getAuth(@QueryParam("redirect") String redirect) {
-        try {
-            if (flow == null) {
-                flow = initializeFlow();
-            }
-
-            return Response.temporaryRedirect(flow.newAuthorizationUrl().setState(redirect).setScopes(scopes).setRedirectUri(getUrlBase(isSecureMode()) + "/callback.html").toURI()).build();
-        } catch (IOException ex) {
-            LOG.error("Can not Access to AuthorizationCodeFlow", ex);
-            return Response.serverError().build();
-        }
+        return Response.temporaryRedirect(OauthCodeFlow.getFlow().newAuthorizationUrl().setState(redirect).setScopes(OauthCodeFlow.scopes).setRedirectUri(getUrlBase(isSecureMode()) + "/callback.html").toURI()).build();
     }
 
     @GET
     @Path("token")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getToken(@CookieParam(Constant.COOKIE_NAME) String userId, @QueryParam("code") String code) throws IOException, URISyntaxException {
-        try {
-            LOG.debug("ClientID fount on cookie :{}", userId);
-            if (flow == null) {
-                flow = initializeFlow();
-            }
-            TokenResponse token = flow.newTokenRequest(code).setRedirectUri(getUrlBase(isSecureMode()) + "/callback.html").execute();
-            LOG.debug("http response {}", token);
-            flow.createAndStoreCredential(token, userId);
-            LOG.debug("UPN: {}", securityContext.getUserPrincipal().toString());
-            return Response.ok(token, MediaType.APPLICATION_JSON).build();
-        } catch (IOException ex) {
-            LOG.error("Can't optain token", ex);
-            throw ex;
-        }
+        LOG.debug("ClientID fount on cookie :{}", userId);
+        TokenResponse token = OauthCodeFlow.getFlow().newTokenRequest(code).setRedirectUri(getUrlBase(isSecureMode()) + "/callback.html").execute();
+        LOG.debug("http response {}", token);
+        OauthCodeFlow.getFlow().createAndStoreCredential(token, userId);
+        return Response.ok(token, MediaType.APPLICATION_JSON).build();
+
     }
 
     @GET
     @Path("logout")
+    @PermitAll
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getLogout(@CookieParam(Constant.COOKIE_NAME) String userId) throws IOException {
-            if (flow == null) {
-                return Response.serverError().build();
-            }
-            flow.getCredentialDataStore().delete(userId);
-            return Response.ok().build();
+    public Response getLogout() throws IOException {
+        OauthCodeFlow.getFlow().getCredentialDataStore().delete(((EvasionSecurityContext.EvasionPrincipal) securityContext.getUserPrincipal()).getCookieValue());
+        return Response.ok().build();
     }
 
     @GET
     @Path("info")
+    @PermitAll
     @Produces({MediaType.APPLICATION_JSON})
-    public Userinfo getInfo(@CookieParam(Constant.COOKIE_NAME) String clientId) throws IOException {
-        Credential credential = initializeFlow().loadCredential(clientId);
-        if (credential == null) {
-            LOG.error("Credential not found for cientID: {}", clientId);
-        }
-        Oauth2 service = new Oauth2.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
-        return service.userinfo().get().execute();
-    }
-
-    /**
-     * Initialise le gestionnaire d'authentification Oauth2 Google. Les
-     * utilisateurs déjà connecter seront enregistré dans l'AppengineDataStore.
-     *
-     * @return @throws IOException
-     */
-    private AuthorizationCodeFlow initializeFlow() throws IOException {
-        return new AuthorizationCodeFlow.Builder(BearerToken.authorizationHeaderAccessMethod(),
-                HTTP_TRANSPORT,
-                JSON_FACTORY,
-                new GenericUrl("https://accounts.google.com/o/oauth2/token"),
-                clientCredential, clientid, "https://accounts.google.com/o/oauth2/auth").setScopes(scopes).setDataStoreFactory(new AppEngineDataStoreFactory()).build();
+    public Userinfo getInfo() throws IOException {
+        return ((EvasionSecurityContext.EvasionPrincipal) securityContext.getUserPrincipal()).getUserInfo();
     }
 
     /**

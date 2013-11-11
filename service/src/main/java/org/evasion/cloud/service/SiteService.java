@@ -4,6 +4,7 @@
  */
 package org.evasion.cloud.service;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.jdo.PersistenceManager;
 import javax.ws.rs.GET;
@@ -64,7 +65,7 @@ public class SiteService {
     }
 
     @PUT()
-    @RolesAllowed({ "Editor", "Contributor" })
+    @PermitAll
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response create() {
         PersistenceManager pm = PMF.get().getPersistenceManager();
