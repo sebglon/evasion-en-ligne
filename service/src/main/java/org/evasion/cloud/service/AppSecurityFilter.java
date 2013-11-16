@@ -13,12 +13,11 @@ import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 import java.io.IOException;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.ext.Provider;
 import org.evasion.cloud.service.security.EvasionSecurityContext;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +25,12 @@ import org.slf4j.LoggerFactory;
  *
  * @author sgl
  */
+@Provider
 public class AppSecurityFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(AppSecurityFilter.class);
 
-    private String userId=null;
+    private String userId = null;
     private boolean isNew = true;
 
     @Override
@@ -57,10 +57,11 @@ public class AppSecurityFilter implements ContainerRequestFilter, ContainerRespo
                 Credential credential = OauthCodeFlow.getFlow().loadCredential(userId);
                 if (credential != null) {
                     Oauth2 service = new Oauth2.Builder(OauthCodeFlow.HTTP_TRANSPORT, OauthCodeFlow.JSON_FACTORY, credential).build();
-                    request.setSecurityContext(new EvasionSecurityContext(userId, service.userinfo().get().execute()));
+                    request.setSecurityContext(new EvasionSecurityContext("https".equalsIgnoreCase(request.getBaseUri().getScheme()), userId, service.userinfo().get().execute()));
                 }
             } catch (IOException ex) {
                 LOG.error("FAIL to load Google credential", ex);
+                throw new WebApplicationException(Status.UNAUTHORIZED);
             }
 
         }

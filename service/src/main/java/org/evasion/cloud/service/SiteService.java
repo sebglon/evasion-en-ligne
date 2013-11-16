@@ -4,9 +4,14 @@
  */
 package org.evasion.cloud.service;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
+import com.google.appengine.repackaged.com.google.common.collect.Sets;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.SortedSet;
+import javax.annotation.security.DeclareRoles;
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -15,11 +20,14 @@ import javax.ws.rs.core.MediaType;
 import org.evasion.cloud.service.common.PMF;
 import org.evasion.cloud.service.model.Site;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
+import org.evasion.cloud.service.model.View;
+import org.evasion.cloud.service.security.EvasionPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,17 +36,17 @@ import org.slf4j.LoggerFactory;
  * @author sgl
  */
 @Path("site")
+@DeclareRoles({"admin", "user"})
 public class SiteService {
 
     @Context
     private SecurityContext securityContext;
     @Context
     HttpHeaders request;
-    
+
     private static Logger LOG = LoggerFactory.getLogger(SiteService.class);
 
     @GET()
-    @RolesAllowed({ "admin" })
     @Path("{siteid}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Site get(@PathParam("siteid") long id) {
@@ -59,21 +67,40 @@ public class SiteService {
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Site getBySubDomain(@PathParam("subdomain") String subdmain) {
         PersistenceManager pm = PMF.getPm();
-        Site result = null;
-        return result;
+        Query query = pm.newQuery(Site.class, ":p.contains(subdomain)");
+        query.setUnique(true);
+        return (Site) query.execute(subdmain);
 
     }
 
     @PUT()
-    @PermitAll
+    
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response create() {
+    public Response create(@FormParam("subdomain") String subdomain) {
+        if (null == securityContext.getUserPrincipal()) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
+        if (null == subdomain || subdomain.isEmpty()) {
+            throw new WebApplicationException(Response.Status.PRECONDITION_FAILED);
+        }
         PersistenceManager pm = PMF.get().getPersistenceManager();
+        // create User
+        User user;
+        LOG.debug("UPN: {}", securityContext.getUserPrincipal());
+        user = new User(((EvasionPrincipal) securityContext.getUserPrincipal()).getUserInfo().getName(), ((EvasionPrincipal) securityContext.getUserPrincipal()).getUserInfo().getId());
         Site site;
+
         try {
             site = new Site();
-            LOG.debug("User connected :{}", securityContext.getUserPrincipal());
-            site.setAuthor(null);
+            View defaultView = new View();
+            defaultView.setTitle("Page par défaut");
+            defaultView.setUrl("/");
+            defaultView.setContent("Contenue par défaut");
+            site.setViews(Sets.newHashSet(defaultView));
+            
+            site.setAuthor(user);
+            site.setSubdomain(subdomain);
+            LOG.debug("Site to create :{}", site);
             pm.makePersistent(site);
         } finally {
             pm.close();

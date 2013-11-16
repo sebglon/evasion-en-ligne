@@ -4,39 +4,24 @@
  */
 package org.evasion.cloud.service;
 
-import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
-import com.google.api.client.auth.oauth2.BearerToken;
-import com.google.api.client.auth.oauth2.ClientParametersAuthentication;
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponse;
-import com.google.api.client.extensions.appengine.datastore.AppEngineDataStoreFactory;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpExecuteInterceptor;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson.JacksonFactory;
-import com.google.api.services.oauth2.Oauth2;
-import com.google.api.services.oauth2.Oauth2Scopes;
 import com.google.api.services.oauth2.model.Userinfo;
 import com.google.appengine.api.utils.SystemProperty;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.logging.Level;
-import javax.annotation.security.PermitAll;
+import javax.annotation.security.DeclareRoles;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
-import org.evasion.cloud.service.security.EvasionSecurityContext;
+import org.evasion.cloud.service.security.EvasionPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,14 +39,6 @@ public class GoogleService {
 
     @Context
     private SecurityContext securityContext;
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public User get() {
-        User user = new User();
-        user.name = "UserTest";
-        return user;
-    }
 
     @GET
     @Path("auth")
@@ -84,19 +61,23 @@ public class GoogleService {
 
     @GET
     @Path("logout")
-    @PermitAll
     @Produces({MediaType.APPLICATION_JSON})
     public Response getLogout() throws IOException {
-        OauthCodeFlow.getFlow().getCredentialDataStore().delete(((EvasionSecurityContext.EvasionPrincipal) securityContext.getUserPrincipal()).getCookieValue());
+        if (null == securityContext.getUserPrincipal()) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
+        OauthCodeFlow.getFlow().getCredentialDataStore().delete(((EvasionPrincipal) securityContext.getUserPrincipal()).getCookieValue());
         return Response.ok().build();
     }
 
     @GET
     @Path("info")
-    @PermitAll
     @Produces({MediaType.APPLICATION_JSON})
     public Userinfo getInfo() throws IOException {
-        return ((EvasionSecurityContext.EvasionPrincipal) securityContext.getUserPrincipal()).getUserInfo();
+        if (null == securityContext.getUserPrincipal()) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
+        return ((EvasionPrincipal) securityContext.getUserPrincipal()).getUserInfo();
     }
 
     /**

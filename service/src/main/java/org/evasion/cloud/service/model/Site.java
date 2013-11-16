@@ -5,15 +5,17 @@
 package org.evasion.cloud.service.model;
 
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.users.User;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+import javax.jdo.annotations.Unique;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.evasion.cloud.service.User;
 
 /**
  *
@@ -27,6 +29,7 @@ public class Site {
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Key key;
     @Persistent
+    @Unique
     private String subdomain;
     @Persistent
     private String title;
@@ -41,7 +44,7 @@ public class Site {
     @Persistent
     private Date dateRevision;
     @Persistent
-    private SortedSet<View> views;
+    private Set<View> views;
 
     public Key getKey() {
         return key;
@@ -95,11 +98,11 @@ public class Site {
         this.author = author;
     }
 
-    public SortedSet<View> getViews() {
+    public Set<View> getViews() {
         return views;
     }
 
-    public void setViews(SortedSet<View> views) {
+    public void setViews(Set<View> views) {
         this.views = views;
     }
 
@@ -110,5 +113,5 @@ public class Site {
     public void setSubdomain(String subdomain) {
         this.subdomain = subdomain;
     }
-    
+
 }
