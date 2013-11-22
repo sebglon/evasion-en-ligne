@@ -29,11 +29,12 @@
                     <jsTestSrcDir>${project.basedir}/src/test/javascript</jsTestSrcDir>
                     <preloadSources>
                         <source>http://code.jquery.com/jquery-1.10.1.min.js</source> 
-                        <source>lib/angular/angular.js</source>
+                        <source>http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js</source>
                         <source>http://code.angularjs.org/1.1.5/angular-mocks.js</source>
-                        <source>lib/angular/angular-cookies.js</source>
-                        <source>lib/restangular/restangular.js</source>
-                        <source>lib/underscore/underscore-min.js</source>                     
+                        <source>http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-route.min.js</source>
+                        <source>http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-cookies.min.js</source>
+                        <source>http://cdn.jsdelivr.net/restangular/1.1.3/restangular.min.js</source>
+                        <source>http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js</source>                     
                     </preloadSources>
                     <sourceExcludes>
                         <exclude>lib/tinymce/**</exclude>
