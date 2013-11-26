@@ -25,18 +25,22 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                 this.edit = function() {
                     this.title = angular.copy($rootScope.view.title);
                     this.content = angular.copy($rootScope.view.content);
+                    this.description = angular.copy($rootScope.view.description);
                     this.onEditContent = true;
                 }
-                this.update = function(content, title) {
-                    $rootScope.view.title = angular.copy(title);
-                    $rootScope.view.content = angular.copy(content);
+                this.update = function() {
+                    $rootScope.view.title = angular.copy(this.title);
+                    $rootScope.view.content = angular.copy(this.content);
+                    $rootScope.view.description = angular.copy(this.content);
                     this.onEditContent = false;
                 };
                 this.reset = function() {
                     this.onEditContent = false;
                 };
-                this.isUnchanged = function(content, title) {
-                    return angular.equals(content, $scope.view.content) && angular.equals(title, $scope.view.title);
+                this.isUnchanged = function() {
+                    return angular.equals(this.content, $rootScope.view.content) 
+                            && angular.equals(this.title, $rootScope.view.title) 
+                            && angular.equals(this.description, $rootScope.view.description);
                 };
                 this.reset();
             }])

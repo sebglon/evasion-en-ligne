@@ -136,8 +136,8 @@
                 </div>
                 </div>                    
                 <textarea name="staticContent" ui-tinymce="esc.tinymceOptions" ng-model="esc.content" required ></textarea>
-                <button ng-click="esc.reset()" ng-disabled="esc.isUnchanged(esc.content,esc.title)">Annuler</button>
-                <button ng-click="esc.update(esc.content,esc.title)">Enregistrer</button>
+                <button ng-click="esc.reset()" >Annuler</button>
+                <button ng-click="esc.update()" ng-disabled="esc.isUnchanged()">Enregistrer</button>
                 </form>
                 </div>
                 <div ng-switch-default><div ng-bind-html="view.content" class="content"></div></div>
