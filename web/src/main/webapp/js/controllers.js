@@ -1,43 +1,48 @@
 'use strict';
-
 angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisiteurApp.services'])
-        .config(['apiProvider', function(apiProvider) {
-                apiProvider.setServerUrl('http://localhost:8080');
+        .config(['$httpProvider', function($httpProvider) {
+                $httpProvider.defaults.withCredentials = true;
+                $httpProvider.defaults.useXDomain = true;
+                delete $httpProvider.defaults.headers.common['X-Requested-With'];
             }])
-        .controller('EditStaticContent', ['$scope', function($scope) {
-                $scope.tinymceOptions = {
+        .config(['apiProvider', function(apiProvider) {
+                apiProvider.setServerUrl('http://evasion-en-ligne.fr:8080');
+            }])
+        .controller('EditStaticContent', ['$scope', '$rootScope', function($scope, $rootScope) {
+
+                this.tinymceOptions = {
+                    plugins: [
+                        "advlist autolink lists link image charmap print preview anchor",
+                        "searchreplace visualblocks code fullscreen",
+                        "insertdatetime media table contextmenu paste"
+                    ],
+                    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+                    browser_spellcheck: true, object_resizing: true, menubar: false, content_css: "/css/app.css, /css/lib/bootstrap/bootstrap.css",
                     handle_event_callback: function(e) {
                         // put logic here for keypress
                     }
                 };
-
-                $scope.edit = function() {
-                    $scope.title = angular.copy($scope.view.title);
-                    $scope.content = angular.copy($scope.view.content);
-                    $scope.onEditContent = true;
+                this.edit = function() {
+                    this.title = angular.copy($rootScope.view.title);
+                    this.content = angular.copy($rootScope.view.content);
+                    this.onEditContent = true;
                 }
-                $scope.update = function(content, title) {
-                    $scope.view.title = angular.copy(title);
-                    $scope.view.content = angular.copy(content);
-                    $scope.onEditContent = false;
+                this.update = function(content, title) {
+                    $rootScope.view.title = angular.copy(title);
+                    $rootScope.view.content = angular.copy(content);
+                    this.onEditContent = false;
                 };
-
-                $scope.reset = function() {
-                    $scope.onEditContent = false;
+                this.reset = function() {
+                    this.onEditContent = false;
                 };
-
-                $scope.isUnchanged = function(content, title) {
+                this.isUnchanged = function(content, title) {
                     return angular.equals(content, $scope.view.content) && angular.equals(title, $scope.view.title);
                 };
-
-                $scope.reset();
+                this.reset();
             }])
         .controller('CallbackCtrl', ['api', function(api) {
 
                 api.user.token();
-
-
-
             }])
         .controller('LoginCtrl', ['$rootScope', '$scope', 'api', function($rootScope, $scope, api) {
                 $scope.loginForm = function() {
@@ -48,16 +53,14 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                         });
                     });
                 };
-
                 $scope.logoutForm = function() {
                     api.user.logout().then(function() {
-                        $rootScope.auth=undefined;
+                        $rootScope.auth = undefined;
                     });
                 };
             }])
         .controller('AppCtrl', ['$scope', '$document', '$location', '$http', function($scope, $document, $location, $http) {
                 console.log('init app Ctrl');
-
                 $scope.init = function() {
                     $scope.loggin = false;
                     $document.ready(function() {

@@ -1,0 +1,39 @@
+{
+    "title": "Titre du site",
+    "author": "Moi auteur",
+    "description": "",
+    "keywords": "",
+    "date-creation": "01/01/1900",
+    "date-revision": "01/01/1900",
+    "header": {
+        "img": "xxx.jpg",
+        "height": "80px"
+    },
+    "views": [
+        {"title": "Home", "url": "/", "content": "mon contenu de page d'accueil",
+            "description":"test",
+            "blocs": [
+                {"title": "bloc1", "type": "linkList"},
+                {"title": "bloc2", "type": "linkList"}
+            ]
+        },
+        {"title": "booktravel", "url": "/booktravel.html",  "templateUrl":"/partials/booktravel.html", "blocs": [
+                {"title": "bloc1", "type": "linkList"},
+                {"title": "bloc2", "type": "linkList"},
+                {"title": "bloc plugin", "type": "bookList"}
+            ],
+            "views": [
+                {"title": "sub view 1", "url": "/booktravel/sub1.html","content":"content sub view 1",
+                    "views": [
+                        {"title": "sub view l2", "url": "/booktravel/sub1/subl2.html", "content":"sub view 1-2"}
+                    ]
+                }
+            ]
+        }
+    ],
+    "blocs": [
+        {"title": "bloc1", "type": "linkList"},
+        {"title": "bloc2", "type": "linkList"},
+        {"title": "bloc plugin", "type": "bookList"}
+    ]
+}
