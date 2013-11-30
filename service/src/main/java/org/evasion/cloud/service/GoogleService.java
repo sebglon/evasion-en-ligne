@@ -4,6 +4,8 @@
  */
 package org.evasion.cloud.service;
 
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.auth.oauth2.StoredCredential;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.services.oauth2.model.Userinfo;
 import com.google.appengine.api.utils.SystemProperty;
@@ -43,19 +45,35 @@ public class GoogleService {
     @GET
     @Path("auth")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getAuth(@QueryParam("redirect") String redirect) {
-        return Response.temporaryRedirect(OauthCodeFlow.getFlow().newAuthorizationUrl().setState(redirect).setScopes(OauthCodeFlow.scopes).setRedirectUri(getUrlBase(isSecureMode()) + "/callback.html").toURI()).build();
+    public Response getAuth(@CookieParam(Constant.COOKIE_NAME) String userId,
+            @QueryParam("redirect") String redirect)
+            throws IOException {
+        if (OauthCodeFlow.getFlow().getCredentialDataStore().containsKey(userId)) {
+            return Response.status(Response.Status.OK).build();
+        } else {
+            return Response.temporaryRedirect(OauthCodeFlow.getFlow().newAuthorizationUrl().setState(redirect).setScopes(OauthCodeFlow.scopes).setRedirectUri(getUrlBase(isSecureMode()) + "/callback.html").toURI()).build();
+        }
     }
 
     @GET
     @Path("token")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getToken(@CookieParam(Constant.COOKIE_NAME) String userId, @QueryParam("code") String code) throws IOException, URISyntaxException {
+    public Response getToken(@CookieParam(Constant.COOKIE_NAME) String userId,
+            @QueryParam("code") String code)
+            throws IOException, URISyntaxException {
         LOG.debug("ClientID fount on cookie :{}", userId);
-        TokenResponse token = OauthCodeFlow.getFlow().newTokenRequest(code).setRedirectUri(getUrlBase(isSecureMode()) + "/callback.html").execute();
-        LOG.debug("http response {}", token);
-        OauthCodeFlow.getFlow().createAndStoreCredential(token, userId);
-        return Response.ok(token, MediaType.APPLICATION_JSON).build();
+        if (userId == null || (!OauthCodeFlow.getFlow().getCredentialDataStore().containsKey(userId) && code == null)) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        if (!OauthCodeFlow.getFlow().getCredentialDataStore().containsKey(userId) && code != null) {
+            TokenResponse token = OauthCodeFlow.getFlow().newTokenRequest(code).setRedirectUri(getUrlBase(isSecureMode()) + "/callback.html").execute();
+            LOG.debug("http response {}", token);
+            OauthCodeFlow.getFlow().createAndStoreCredential(token, userId);
+        }
+        StoredCredential credential = OauthCodeFlow.getFlow().getCredentialDataStore().get(userId);
+        LOG.debug("http response {}", credential.getAccessToken());
+        return Response.ok(credential.getAccessToken(), MediaType.APPLICATION_JSON)
+                .build();
 
     }
 

@@ -49,6 +49,7 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                 api.user.token();
             }])
         .controller('LoginCtrl', ['$rootScope', '$scope', 'api', function($rootScope, $scope, api) {
+                
                 $scope.loginForm = function() {
                     api.user.auth(function(data) {
                         $rootScope.auth = {token: data};

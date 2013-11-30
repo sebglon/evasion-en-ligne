@@ -26,19 +26,29 @@ angular.module('evasionVisiteurApp.services', []).
                             });
                         };
 
-                        var userToken = function() {
+                        var userToken = function(direct) {
+                            var deferred = $q.defer();
                             $http({
                                 method: 'GET',
                                 url: serverUrl + '/ws/user/token' + window.location.search
                             }).
                                     success(function(data, status, headers, config) {
-                                        window.opener.postMessage(data, "*");
-                                        window.close();
+                                        if (direct) {
+                                            deferred.resolve(data);
+                                        } else {
+                                            window.opener.postMessage(data, "*");
+                                            window.close();
+                                        }
                                     }).
                                     error(function(data, status, headers, config) {
-                                        window.opener.postMessage(data, "*");
-                                        window.close();
+                                        if (direct) {
+                                            deferred.reject(status);
+                                        } else {
+                                            window.opener.postMessage(data, "*");
+                                            window.close();
+                                        }
                                     });
+                            return deferred.promise;
                         };
 
                         var userLogout = function() {
@@ -70,12 +80,12 @@ angular.module('evasionVisiteurApp.services', []).
                                     });
                             return deferred.promise;
                         };
-                        
+
                         var siteBySubDomain = function(subdomain) {
                             var deferred = $q.defer();
                             $http({
                                 method: 'GET',
-                                url: serverUrl + '/ws/site/bySubdmain/'+subdomain
+                                url: serverUrl + '/ws/site/bySubdmain/' + subdomain
                             }).
                                     success(function(data) {
                                         deferred.resolve(data);
@@ -95,10 +105,10 @@ angular.module('evasionVisiteurApp.services', []).
                                 info: userInfo
                             },
                             site: {
-                                bySubdomain:siteBySubDomain,
-                                update:''
+                                bySubdomain: siteBySubDomain,
+                                update: ''
                             }
-                            
+
                         };
 
                     }];
