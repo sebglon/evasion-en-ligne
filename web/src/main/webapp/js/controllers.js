@@ -8,7 +8,7 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
         .config(['apiProvider', function(apiProvider) {
                 apiProvider.setServerUrl('http://evasion-en-ligne.fr:8080');
             }])
-        .controller('EditStaticContent', ['$scope', '$rootScope', function($scope, $rootScope) {
+        .controller('EditStaticContent', ['$scope', '$rootScope', 'api', function($scope, $rootScope, api) {
 
                 this.tinymceOptions = {
                     plugins: [
@@ -29,9 +29,19 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                     this.onEditContent = true;
                 }
                 this.update = function() {
-                    $rootScope.view.title = angular.copy(this.title);
-                    $rootScope.view.content = angular.copy(this.content);
-                    $rootScope.view.description = angular.copy(this.content);
+                    var i;
+                    // Mise à jour du site;
+                    for (i=0; $rootScope.site.views.length;i++) {
+                        if ($rootScope.site.views[i].key === $rootScope.view.key) {
+                            $rootScope.site.views[i].title = angular.copy(this.title);
+                            $rootScope.site.views[i].content = angular.copy(this.content);
+                            $rootScope.site.views[i].description = angular.copy(this.description);
+                            $rootScope.view = $rootScope.site.views[i];
+                            break;
+                        }
+                    }
+                    // persistence 
+                    api.site.update($rootScope.site);
                     this.onEditContent = false;
                 };
                 this.reset = function() {

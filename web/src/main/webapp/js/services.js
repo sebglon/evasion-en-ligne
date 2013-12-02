@@ -94,7 +94,23 @@ angular.module('evasionVisiteurApp.services', []).
                                         deferred.reject("error");
                                     });
                             return deferred.promise;
-                        }
+                        };
+
+                        var siteUpdate = function(site) {
+                            var deferred = $q.defer();
+                            $http({
+                                method: 'PUT',
+                                url: serverUrl + '/ws/site',
+                                data: site
+                            }).
+                                    success(function(data) {
+                                        deferred.resolve(data);
+                                    }).
+                                    error(function(data) {
+                                        deferred.reject(data);
+                                    });
+                            return deferred.promise;
+                        };
 
                         return {
                             getServerUrl: serverUrl,
@@ -106,7 +122,7 @@ angular.module('evasionVisiteurApp.services', []).
                             },
                             site: {
                                 bySubdomain: siteBySubDomain,
-                                update: ''
+                                update: siteUpdate
                             }
 
                         };

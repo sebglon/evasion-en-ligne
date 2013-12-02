@@ -25,6 +25,8 @@ angular.injector(['ng', 'ngRoute', 'ngCookies']).invoke(function($rootScope) {
                     $rootScope.auth.user = data;
                     });
                 }
+            },function(){
+                delete $cookies['eelid'];
             });
         }
         // Récupération du subdomain
