@@ -4,9 +4,11 @@
  */
 package org.evasion.cloud.service.model;
 
-import com.google.appengine.api.datastore.Key;
 import java.util.SortedSet;
+import javax.jdo.annotations.Element;
+import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
@@ -15,31 +17,35 @@ import javax.jdo.annotations.PrimaryKey;
  *
  * @author sgl
  */
-@PersistenceCapable
+@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class View {
 
-    @PrimaryKey
+ @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key key;
-    
+    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+    private String encodedKey;
+
     @Persistent
     private String title;
-    
+
     @Persistent
     private String url;
-    
+
     @Persistent
     private String description;
-    
+
     @Persistent
     private String content;
-    
+
     @Persistent
+    @Element(dependent = "true")
     private SortedSet<Bloc> blocs;
 
-    public Key getKey() {
-        return key;
+    public String getEncodedKey() {
+        return encodedKey;
     }
+
+
 
     public String getTitle() {
         return title;
@@ -80,5 +86,5 @@ public class View {
     public void setBlocs(SortedSet<Bloc> blocs) {
         this.blocs = blocs;
     }
-    
+
 }

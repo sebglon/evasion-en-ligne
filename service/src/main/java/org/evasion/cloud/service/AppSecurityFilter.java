@@ -71,6 +71,7 @@ public class AppSecurityFilter implements ContainerRequestFilter, ContainerRespo
             try {
                 Credential credential = OauthCodeFlow.getFlow().loadCredential(userId);
                 if (credential != null) {
+                    credential.refreshToken();
                     Oauth2 service = new Oauth2.Builder(OauthCodeFlow.HTTP_TRANSPORT, OauthCodeFlow.JSON_FACTORY, credential).build();
                     request.setSecurityContext(new EvasionSecurityContext("https".equalsIgnoreCase(request.getBaseUri().getScheme()), userId, service.userinfo().get().execute()));
                 }

@@ -4,11 +4,12 @@
  */
 package org.evasion.cloud.service.model;
 
-import com.google.appengine.api.datastore.Key;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
+import javax.jdo.annotations.Element;
+import javax.jdo.annotations.Embedded;
+import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -22,12 +23,13 @@ import org.evasion.cloud.service.User;
  * @author sgl
  */
 @XmlRootElement
-@PersistenceCapable
+@PersistenceCapable()
 public class Site {
 
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key key;
+    @Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
+    private String encodedKey;
     @Persistent
     @Unique
     private String subdomain;
@@ -44,10 +46,11 @@ public class Site {
     @Persistent
     private Date dateRevision;
     @Persistent
+    @Element(dependent = "true")
     private Set<View> views;
 
-    public Key getKey() {
-        return key;
+    public String getEncodedKey() {
+        return encodedKey;
     }
 
     public String getTitle() {

@@ -5,7 +5,6 @@
 package org.evasion.cloud.service;
 
 import javax.jdo.annotations.PersistenceCapable;
-import javax.xml.bind.annotation.XmlElement;
 
 /**
  *
@@ -14,11 +13,9 @@ import javax.xml.bind.annotation.XmlElement;
 @PersistenceCapable
 public class User {
 
-    @XmlElement(name = "name")
-    String name;
+    private String name;
     
-    @XmlElement(name="googleId")
-    String googleId;
+    private String googleId;
 
     public User(String name, String googleId) {
         this.name = name;
@@ -31,6 +28,11 @@ public class User {
 
     public String getGoogleId() {
         return googleId;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "name=" + name + ", googleId=" + googleId + '}';
     }
     
 }
