@@ -38,6 +38,10 @@ public class HTML5CorsFilter implements javax.servlet.Filter {
         }
 
         String origin = request.getHeader("Origin");
+        // contournement du bug appengine 8625 bug présent uniquement en prod.
+        if (origin==null){
+            origin="";
+        }
 
         //if (origin != null && whitelist.contains(origin)) {
             response.addHeader("Access-Control-Allow-Origin", origin);
