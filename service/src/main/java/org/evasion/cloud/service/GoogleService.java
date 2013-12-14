@@ -121,7 +121,8 @@ public class GoogleService {
      * @cod true} en environneent de production, sinon {@code false}
      */
     private boolean isSecureMode() {
-        return SystemProperty.environment.value() == SystemProperty.Environment.Value.Production;
+        return false;
+        //  return SystemProperty.environment.value() == SystemProperty.Environment.Value.Production;
     }
 
 }
