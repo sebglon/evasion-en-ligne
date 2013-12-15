@@ -6,9 +6,9 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                 delete $httpProvider.defaults.headers.common['X-Requested-With'];
             }])
         .config(['apiProvider', function(apiProvider) {
-                apiProvider.setServerUrl('http://evasion-en-ligne.fr:8080');
+                apiProvider.setServerUrl('http://ws.evasion-en-ligne.fr');
             }])
-        .controller('EditStaticContent', ['$scope', '$rootScope', 'api', function($scope, $rootScope, api) {
+        .controller('EditStaticContent', ['$scope', '$rootScope', 'api','$sce', function($scope, $rootScope, api,$sce) {
 
                 this.tinymceOptions = {
                     plugins: [
@@ -17,7 +17,7 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                         "insertdatetime media table contextmenu paste"
                     ],
                     toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-                    browser_spellcheck: true, object_resizing: true, menubar: false, content_css: "/css/app.css, /css/lib/bootstrap/bootstrap.css",
+                    browser_spellcheck: true, object_resizing: true, menubar: false, content_css: "/css/app.css, //cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap.min.js",
                     handle_event_callback: function(e) {
                         // put logic here for keypress
                     }
@@ -51,6 +51,9 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                     return angular.equals(this.content, $rootScope.view.content) 
                             && angular.equals(this.title, $rootScope.view.title) 
                             && angular.equals(this.description, $rootScope.view.description);
+                };
+                this.trustedContent = function() {
+                    return $sce.trustAsHtml($rootScope.view.content);
                 };
                 this.reset();
             }])

@@ -51,7 +51,8 @@
                         <div ng-show="auth.token && auth.user && auth.user.name">
                             <div class="pull-right">
                                 <div>Bonjour {{auth.user.name}}</div>
-                                <a type="button" class="btn pull-right" ng-click="logoutForm()">Me d&eacute;connecter</a>
+                                <div>Faire une demande de <a ng-click="" >cr&eacute;ation de site</a></div>
+                                <a type="button" class="" ng-click="logoutForm()">Me d&eacute;connecter</a>
                             </div>
 
                         </div>
@@ -140,7 +141,7 @@
                 <button ng-click="esc.update()" ng-disabled="esc.isUnchanged()">Enregistrer</button>
                 </form>
                 </div>
-                <div ng-switch-default><div ng-bind-html="view.content" class="content"></div></div>
+                <div ng-switch-default><div ng-bind-html="esc.trustedContent()" class="content"></div></div>
 
                 </div>
                 </div>
