@@ -77,7 +77,7 @@ public class AppSecurityFilter implements ContainerRequestFilter, ContainerRespo
                 }
             } catch (IOException ex) {
                 LOG.error("FAIL to load Google credential", ex);
-                throw new WebApplicationException(Status.UNAUTHORIZED);
+                //throw new WebApplicationException(Status.UNAUTHORIZED);
             }
 
         }
