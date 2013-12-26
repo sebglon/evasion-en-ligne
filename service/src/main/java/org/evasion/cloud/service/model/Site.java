@@ -8,21 +8,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.jdo.annotations.Element;
-import javax.jdo.annotations.Embedded;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.Unique;
-import javax.xml.bind.annotation.XmlRootElement;
 import org.evasion.cloud.service.User;
 
 /**
  *
  * @author sgl
  */
-@XmlRootElement
 @PersistenceCapable()
 public class Site {
 
@@ -47,10 +44,15 @@ public class Site {
     private Date dateRevision;
     @Persistent
     @Element(dependent = "true")
+    @Extension(vendorName = "datanucleus", key = "comparator-name" ,value  = "foo.bar.MyComparatorClass") 
     private Set<View> views;
 
     public String getEncodedKey() {
         return encodedKey;
+    }
+
+    public void setEncodedKey(String encodedKey) {
+        this.encodedKey = encodedKey;
     }
 
     public String getTitle() {

@@ -8,22 +8,18 @@ import com.google.appengine.repackaged.com.google.common.collect.Sets;
 import javax.annotation.security.DeclareRoles;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import org.evasion.cloud.service.common.PMF;
 import org.evasion.cloud.service.model.Site;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import org.evasion.cloud.api.data.ISite;
+import org.evasion.cloud.api.service.ISiteService;
+import org.evasion.cloud.service.converter.CSite;
+import org.evasion.cloud.service.converter.IConverter;
 import org.evasion.cloud.service.model.View;
 import org.evasion.cloud.service.security.EvasionPrincipal;
 import org.slf4j.Logger;
@@ -35,19 +31,17 @@ import org.slf4j.LoggerFactory;
  */
 @Path("site")
 @DeclareRoles({"admin", "user"})
-public class SiteService {
+public class SiteService implements ISiteService {
 
     @Context
     private SecurityContext securityContext;
     @Context
     HttpHeaders request;
 
-    private static Logger LOG = LoggerFactory.getLogger(SiteService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
 
-    @GET()
-    @Path("{siteid}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Site get(@PathParam("siteid") long id) {
+    @Override
+    public ISite get(long id) {
         LOG.debug("Request: {}", request);
         Site site;
         PersistenceManager pm = PMF.getPm();
@@ -56,24 +50,21 @@ public class SiteService {
         } finally {
             pm.close();
         }
-        return site;
+        return new CSite(site);
 
     }
 
-    @GET()
-    @Path("bySubdmain/{subdomain}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Site getBySubDomain(@PathParam("subdomain") String subdmain) {
+    @Override
+    public ISite getBySubDomain(String subdmain) {
         PersistenceManager pm = PMF.getPm();
         Query query = pm.newQuery(Site.class, ":p.contains(subdomain)");
         query.setUnique(true);
-        return (Site) query.execute(subdmain);
+        return new CSite((Site) query.execute(subdmain));
 
     }
 
-    @POST()
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response create(@FormParam("subdomain") String subdomain) {
+    @Override
+    public ISite create(String subdomain) {
         if (null == securityContext.getUserPrincipal()) {
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
@@ -90,7 +81,7 @@ public class SiteService {
             defaultView.setUrl("/");
             defaultView.setContent("Contenue par défaut");
             site.setViews(Sets.newHashSet(defaultView));
-            
+
             site.setAuthor(getUser());
             site.setSubdomain(subdomain);
             LOG.debug("Site to create :{}", site);
@@ -99,34 +90,33 @@ public class SiteService {
             pm.close();
         }
 
-        return Response.ok(site).build();
+        return new CSite(site);
     }
-   
-    @PUT()
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response update(Site site) {
+
+    @Override
+    public ISite update(ISite site) {
         User user = getUser();
         PersistenceManager pm = PMF.get().getPersistenceManager();
+        Site eSite = ((IConverter<Site>) site).getEntity();
         try {
-        // recuperation du site en base pour verification du proprietaire
-        Site siteBdd = (Site) pm.getObjectById(Site.class,site.getEncodedKey());
-        if (null == securityContext.getUserPrincipal() || null == user || !siteBdd.getAuthor().getGoogleId().equals(user.getGoogleId())) {
-            LOG.warn("Not same user on update site: {}/ {}", siteBdd.getAuthor(), user);
-            throw new WebApplicationException(Response.Status.FORBIDDEN);
-        }
-        
-        // Reset du sous domain pour s'assurer qu'il ne soit pas changer
-        site.setSubdomain(siteBdd.getSubdomain());
-        pm.makePersistent(site);
+            // recuperation du site en base pour verification du proprietaire
+            Site siteBdd = (Site) pm.getObjectById(Site.class, eSite.getEncodedKey());
+            if (null == securityContext.getUserPrincipal() || null == user || !siteBdd.getAuthor().getGoogleId().equals(user.getGoogleId())) {
+                LOG.warn("Not same user on update site: {}/ {}", siteBdd.getAuthor(), user);
+                throw new WebApplicationException(Response.Status.FORBIDDEN);
+            }
+
+            // Reset du sous domain pour s'assurer qu'il ne soit pas changer
+            site.setSubdomain(siteBdd.getSubdomain());
+            pm.makePersistent(site);
         } finally {
             pm.close();
         }
-        return Response.ok(site).build();
+        return new CSite(eSite);
     }
-    
+
     private User getUser() {
-                // create User
+        // create User
         User user;
         LOG.debug("UPN: {}", securityContext.getUserPrincipal());
         user = new User(((EvasionPrincipal) securityContext.getUserPrincipal()).getUserInfo().getName(), ((EvasionPrincipal) securityContext.getUserPrincipal()).getUserInfo().getId());

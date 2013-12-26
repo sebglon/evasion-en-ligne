@@ -6,7 +6,7 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                 delete $httpProvider.defaults.headers.common['X-Requested-With'];
             }])
         .config(['apiProvider', function(apiProvider) {
-                apiProvider.setServerUrl('http://ws.evasion-en-ligne.fr');
+                apiProvider.setServerUrl('http://www.evasion-en-ligne.com:8080');
             }])
         .controller('EditStaticContent', ['$scope', '$rootScope', 'api','$sce', function($scope, $rootScope, api,$sce) {
 
