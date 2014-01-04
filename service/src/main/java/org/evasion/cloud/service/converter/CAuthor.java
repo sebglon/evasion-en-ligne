@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.evasion.cloud.service.converter;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.evasion.cloud.api.data.IAuthor;
 import org.evasion.cloud.service.User;
 
@@ -13,10 +16,20 @@ import org.evasion.cloud.service.User;
  *
  * @author sgl
  */
-public class CAuthor extends IConverter<User> implements IAuthor{
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.PROPERTY)
+
+public class CAuthor implements IAuthor, IConverter<User> {
 
     public CAuthor(User entity) {
-        super(entity);
+        this.entity = entity;
     }
-    
+
+    User entity;
+
+    @XmlTransient
+    public User getEntity() {
+        return entity;
+    }
+
 }

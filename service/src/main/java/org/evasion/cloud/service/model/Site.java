@@ -4,9 +4,11 @@
  */
 package org.evasion.cloud.service.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -37,7 +39,7 @@ public class Site {
     @Persistent
     private User author;
     @Persistent
-    private List<String> keywords;
+    private List<String> keywords = new ArrayList<String>();
     @Persistent
     private Date dateCreation;
     @Persistent
@@ -45,7 +47,7 @@ public class Site {
     @Persistent
     @Element(dependent = "true")
     @Extension(vendorName = "datanucleus", key = "comparator-name" ,value  = "foo.bar.MyComparatorClass") 
-    private Set<View> views;
+    private Set<View> views = new TreeSet<View>();
 
     public String getEncodedKey() {
         return encodedKey;

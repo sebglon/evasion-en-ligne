@@ -4,13 +4,15 @@
  * and open the template in the editor.
  */
 
-package org.evasion.cloud.api.data;
+package org.evasion.cloud.service.model;
 
 /**
  *
  * @author sgl
  */
-public interface IAuthor {
-
+public enum ContentType {
+    
+    staticContent, template, templateUrl
+    
     
 }

@@ -9,7 +9,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlList;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.evasion.cloud.api.data.IAuthor;
@@ -23,16 +30,26 @@ import org.evasion.cloud.service.model.View;
  * @author sgl
  */
 @XmlRootElement
-public class CSite extends IConverter<Site> implements ISite {
+@XmlAccessorType(XmlAccessType.PROPERTY)
+public class CSite implements ISite, IConverter<Site> {
 
     public CSite() {
-        super(new Site());
+        this.entity = new Site();
     }
 
     public CSite(Site entity) {
-        super(entity);
+        this.entity = entity;
     }
 
+    private final Site entity;
+
+    @XmlTransient
+    @Override
+    public Site getEntity() {
+        return entity;
+    }
+
+    @XmlAttribute
     @Override
     public String getId() {
         return getEntity().getEncodedKey();
@@ -43,6 +60,7 @@ public class CSite extends IConverter<Site> implements ISite {
         getEntity().setEncodedKey(id);
     }
 
+    @XmlAttribute
     @Override
     public String getTitle() {
         return getEntity().getTitle();
@@ -53,6 +71,7 @@ public class CSite extends IConverter<Site> implements ISite {
         getEntity().setTitle(title);
     }
 
+    @XmlAttribute
     @Override
     public String getDescription() {
         return getEntity().getDescription();
@@ -63,6 +82,8 @@ public class CSite extends IConverter<Site> implements ISite {
         getEntity().setDescription(description);
     }
 
+    @XmlElement
+    @XmlList
     @Override
     public List<String> getKeywords() {
         return getEntity().getKeywords();
@@ -73,6 +94,7 @@ public class CSite extends IConverter<Site> implements ISite {
         getEntity().setKeywords(keywords);
     }
 
+    @XmlAttribute
     @Override
     public Date getDateCreation() {
         return getEntity().getDateCreation();
@@ -83,6 +105,7 @@ public class CSite extends IConverter<Site> implements ISite {
         getEntity().setDateCreation(dateCreation);
     }
 
+    @XmlAttribute
     @Override
     public Date getDateRevision() {
         return getEntity().getDateRevision();
@@ -93,6 +116,7 @@ public class CSite extends IConverter<Site> implements ISite {
         getEntity().setDateRevision(dateRevision);
     }
 
+    @XmlElement
     @Override
     public IAuthor getAuthor() {
         return new CAuthor(getEntity().getAuthor());
@@ -103,6 +127,7 @@ public class CSite extends IConverter<Site> implements ISite {
         getEntity().setAuthor(null);
     }
 
+    @XmlElement
     @Override
     public Set<IView> getViews() {
         Set<IView> result = new HashSet<IView>();
@@ -128,6 +153,7 @@ public class CSite extends IConverter<Site> implements ISite {
         getEntity().setViews(result);
     }
 
+    @XmlAttribute
     @Override
     public String getSubdomain() {
         return getEntity().getSubdomain();

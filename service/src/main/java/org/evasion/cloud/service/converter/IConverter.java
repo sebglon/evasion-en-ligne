@@ -3,27 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.evasion.cloud.service.converter;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author sgl
  * @param <BEAN>
  */
-public abstract class IConverter<BEAN extends Object> {
-    
-    BEAN entity;
-    
-    public BEAN getEntity() {
-        return entity;
-    }
+public interface IConverter<BEAN extends Object> {
 
-    public IConverter(BEAN entity) {
-        this.entity = entity;
-    }
+     BEAN getEntity();
 
-    public IConverter() {
-    }
-    
 }

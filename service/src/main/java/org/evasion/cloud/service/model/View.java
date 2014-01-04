@@ -36,8 +36,11 @@ public class View {
 
     @Persistent
     private String content;
-
+    
     @Persistent
+    private ContentType type;
+
+    @Persistent 
     @Element(dependent = "true")
     private SortedSet<Bloc> blocs;
 
@@ -85,6 +88,14 @@ public class View {
 
     public void setBlocs(SortedSet<Bloc> blocs) {
         this.blocs = blocs;
+    }
+
+    public ContentType getType() {
+        return type;
+    }
+
+    public void setType(ContentType type) {
+        this.type = type;
     }
 
 }

@@ -20,6 +20,7 @@ import org.evasion.cloud.api.data.ISite;
 import org.evasion.cloud.api.service.ISiteService;
 import org.evasion.cloud.service.converter.CSite;
 import org.evasion.cloud.service.converter.IConverter;
+import org.evasion.cloud.service.model.ContentType;
 import org.evasion.cloud.service.model.View;
 import org.evasion.cloud.service.security.EvasionPrincipal;
 import org.slf4j.Logger;
@@ -78,10 +79,17 @@ public class SiteService implements ISiteService {
             site = new Site();
             View defaultView = new View();
             defaultView.setTitle("Page par défaut");
+            defaultView.setType(ContentType.staticContent);
             defaultView.setUrl("/");
             defaultView.setContent("Contenue par défaut");
             site.setViews(Sets.newHashSet(defaultView));
 
+            View booktravelView = new View();
+            booktravelView.setType(ContentType.templateUrl);
+            booktravelView.setUrl("/voyage");
+            booktravelView.setContent("partials/booktravel.html");
+            booktravelView.setTitle("carnet de voyage");
+            site.getViews().add(booktravelView);
             site.setAuthor(getUser());
             site.setSubdomain(subdomain);
             LOG.debug("Site to create :{}", site);

@@ -25,5 +25,9 @@ public interface IView {
     void setContent(String content);
     Set<IBloc> getBlocs();
     void setBlocs(SortedSet<IBloc> blocs);
+    String getTemplate();
+    void setTemplate(String template);
+    String getTemplateUrl();
+    void setTemplateUrl(String templateUrl);
     
 }
