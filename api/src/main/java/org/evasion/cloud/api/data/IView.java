@@ -29,5 +29,6 @@ public interface IView {
     void setTemplate(String template);
     String getTemplateUrl();
     void setTemplateUrl(String templateUrl);
-    
+    int getIndex();
+    void setIndex(int index);
 }

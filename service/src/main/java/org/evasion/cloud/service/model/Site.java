@@ -6,12 +6,15 @@ package org.evasion.cloud.service.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.Order;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
@@ -46,8 +49,8 @@ public class Site {
     private Date dateRevision;
     @Persistent
     @Element(dependent = "true")
-    @Extension(vendorName = "datanucleus", key = "comparator-name" ,value  = "foo.bar.MyComparatorClass") 
-    private Set<View> views = new TreeSet<View>();
+    @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="index asc"))
+    private Set<View> views = new HashSet<View>();
 
     public String getEncodedKey() {
         return encodedKey;

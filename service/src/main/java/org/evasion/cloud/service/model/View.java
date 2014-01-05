@@ -43,7 +43,9 @@ public class View {
     @Persistent 
     @Element(dependent = "true")
     private SortedSet<Bloc> blocs;
-
+    
+    private int index;
+    
     public String getEncodedKey() {
         return encodedKey;
     }
@@ -98,4 +100,12 @@ public class View {
         this.type = type;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+    
 }

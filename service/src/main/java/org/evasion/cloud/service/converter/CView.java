@@ -154,4 +154,14 @@ public class CView implements IView, IConverter<View> {
         }
     }
 
+    @Override
+    public int getIndex() {
+        return getEntity().getIndex();
+    }
+
+    @Override
+    public void setIndex(int index) {
+        getEntity().setIndex(index);
+    }
+
 }

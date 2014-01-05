@@ -5,15 +5,19 @@
  */
 package org.evasion.cloud.service.converter;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlList;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -128,9 +132,16 @@ public class CSite implements ISite, IConverter<Site> {
     }
 
     @XmlElement
+    @XmlElementWrapper
     @Override
     public Set<IView> getViews() {
-        Set<IView> result = new HashSet<IView>();
+        Set<IView> result = new TreeSet<IView>(new Comparator<IView>() {
+
+            @Override
+            public int compare(IView o1, IView o2) {
+                return o1.getIndex() - o2.getIndex();
+            }
+        });
 
         CollectionUtils.collect(getEntity().getViews(), new Transformer() {
             @Override
@@ -147,7 +158,8 @@ public class CSite implements ISite, IConverter<Site> {
         CollectionUtils.collect(views, new Transformer() {
             @Override
             public Object transform(Object o) {
-                return ((CView) o).getEntity();
+                final View view = ((CView) o).getEntity();
+                return view;
             }
         }, result);
         getEntity().setViews(result);

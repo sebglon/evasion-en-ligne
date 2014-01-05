@@ -82,13 +82,15 @@ public class SiteService implements ISiteService {
             defaultView.setType(ContentType.staticContent);
             defaultView.setUrl("/");
             defaultView.setContent("Contenue par défaut");
-            site.setViews(Sets.newHashSet(defaultView));
+            defaultView.setIndex(0);
+            site.getViews().add(defaultView);
 
             View booktravelView = new View();
             booktravelView.setType(ContentType.templateUrl);
             booktravelView.setUrl("/voyage");
             booktravelView.setContent("partials/booktravel.html");
             booktravelView.setTitle("carnet de voyage");
+            booktravelView.setIndex(1);
             site.getViews().add(booktravelView);
             site.setAuthor(getUser());
             site.setSubdomain(subdomain);
