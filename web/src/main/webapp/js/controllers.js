@@ -8,7 +8,7 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
         .config(['apiProvider', function(apiProvider) {
                 apiProvider.setServerUrl('http://www.evasion-en-ligne.com:8080');
             }])
-        .controller('EditStaticContent', ['$scope', '$rootScope', 'api','$sce', function($scope, $rootScope, api,$sce) {
+        .controller('EditStaticContent', ['$scope', '$rootScope', 'api', '$sce', function($scope, $rootScope, api, $sce) {
 
                 this.tinymceOptions = {
                     plugins: [
@@ -31,7 +31,7 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                 this.update = function() {
                     var i;
                     // Mise à jour du site;
-                    for (i=0; $rootScope.site.views.length;i++) {
+                    for (i = 0; $rootScope.site.views.length; i++) {
                         if ($rootScope.site.views[i].key === $rootScope.view.key) {
                             $rootScope.site.views[i].title = angular.copy(this.title);
                             $rootScope.site.views[i].content = angular.copy(this.content);
@@ -48,8 +48,8 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                     this.onEditContent = false;
                 };
                 this.isUnchanged = function() {
-                    return angular.equals(this.content, $rootScope.view.content) 
-                            && angular.equals(this.title, $rootScope.view.title) 
+                    return angular.equals(this.content, $rootScope.view.content)
+                            && angular.equals(this.title, $rootScope.view.title)
                             && angular.equals(this.description, $rootScope.view.description);
                 };
                 this.trustedContent = function() {
@@ -62,7 +62,7 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                 api.user.token();
             }])
         .controller('LoginCtrl', ['$rootScope', '$scope', 'api', function($rootScope, $scope, api) {
-                
+
                 $scope.loginForm = function() {
                     api.user.auth(function(data) {
                         $rootScope.auth = {token: data};
@@ -81,8 +81,11 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                 console.log('init app Ctrl');
                 $scope.init = function() {
                     $scope.loggin = false;
-                    $document.ready(function() {
+                    $document.ready(function(scope, element, attrs) {
 
                     });
                 };
+            }])
+        .controller('BooktravelCtrl', ['$scope', function($scope) {
+                $scope.book = {titre: "Titre du carnet"};
             }]);

@@ -1,7 +1,7 @@
 'use strict';
 
 // Declare app level module which depends on filters, and services
-var evasionVisiteurApp = angular.module('evasionVisiteurApp', ['ui.tinymce', 'ngRoute', 'evasionVisiteurApp.controllers', 'ngSanitize', 'ngCookies']);
+var evasionVisiteurApp = angular.module('evasionVisiteurApp', ['ui.tinymce', 'ngRoute', 'evasionVisiteurApp.controllers', 'ngSanitize', 'ngCookies', 'evasionVisiteurApp.googleapi','evasionVisiteurApp.directives']);
 var $routeProviderReference;
 evasionVisiteurApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
@@ -40,10 +40,10 @@ angular.injector(['ng', 'ngRoute', 'ngCookies']).invoke(function($rootScope) {
                             $rootScope.view = $route.current.view;
                         }};
 
-                    if (view.content !== undefined) {
+                    if (view.content !== undefined && view.content!== null) {
                         routeConfig.template = "<ng-include src=\"'staticContent_TPL.html'\"></ng-include>";
-                    } else if (view.template !== undefined) {
-                        routeConfig.template = view.content;
+                    } else if (view.template !== undefined && view.template!==null) {
+                        routeConfig.template = view.template;
                     } else {
                         routeConfig.templateUrl = view.templateUrl;
                     }

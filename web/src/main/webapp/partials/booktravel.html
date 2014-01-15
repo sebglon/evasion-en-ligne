@@ -1,8 +1,46 @@
-<script  type='text/ng-template' id="block-bookList.html">
-<ul>
-    <li>test link book</li>
-</ul>
-</script>
-<div>
-page de booktravel
-</div>
+<div ng-controller="BooktravelCtrl">
+    <ev-editor edit="esc.edit()" auth="auth && auth.token && !auth.token.error">
+        <ev-text type="title-h2" class="row-fluid" value="book.titre"></ev-text>
+        <div class="row-fluid" >
+            <div class="span9">
+                <div> contenux
+                    w<br>
+                    w<br>
+                    w<br>
+                    w<br>
+                    w<br>
+                    w<br>
+                    w<br>
+                    w<br>
+                    w<br>
+                    w<br>
+                    w<br>
+                    w<br></div>
+            </div>
+            <div class="span3">
+                <div>Date de départ <br> Date de retour<br>Distance parcourue <br> Nbr d'étapes <br> </div>
+                <div>Pays traversés <br> xxx<br>yyy </div>
+            </div>
+        </div>
+    </ev-editor>
+    <div class="row-fluid" >
+        <div class="span9">
+            <div class='row-fluid'>
+                <div>feuille de route N</div>
+                <div>resumé</div>
+            </div>
+            <div>
+                <div>feuille de route N-1</div>
+                <div>resumé</div>
+            </div>
+            <div>
+                <div>feuille de route N-2</div>
+                <div>resumé</div>
+            </div>
+            <div>
+                <div>feuille de route N-3</div>
+                <div>resumé</div>
+            </div>
+        </div>
+    </div>
+</div> 

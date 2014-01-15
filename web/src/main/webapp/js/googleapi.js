@@ -47,7 +47,7 @@ googleapi.provider('GoogleApi', function() {
             return {
                 clientid: config.clientId,
                 client_id: config.clientId,
-                        immediate: immediate,
+                immediate: immediate,
                 cookiepolicy: config.cookiepolicy,
                 scope: config.scopes.join(" ")//,
                         // hd: config.hdDomain
@@ -66,7 +66,7 @@ googleapi.provider('GoogleApi', function() {
                         $rootScope.$apply(function() {
                             data.upn = obj;
                         });
-                        
+
                     });
                 });
                 deferred.resolve(data);
@@ -90,10 +90,10 @@ googleapi.provider('GoogleApi', function() {
             clientLoadPlus: function() {
                 gapi.client.setApiKey(config.apiKey);
                 var param = getParams(false);
-                param.callback=handleAuthResult;
+                param.callback = handleAuthResult;
                 gapi.client.load('plus', 'v1', function() {
-                    gapi.signin.render('googleSignIn',param) ;
-                }); 
+                    gapi.signin.render('googleSignIn', param);
+                });
             },
             clientLoadOAuth2: function() {
                 gapi.client.setApiKey(config.apiKey);
@@ -107,7 +107,7 @@ googleapi.provider('GoogleApi', function() {
 googleapi.config(function(GoogleApiProvider) {
     GoogleApiProvider.extendConfig({
         cookiepolicy: 'single_host_origin',
-        scopes: ["https://www.googleapis.com/auth/plus.login","https://www.googleapis.com/auth/plus.me"]
+        scopes: ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.me"]
     });
 });
 
@@ -118,8 +118,8 @@ googleapi.directive('gsignin', ['$rootScope', 'GoogleApi', function($rootScope, 
             template: '<a>Google SignIn</a>',
             replace: true,
             controller: function($scope, GoogleApi, $document) {
-               // GoogleApi.clientLoad();
-                
+                // GoogleApi.clientLoad();
+
             },
             link: function(scope, element, attrs) {
                 element.bind("click", function() {
@@ -130,3 +130,22 @@ googleapi.directive('gsignin', ['$rootScope', 'GoogleApi', function($rootScope, 
         };
     }
 ]);
+
+googleapi.directive('googleMaps', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            console.log("test API");
+            var map;
+            var mapOptions = {
+                zoom: 7,
+                // Center the map on Chicago, USA.
+                center: new google.maps.LatLng(41.879535, -87.624333)
+            };
+
+            map = new google.maps.Map(element[0], mapOptions);
+
+
+        }
+    };
+});

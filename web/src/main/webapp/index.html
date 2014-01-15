@@ -114,13 +114,7 @@
 
             <script id="staticContent_TPL.html" type="text/ng-template" ng-controller="EditStaticContent">
                 <div ng-controller="EditStaticContent as esc">
-                <div ng-switch on="auth && auth.token && !auth.token.error">
-                <div ng-switch-when="true">
-                <div class="options">
-                <a class="icon icon-edit" href="" ng-click="esc.edit()"></a>
-                <a class="icon icon-move" href=""></a>
-                <a class="icon-black icon-trash" href=""></a>
-                </div></div></div>
+                <ev-editor edit="esc.edit()" auth="auth && auth.token && !auth.token.error"></ev-editor>
                 <div ng-switch on="auth && auth.token && !auth.token.error && esc.onEditContent">
                 <div ng-switch-when="true">
                 <form name="formStaticContent" novalidate class="form-horizontal">
@@ -166,5 +160,7 @@
         <script type="text/javascript" src="/js/services.js"></script>
         <script type="text/javascript" src="/js/controllers.js"></script>
         <script type="text/javascript" src="/js/googleapi.js"></script>
+        <script type="text/javascript" src="/js/directives.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
     </body>
 </html>
