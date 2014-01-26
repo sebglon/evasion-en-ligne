@@ -10,7 +10,28 @@ package org.evasion.cloud.api.data;
  *
  * @author sgl
  */
-public interface IAuthor {
+public class IAuthor {
 
+    private String name;
+    
+    public String getName() {
+        return this.name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    private String googleId;
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
+    
+    
     
 }

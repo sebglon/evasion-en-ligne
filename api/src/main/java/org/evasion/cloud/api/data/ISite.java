@@ -1,9 +1,18 @@
 package org.evasion.cloud.api.data;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import org.evasion.cloud.api.data.IAuthor;
+import java.util.TreeSet;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlList;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 /*
@@ -15,41 +24,108 @@ import org.evasion.cloud.api.data.IAuthor;
  *
  * @author sgl
  */
-public interface ISite {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.PROPERTY)
+public class ISite implements Serializable {
 
-    String getId();
+    private String id;
 
-    void setId(String id);
+    @XmlAttribute
+    public String getId() {
+        return this.id;
+    }
 
-    String getTitle();
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    void setTitle(String title);
+    private String title;
 
-    String getDescription();
+    @XmlAttribute
+    public String getTitle() {
+        return this.title;
+    }
 
-    void setDescription(String description);
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    List<String> getKeywords();
+    private String description;
 
-    void setKeywords(List<String> keywords);
+    @XmlAttribute
+    public String getDescription() {
+        return this.description;
+    }
 
-    Date getDateCreation();
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    void setDateCreation(Date dateCreation);
+    private List<String> keywords = new ArrayList<String>();
 
-    Date getDateRevision();
+    @XmlElement
+    @XmlList
+    public List<String> getKeywords() {
+        return this.keywords;
+    }
 
-    void setDateRevision(Date dateRevision);
+    public void setKeywords(List<String> keywords) {
+        this.keywords = keywords;
+    }
 
-    IAuthor getAuthor();
+    private Date dateCreation;
 
-    void setAuthor(IAuthor author);
+    @XmlAttribute
+    public Date getDateCreation() {
+        return this.dateCreation;
+    }
 
-    Set<IView> getViews();
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
+    }
 
-    void setViews(Set<IView> views);
+    private Date dateRevision;
 
-    String getSubdomain();
+    @XmlAttribute
+    public Date getDateRevision() {
+        return this.dateRevision;
+    }
 
-    void setSubdomain(String subdomain);
+    public void setDateRevision(Date dateRevision) {
+        this.dateRevision = dateRevision;
+    }
+
+    private IAuthor author;
+
+    @XmlAttribute
+    public IAuthor getAuthor() {
+        return this.author;
+    }
+
+    public void setAuthor(IAuthor author) {
+        this.author = author;
+    }
+
+    private Set<IView> views = new TreeSet<IView>();
+
+    @XmlElement
+    @XmlElementWrapper
+    public Set<IView> getViews() {
+        return this.views;
+    }
+
+    public void setViews(Set<IView> views) {
+        this.views = views;
+    }
+
+    private String subDomain;
+
+    @XmlAttribute
+    public String getSubdomain() {
+        return this.subDomain;
+    }
+
+    public void setSubdomain(String subdomain) {
+        this.subDomain = subdomain;
+    }
 }

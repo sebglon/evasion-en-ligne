@@ -225,10 +225,14 @@
                     <version>${gae.version}</version>
                     <configuration>
                         <unpackVersion>${gae.version}</unpackVersion>
-                        
+                        <enhancerApi>JDO</enhancerApi>
                         <serverId>appengine.google.com</serverId>
                         <debugSuspend>true</debugSuspend>
                         <outputFile>${project.build.outputDirectory}/gae.log</outputFile>
+                        <jvmFlags>  
+                            <jvmFlag>-Xdebug</jvmFlag>  
+                            <jvmFlag>-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</jvmFlag>  
+                        </jvmFlags>  
                     </configuration>
                     <dependencies>
                         <dependency>
@@ -250,14 +254,6 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <configuration>
                         <goals>gae:deploy</goals>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>com.google.appengine</groupId>
-                    <artifactId>appengine-maven-plugin</artifactId>
-                    <version>${gae.version}</version>
-                    <configuration>
-                        <enhancerApi>JDO</enhancerApi>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -325,7 +321,11 @@
                 <artifactId>commons-collections</artifactId>
                 <version>3.0</version>
             </dependency>
-            
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>5.4.0</version>
+            </dependency>
             <dependency>
                 <groupId>org.jodd</groupId>
                 <artifactId>jodd-core</artifactId>
@@ -494,7 +494,11 @@
                 <artifactId>google-http-client-jackson</artifactId>
                 <version>1.17.0-rc</version>
             </dependency>
-                            
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-asl</artifactId>
+                <version>1.9.2</version>
+            </dependency>       
         </dependencies>
     </dependencyManagement>
     <profiles>

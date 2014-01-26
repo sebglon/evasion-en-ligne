@@ -6,10 +6,8 @@ package org.evasion.cloud.service.model;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.Extension;
@@ -50,7 +48,7 @@ public class Site {
     @Persistent
     @Element(dependent = "true")
     @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="index asc"))
-    private Set<View> views = new HashSet<View>();
+    private Set<View> views = new TreeSet<View>();
 
     public String getEncodedKey() {
         return encodedKey;

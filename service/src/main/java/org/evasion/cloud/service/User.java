@@ -5,6 +5,7 @@
 package org.evasion.cloud.service;
 
 import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 
 /**
  *
@@ -13,8 +14,10 @@ import javax.jdo.annotations.PersistenceCapable;
 @PersistenceCapable
 public class User {
 
+    @Persistent
     private String name;
     
+    @Persistent
     private String googleId;
 
     public User(String name, String googleId) {

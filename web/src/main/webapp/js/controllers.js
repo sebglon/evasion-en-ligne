@@ -24,7 +24,7 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                 };
                 this.edit = function() {
                     this.title = angular.copy($rootScope.view.title);
-                    this.content = angular.copy($rootScope.view.content);
+                    this.content = angular.copy($rootScope.view.contents.value);
                     this.description = angular.copy($rootScope.view.description);
                     this.onEditContent = true;
                 }
@@ -34,7 +34,7 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                     for (i = 0; $rootScope.site.views.length; i++) {
                         if ($rootScope.site.views[i].key === $rootScope.view.key) {
                             $rootScope.site.views[i].title = angular.copy(this.title);
-                            $rootScope.site.views[i].content = angular.copy(this.content);
+                            $rootScope.site.views[i].contents.value = angular.copy(this.content);
                             $rootScope.site.views[i].description = angular.copy(this.description);
                             $rootScope.view = $rootScope.site.views[i];
                             break;
@@ -48,12 +48,12 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                     this.onEditContent = false;
                 };
                 this.isUnchanged = function() {
-                    return angular.equals(this.content, $rootScope.view.content)
+                    return angular.equals(this.content, $rootScope.view.contents.value)
                             && angular.equals(this.title, $rootScope.view.title)
                             && angular.equals(this.description, $rootScope.view.description);
                 };
                 this.trustedContent = function() {
-                    return $sce.trustAsHtml($rootScope.view.content);
+                    return $sce.trustAsHtml($rootScope.view.contents.value);
                 };
                 this.reset();
             }])

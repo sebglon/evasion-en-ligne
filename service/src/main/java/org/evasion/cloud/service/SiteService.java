@@ -4,7 +4,7 @@
  */
 package org.evasion.cloud.service;
 
-import com.google.appengine.repackaged.com.google.common.collect.Sets;
+import java.util.Date;
 import javax.annotation.security.DeclareRoles;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -18,9 +18,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import org.evasion.cloud.api.data.ISite;
 import org.evasion.cloud.api.service.ISiteService;
-import org.evasion.cloud.service.converter.CSite;
-import org.evasion.cloud.service.converter.IConverter;
-import org.evasion.cloud.service.model.ContentType;
+import org.evasion.cloud.service.mapper.MapperUtils;
+import org.evasion.cloud.service.model.Content;
+import org.evasion.cloud.service.model.ContentConst;
 import org.evasion.cloud.service.model.View;
 import org.evasion.cloud.service.security.EvasionPrincipal;
 import org.slf4j.Logger;
@@ -51,7 +51,7 @@ public class SiteService implements ISiteService {
         } finally {
             pm.close();
         }
-        return new CSite(site);
+        return MapperUtils.convertFromSite(site);
 
     }
 
@@ -60,7 +60,7 @@ public class SiteService implements ISiteService {
         PersistenceManager pm = PMF.getPm();
         Query query = pm.newQuery(Site.class, ":p.contains(subdomain)");
         query.setUnique(true);
-        return new CSite((Site) query.execute(subdmain));
+        return MapperUtils.convertFromSite((Site) query.execute(subdmain));
 
     }
 
@@ -79,35 +79,44 @@ public class SiteService implements ISiteService {
             site = new Site();
             View defaultView = new View();
             defaultView.setTitle("Page par défaut");
-            defaultView.setType(ContentType.staticContent);
             defaultView.setUrl("/");
-            defaultView.setContent("Contenue par défaut");
+             Content content = new Content();
+            content.setType(ContentConst.STATIC);
+             content.setValue("Contenu par défaut");
+             defaultView.setContents(content);
             defaultView.setIndex(0);
             site.getViews().add(defaultView);
 
             View booktravelView = new View();
-            booktravelView.setType(ContentType.templateUrl);
             booktravelView.setUrl("/voyage");
-            booktravelView.setContent("partials/booktravel.html");
+            Content btContent = new Content();
+            btContent.setType(ContentConst.TEMPLATE_URL);
+            btContent.setValue("partials/booktravel.html");
+            btContent.setDataKey(Integer.toString(5));
+            booktravelView.setContents(btContent);
             booktravelView.setTitle("carnet de voyage");
             booktravelView.setIndex(1);
             site.getViews().add(booktravelView);
             site.setAuthor(getUser());
             site.setSubdomain(subdomain);
+            site.setTitle("Titre par défaut");
+            site.setDateCreation(new Date());
+            site.setDateRevision(new Date());
+
             LOG.debug("Site to create :{}", site);
             pm.makePersistent(site);
         } finally {
             pm.close();
         }
 
-        return new CSite(site);
+        return MapperUtils.convertFromSite(site);
     }
 
     @Override
     public ISite update(ISite site) {
         User user = getUser();
         PersistenceManager pm = PMF.get().getPersistenceManager();
-        Site eSite = ((IConverter<Site>) site).getEntity();
+        Site eSite = MapperUtils.convertToSite(site);
         try {
             // recuperation du site en base pour verification du proprietaire
             Site siteBdd = (Site) pm.getObjectById(Site.class, eSite.getEncodedKey());
@@ -117,12 +126,12 @@ public class SiteService implements ISiteService {
             }
 
             // Reset du sous domain pour s'assurer qu'il ne soit pas changer
-            site.setSubdomain(siteBdd.getSubdomain());
-            pm.makePersistent(site);
+            eSite.setSubdomain(siteBdd.getSubdomain());
+            pm.makePersistent(eSite);
         } finally {
             pm.close();
         }
-        return new CSite(eSite);
+        return MapperUtils.convertFromSite(eSite);
     }
 
     private User getUser() {

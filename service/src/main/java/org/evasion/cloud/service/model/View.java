@@ -16,14 +16,19 @@ import javax.jdo.annotations.PrimaryKey;
 /**
  *
  * @author sgl
+ * @param <T>
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class View {
+public class View implements Comparable<View>{
 
  @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
     private String encodedKey;
+
+    public void setEncodedKey(String encodedKey) {
+        this.encodedKey = encodedKey;
+    }
 
     @Persistent
     private String title;
@@ -35,10 +40,7 @@ public class View {
     private String description;
 
     @Persistent
-    private String content;
-    
-    @Persistent
-    private ContentType type;
+    private Content contents;
 
     @Persistent 
     @Element(dependent = "true")
@@ -76,12 +78,12 @@ public class View {
         this.description = description;
     }
 
-    public String getContent() {
-        return content;
+    public Content getContents() {
+        return contents;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setContents(Content contents) {
+        this.contents = contents;
     }
 
     public SortedSet<Bloc> getBlocs() {
@@ -92,20 +94,17 @@ public class View {
         this.blocs = blocs;
     }
 
-    public ContentType getType() {
-        return type;
-    }
-
-    public void setType(ContentType type) {
-        this.type = type;
-    }
-
     public int getIndex() {
         return index;
     }
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    @Override
+    public int compareTo(View o) {
+                return this.getIndex() - o.getIndex();
     }
     
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <configuration>
+        
+        <custom-converters>
+            <converter type="org.evasion.cloud.service.mapper.EnumToStringConverter">
+                <class-a>java.lang.Enum</class-a>
+                <class-b>java.lang.String</class-b>
+            </converter>
+        </custom-converters>
+    </configuration> 
+
+    <mapping> 
+        <class-a>org.evasion.cloud.service.model.Site</class-a>
+        <class-b>org.evasion.cloud.api.data.ISite</class-b>
+        <field>
+            <a>encodedKey</a>
+            <b>id</b>
+        </field>   
+    </mapping>
+    <mapping map-null="false" > 
+        <class-a>org.evasion.cloud.service.model.View</class-a>
+        <class-b>org.evasion.cloud.api.data.IView</class-b>
+        <field>
+            <a>encodedKey</a>
+            <b>id</b>
+        </field> 
+        <field>
+            <a>contents</a>
+            <b>contents</b>
+            <a-hint>
+                org.evasion.cloud.service.model.Content
+            </a-hint>
+            <b-hint>java.util.Map</b-hint>
+        </field>      
+    </mapping> 
+   
+</mappings>

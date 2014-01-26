@@ -1,6 +1,15 @@
 <!doctype html>
 <html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="evasionVisiteurApp">
     <head>
+        <!--[if lte IE 8]>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.2.6/json3.min.js"></script>
+            <script>
+              document.createElement('ng-include');
+              document.createElement('ng-pluralize');
+              document.createElement('ng-view');
+
+            </script>
+        <![endif]-->
         <meta http-EQUIV="content-type" CONTENT="text/html">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/2.3.1/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="/css/app.css"/>
@@ -62,7 +71,7 @@
                 <div class="navbar">
                     <div class="navbar-inner">
                         <ul class="nav" ng-repeat="view in site.views">
-                            <li ng-class="{active : $location.path() == view.url}" class="divider-vertical"><a href="{{view.url}}">{{view.title}}</a></li>
+                            <li ng-class="{active : $location.path() === view.url}" class="divider-vertical"><a href="{{view.url}}">{{view.title}}</a></li>
                         </ul>
                         <form class="navbar-form  pull-right">
                             <input type="text" class="search-query" placeholder="Search">
@@ -114,7 +123,13 @@
 
             <script id="staticContent_TPL.html" type="text/ng-template" ng-controller="EditStaticContent">
                 <div ng-controller="EditStaticContent as esc">
-                <ev-editor edit="esc.edit()" auth="auth && auth.token && !auth.token.error"></ev-editor>
+                <div ng-switch on="auth && auth.token && !auth.token.error">
+                <div ng-switch-when="true">
+                <div class="options">
+                <a class="icon icon-edit" href="" ng-click="esc.edit()"></a>
+                <a class="icon icon-move" href=""></a>
+                <a class="icon-black icon-trash" href=""></a>
+                </div></div></div>
                 <div ng-switch on="auth && auth.token && !auth.token.error && esc.onEditContent">
                 <div ng-switch-when="true">
                 <form name="formStaticContent" novalidate class="form-horizontal">
