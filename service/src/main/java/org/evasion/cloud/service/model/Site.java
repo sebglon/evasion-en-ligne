@@ -48,7 +48,7 @@ public class Site {
     @Persistent
     @Element(dependent = "true")
     @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="index asc"))
-    private Set<View> views = new TreeSet<View>();
+    private List<View> views = new ArrayList<View>();
 
     public String getEncodedKey() {
         return encodedKey;
@@ -106,11 +106,11 @@ public class Site {
         this.author = author;
     }
 
-    public Set<View> getViews() {
+    public List<View> getViews() {
         return views;
     }
 
-    public void setViews(Set<View> views) {
+    public void setViews(List<View> views) {
         this.views = views;
     }
 
