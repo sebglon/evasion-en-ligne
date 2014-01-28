@@ -19,6 +19,10 @@
         <field>
             <a>encodedKey</a>
             <b>id</b>
+        </field>
+        <field type="one-way">
+            <a>author</a>
+            <b>author</b>
         </field>   
     </mapping>
     <mapping map-null="false" > 

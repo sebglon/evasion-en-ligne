@@ -7,8 +7,6 @@ package org.evasion.cloud.service.model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -33,6 +31,8 @@ public class Site {
     @Persistent
     @Unique
     private String subdomain;
+    @Persistent
+    private String version = "1";
     @Persistent
     private String title;
     @Persistent
@@ -120,6 +120,14 @@ public class Site {
 
     public void setSubdomain(String subdomain) {
         this.subdomain = subdomain;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
 }

@@ -4,7 +4,10 @@
  */
 package org.evasion.cloud.service;
 
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.KeyFactory;
 import java.util.Date;
+import java.util.logging.Level;
 import javax.annotation.security.DeclareRoles;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -41,6 +44,14 @@ public class SiteService implements ISiteService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
 
+    private static final Integer API_VERSION = 1;
+
+    private static SiteUpdator updator;
+
+    public SiteService() {
+        updator = new SiteUpdator();
+    }
+
     @Override
     public ISite get(long id) {
         LOG.debug("Request: {}", request);
@@ -60,7 +71,16 @@ public class SiteService implements ISiteService {
         PersistenceManager pm = PMF.getPm();
         Query query = pm.newQuery(Site.class, ":p.contains(subdomain)");
         query.setUnique(true);
-        return MapperUtils.convertFromSite((Site) query.execute(subdmain));
+        Site site = (Site) query.execute(subdmain);
+        if (site.getVersion() == null) {
+            try {
+                site = updator.upgrade(site);
+                pm.makePersistent(site);
+            } catch (EntityNotFoundException ex) {
+                LOG.error("Fail to upgrade site {}", site.getSubdomain());
+            }
+        }
+        return MapperUtils.convertFromSite(site);
 
     }
 
@@ -80,10 +100,10 @@ public class SiteService implements ISiteService {
             View defaultView = new View();
             defaultView.setTitle("Page par défaut");
             defaultView.setUrl("/");
-             Content content = new Content();
+            Content content = new Content();
             content.setType(ContentConst.STATIC);
-             content.setValue("Contenu par défaut");
-             defaultView.setContents(content);
+            content.setValue("Contenu par défaut");
+            defaultView.setContents(content);
             defaultView.setIndex(0);
             site.getViews().add(defaultView);
 
@@ -120,13 +140,18 @@ public class SiteService implements ISiteService {
         try {
             // recuperation du site en base pour verification du proprietaire
             Site siteBdd = (Site) pm.getObjectById(Site.class, eSite.getEncodedKey());
-            if (null == securityContext.getUserPrincipal() || null == user || !siteBdd.getAuthor().getGoogleId().equals(user.getGoogleId())) {
+            if (siteBdd==null || siteBdd.getAuthor()==null) {
+                LOG.warn("Site not found or no author for user: {} {}",siteBdd, user);
+                throw  new WebApplicationException(Response.Status.NOT_FOUND);
+            }
+            if (null == user || !siteBdd.getAuthor().getGoogleId().equals(user.getGoogleId())) {
                 LOG.warn("Not same user on update site: {}/ {}", siteBdd.getAuthor(), user);
                 throw new WebApplicationException(Response.Status.FORBIDDEN);
             }
 
             // Reset du sous domain pour s'assurer qu'il ne soit pas changer
             eSite.setSubdomain(siteBdd.getSubdomain());
+            eSite.setAuthor(siteBdd.getAuthor());
             pm.makePersistent(eSite);
         } finally {
             pm.close();
@@ -140,5 +165,10 @@ public class SiteService implements ISiteService {
         LOG.debug("UPN: {}", securityContext.getUserPrincipal());
         user = new User(((EvasionPrincipal) securityContext.getUserPrincipal()).getUserInfo().getName(), ((EvasionPrincipal) securityContext.getUserPrincipal()).getUserInfo().getId());
         return user;
+    }
+
+    @Override
+    public String getVersion() {
+        return API_VERSION.toString();
     }
 }

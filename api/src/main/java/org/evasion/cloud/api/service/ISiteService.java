@@ -25,6 +25,11 @@ import org.evasion.cloud.api.data.ISite;
 public interface ISiteService {
 
     @GET()
+    @Path("version")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    String getVersion();
+    
+    @GET()
     @Path("{siteid}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     ISite get(@PathParam("siteid") long id);
