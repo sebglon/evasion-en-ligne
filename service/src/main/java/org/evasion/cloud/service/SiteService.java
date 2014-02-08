@@ -129,7 +129,7 @@ public class SiteService extends AbstractService<ISite, Site> implements ISiteSe
                 LOG.warn("Site not found or no author for user: {} {}", siteBdd, user);
                 throw new WebApplicationException(Response.Status.NOT_FOUND);
             }
-            if (null == user || !siteBdd.getUserId().equals(user)) {
+            if (null == user || !siteBdd.getUserId().equals(user)|| securityContext.isUserInRole("ADMIN")) {
                 LOG.warn("Not same user on update site: {}/ {}", siteBdd.getUserId(), user);
                 throw new WebApplicationException(Response.Status.FORBIDDEN);
             }
