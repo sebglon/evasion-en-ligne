@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.evasion.cloud.service;
+package org.evasion.cloud.service.updator;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -28,9 +28,7 @@ public class SiteUpdator {
     }
 
     public Site upgrade(Site site) throws EntityNotFoundException {
-         if(site.getAuthor()==null) {
-             site.setAuthor(new User("reprise", "000"));
-         }
+
         for (View view : site.getViews()) {
             Entity oldView = datastore.get(KeyFactory.stringToKey(view.getEncodedKey()));
             String value = (String) oldView.getProperty("content");

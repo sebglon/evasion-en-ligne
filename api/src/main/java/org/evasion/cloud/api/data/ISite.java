@@ -95,15 +95,26 @@ public class ISite implements Serializable {
         this.dateRevision = dateRevision;
     }
 
-    private IAuthor author;
+     @XmlAttribute
+    private String userId;
 
-    @XmlAttribute
-    public IAuthor getAuthor() {
-        return this.author;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setAuthor(IAuthor author) {
-        this.author = author;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+ 
+     @XmlAttribute
+    private String fullName;
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     private Set<IView> views = new TreeSet<IView>();
@@ -121,11 +132,11 @@ public class ISite implements Serializable {
     private String subDomain;
 
     @XmlAttribute
-    public String getSubdomain() {
+    public String getSubDomain() {
         return this.subDomain;
     }
 
-    public void setSubdomain(String subdomain) {
+    public void setSubDomain(String subdomain) {
         this.subDomain = subdomain;
     }
 }

@@ -10,18 +10,20 @@ import java.util.List;
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.Index;
 import javax.jdo.annotations.Order;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-import javax.jdo.annotations.Unique;
-import org.evasion.cloud.service.User;
+import javax.jdo.annotations.Queries;
+import javax.jdo.annotations.Query;
 
 /**
  *
  * @author sgl
  */
 @PersistenceCapable()
+@Queries({@Query(name = "SiteByUser", value = "SELECT FROM org.evasion.cloud.service.model.Site WHERE userId == :googleIdParam")})
 public class Site {
 
     @PrimaryKey
@@ -29,16 +31,21 @@ public class Site {
     @Extension(vendorName = "datanucleus", key = "gae.encoded-pk", value = "true")
     private String encodedKey;
     @Persistent
-    @Unique
+    @Index
     private String subdomain;
     @Persistent
     private String version = "1";
+    @Index
     @Persistent
     private String title;
     @Persistent
     private String description;
+    @Index
     @Persistent
-    private User author;
+    private String userId;
+    @Persistent
+    private String fullName;
+    @Index
     @Persistent
     private List<String> keywords = new ArrayList<String>();
     @Persistent
@@ -49,6 +56,22 @@ public class Site {
     @Element(dependent = "true")
     @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="index asc"))
     private List<View> views = new ArrayList<View>();
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
     public String getEncodedKey() {
         return encodedKey;
@@ -96,14 +119,6 @@ public class Site {
 
     public void setDateRevision(Date dateRevision) {
         this.dateRevision = dateRevision;
-    }
-
-    public User getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
     }
 
     public List<View> getViews() {

@@ -4,10 +4,9 @@
  */
 package org.evasion.cloud.service;
 
+import org.evasion.cloud.service.updator.SiteUpdator;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.KeyFactory;
 import java.util.Date;
-import java.util.logging.Level;
 import javax.annotation.security.DeclareRoles;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -25,7 +24,6 @@ import org.evasion.cloud.service.mapper.MapperUtils;
 import org.evasion.cloud.service.model.Content;
 import org.evasion.cloud.service.model.ContentConst;
 import org.evasion.cloud.service.model.View;
-import org.evasion.cloud.service.security.EvasionPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 @Path("site")
 @DeclareRoles({"admin", "user"})
-public class SiteService implements ISiteService {
+public class SiteService extends AbstractService<ISite, Site> implements ISiteService {
 
     @Context
     private SecurityContext securityContext;
@@ -50,20 +48,6 @@ public class SiteService implements ISiteService {
 
     public SiteService() {
         updator = new SiteUpdator();
-    }
-
-    @Override
-    public ISite get(long id) {
-        LOG.debug("Request: {}", request);
-        Site site;
-        PersistenceManager pm = PMF.getPm();
-        try {
-            site = pm.detachCopy(pm.getObjectById(Site.class, id));
-        } finally {
-            pm.close();
-        }
-        return MapperUtils.convertFromSite(site);
-
     }
 
     @Override
@@ -117,7 +101,8 @@ public class SiteService implements ISiteService {
             booktravelView.setTitle("carnet de voyage");
             booktravelView.setIndex(1);
             site.getViews().add(booktravelView);
-            site.setAuthor(getUser());
+            site.setUserId(getUser().getId());
+            site.setFullName(getUser().getName());
             site.setSubdomain(subdomain);
             site.setTitle("Titre par défaut");
             site.setDateCreation(new Date());
@@ -134,37 +119,29 @@ public class SiteService implements ISiteService {
 
     @Override
     public ISite update(ISite site) {
-        User user = getUser();
+        String user = getUser().getId();
         PersistenceManager pm = PMF.get().getPersistenceManager();
         Site eSite = MapperUtils.convertToSite(site);
         try {
             // recuperation du site en base pour verification du proprietaire
             Site siteBdd = (Site) pm.getObjectById(Site.class, eSite.getEncodedKey());
-            if (siteBdd==null || siteBdd.getAuthor()==null) {
-                LOG.warn("Site not found or no author for user: {} {}",siteBdd, user);
-                throw  new WebApplicationException(Response.Status.NOT_FOUND);
+            if (siteBdd == null || siteBdd.getUserId() == null) {
+                LOG.warn("Site not found or no author for user: {} {}", siteBdd, user);
+                throw new WebApplicationException(Response.Status.NOT_FOUND);
             }
-            if (null == user || !siteBdd.getAuthor().getGoogleId().equals(user.getGoogleId())) {
-                LOG.warn("Not same user on update site: {}/ {}", siteBdd.getAuthor(), user);
+            if (null == user || !siteBdd.getUserId().equals(user)) {
+                LOG.warn("Not same user on update site: {}/ {}", siteBdd.getUserId(), user);
                 throw new WebApplicationException(Response.Status.FORBIDDEN);
             }
 
             // Reset du sous domain pour s'assurer qu'il ne soit pas changer
             eSite.setSubdomain(siteBdd.getSubdomain());
-            eSite.setAuthor(siteBdd.getAuthor());
+            eSite.setUserId(siteBdd.getUserId());
             pm.makePersistent(eSite);
         } finally {
             pm.close();
         }
         return MapperUtils.convertFromSite(eSite);
-    }
-
-    private User getUser() {
-        // create User
-        User user;
-        LOG.debug("UPN: {}", securityContext.getUserPrincipal());
-        user = new User(((EvasionPrincipal) securityContext.getUserPrincipal()).getUserInfo().getName(), ((EvasionPrincipal) securityContext.getUserPrincipal()).getUserInfo().getId());
-        return user;
     }
 
     @Override

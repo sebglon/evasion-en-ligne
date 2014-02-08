@@ -17,7 +17,7 @@ public final class EvasionPrincipal implements Principal {
     private final String cookieId;
     private final Userinfo userInfo;
 
-    protected EvasionPrincipal(String cookieId, Userinfo user) {
+    public EvasionPrincipal(String cookieId, Userinfo user) {
         this.cookieId = cookieId;
         userInfo = user;
     }

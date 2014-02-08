@@ -21,8 +21,8 @@
             <b>id</b>
         </field>
         <field type="one-way">
-            <a>author</a>
-            <b>author</b>
+            <a>userId</a>
+            <b>userId</b>
         </field>   
     </mapping>
     <mapping map-null="false" > 
@@ -41,5 +41,12 @@
             <b-hint>java.util.Map</b-hint>
         </field>      
     </mapping> 
-   
+    <mapping>
+        <class-a>org.evasion.cloud.service.model.booktravel.Book</class-a>
+        <class-b>org.evasion.cloud.api.data.booktravel.IBook</class-b>
+        <field>
+            <a>encodedKey</a>
+            <b>id</b>
+        </field> 
+    </mapping>
 </mappings>

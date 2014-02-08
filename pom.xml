@@ -45,7 +45,8 @@
         -->
         <gae.application.version>test</gae.application.version>
 
-        <github.global.server>github</github.global.server>            
+        <github.global.server>github</github.global.server> 
+        <jersey.version>1.18</jersey.version>
     </properties>
     <modules>
         <module>web</module>
@@ -317,6 +318,25 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>com.sun.jersey.jersey-test-framework</groupId>
+                <artifactId>jersey-test-framework-core</artifactId>
+                <version>${jersey.version}</version>
+                <scope>test</scope>
+            </dependency>
+       
+            <dependency>
+                <groupId>com.sun.jersey.jersey-test-framework</groupId>
+                <artifactId>jersey-test-framework-inmemory</artifactId>
+                <version>${jersey.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-json</artifactId>
+                <version>${jersey.version}</version>
+                
+            </dependency>
+            <dependency>
                 <groupId>commons-collections</groupId>
                 <artifactId>commons-collections</artifactId>
                 <version>3.0</version>
@@ -379,17 +399,17 @@
             <dependency>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-server</artifactId>
-                <version>1.17.1</version>
+                <version>${jersey.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-json</artifactId>
-                <version>1.17.1</version>
+                <version>${jersey.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-servlet</artifactId>
-                <version>1.17.1</version>
+                <version>${jersey.version}</version>
             </dependency>
             <!--
             GAE libraries for local testing as described here:
