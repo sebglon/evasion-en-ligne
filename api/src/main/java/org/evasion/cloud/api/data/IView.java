@@ -6,11 +6,13 @@
 package org.evasion.cloud.api.data;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -22,7 +24,6 @@ public class IView implements Serializable, Comparable<IView> {
 
     private String id;
 
-    @XmlAttribute
     public String getId() {
         return this.id;
     }
@@ -30,7 +31,7 @@ public class IView implements Serializable, Comparable<IView> {
     public void setId(String id) {
         this.id = id;
     }
-    
+
     private String title;
 
     public String getTitle() {
@@ -60,9 +61,9 @@ public class IView implements Serializable, Comparable<IView> {
         this.description = description;
     }
 
-    @XmlElement
-    private Map contents;
+    private Map contents = new HashMap();
 
+    @XmlElementWrapper
     public Map getContents() {
         return this.contents;
     }

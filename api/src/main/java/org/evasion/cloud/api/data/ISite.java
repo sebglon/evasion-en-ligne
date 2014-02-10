@@ -6,13 +6,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlList;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.evasion.cloud.api.data.adapter.DateAdapter;
 
 
 /*
@@ -25,12 +24,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author sgl
  */
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.PROPERTY)
 public class ISite implements Serializable {
 
     private String id;
 
-    @XmlAttribute
     public String getId() {
         return this.id;
     }
@@ -41,7 +38,6 @@ public class ISite implements Serializable {
 
     private String title;
 
-    @XmlAttribute
     public String getTitle() {
         return this.title;
     }
@@ -52,7 +48,6 @@ public class ISite implements Serializable {
 
     private String description;
 
-    @XmlAttribute
     public String getDescription() {
         return this.description;
     }
@@ -75,7 +70,8 @@ public class ISite implements Serializable {
 
     private Date dateCreation;
 
-    @XmlAttribute
+    @XmlElement
+    @XmlJavaTypeAdapter(DateAdapter.class)
     public Date getDateCreation() {
         return this.dateCreation;
     }
@@ -86,7 +82,8 @@ public class ISite implements Serializable {
 
     private Date dateRevision;
 
-    @XmlAttribute
+    @XmlElement
+    @XmlJavaTypeAdapter(DateAdapter.class)
     public Date getDateRevision() {
         return this.dateRevision;
     }
@@ -95,7 +92,6 @@ public class ISite implements Serializable {
         this.dateRevision = dateRevision;
     }
 
-     @XmlAttribute
     private String userId;
 
     public String getUserId() {
@@ -105,8 +101,7 @@ public class ISite implements Serializable {
     public void setUserId(String userId) {
         this.userId = userId;
     }
- 
-     @XmlAttribute
+
     private String fullName;
 
     public String getFullName() {
@@ -131,7 +126,6 @@ public class ISite implements Serializable {
 
     private String subDomain;
 
-    @XmlAttribute
     public String getSubDomain() {
         return this.subDomain;
     }

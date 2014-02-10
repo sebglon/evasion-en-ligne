@@ -6,6 +6,7 @@ package org.evasion.cloud.service;
 
 import org.evasion.cloud.service.updator.SiteUpdator;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.KeyFactory;
 import java.util.Date;
 import javax.annotation.security.DeclareRoles;
 import javax.jdo.PersistenceManager;
@@ -124,7 +125,7 @@ public class SiteService extends AbstractService<ISite, Site> implements ISiteSe
         Site eSite = MapperUtils.convertToSite(site);
         try {
             // recuperation du site en base pour verification du proprietaire
-            Site siteBdd = (Site) pm.getObjectById(Site.class, eSite.getEncodedKey());
+            Site siteBdd = (Site) pm.getObjectById(Site.class, KeyFactory.stringToKey(eSite.getEncodedKey()));
             if (siteBdd == null || siteBdd.getUserId() == null) {
                 LOG.warn("Site not found or no author for user: {} {}", siteBdd, user);
                 throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -137,6 +138,8 @@ public class SiteService extends AbstractService<ISite, Site> implements ISiteSe
             // Reset du sous domain pour s'assurer qu'il ne soit pas changer
             eSite.setSubdomain(siteBdd.getSubdomain());
             eSite.setUserId(siteBdd.getUserId());
+            eSite.setDateCreation(siteBdd.getDateCreation());
+            eSite.setDateRevision(new Date());
             pm.makePersistent(eSite);
         } finally {
             pm.close();
