@@ -52,10 +52,10 @@ public class Site {
     private Date dateCreation;
     @Persistent
     private Date dateRevision;
-    @Persistent
+    @Persistent(defaultFetchGroup = "true")
     @Element(dependent = "true")
     @Order(extensions = @Extension(vendorName="datanucleus", key="list-ordering", value="index asc"))
-    private List<View> views = new ArrayList<View>();
+    private List<View> views;
 
     public String getUserId() {
         return userId;

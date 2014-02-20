@@ -97,13 +97,8 @@ public class CrawlServlet implements Filter {
             out.write(page.asXml());
             webClient.closeAllWindows();
         } else {
-            try {
                 // not an _escaped_fragment_ URL, so move up the chain of servlet (filters)
                 chain.doFilter(request, response);
-            } catch (ServletException e) {
-                System.err.println("Servlet exception caught: " + e);
-                e.printStackTrace();
-            }
         }
     }
 

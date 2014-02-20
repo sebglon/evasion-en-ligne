@@ -7,6 +7,7 @@ package org.evasion.cloud.service;
 import org.evasion.cloud.service.updator.SiteUpdator;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.KeyFactory;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.annotation.security.DeclareRoles;
 import javax.jdo.PersistenceManager;
@@ -65,7 +66,8 @@ public class SiteService extends AbstractService<ISite, Site> implements ISiteSe
                 LOG.error("Fail to upgrade site {}", site.getSubdomain());
             }
         }
-        return MapperUtils.convertFromSite(site);
+        
+        return MapperUtils.convertFromSite(pm.detachCopy(site));
 
     }
 
@@ -90,6 +92,7 @@ public class SiteService extends AbstractService<ISite, Site> implements ISiteSe
             content.setValue("Contenu par défaut");
             defaultView.setContents(content);
             defaultView.setIndex(0);
+            site.setViews(new ArrayList<View>());
             site.getViews().add(defaultView);
 
             View booktravelView = new View();
