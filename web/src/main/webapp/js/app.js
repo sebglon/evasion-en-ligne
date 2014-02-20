@@ -5,7 +5,7 @@ var evasionVisiteurApp = angular.module('evasionVisiteurApp', ['ui.tinymce', 'ng
 var $routeProviderReference;
 evasionVisiteurApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
         $locationProvider.html5Mode(true);
-        $locationProvider.hashPrefix = '';
+        $locationProvider.hashPrefix = '!';
         $routeProvider.when('/test', {templateUrl: 'partials/basic-page.html', controller: function() {
                 this.test = 'xxxxx';
             }});

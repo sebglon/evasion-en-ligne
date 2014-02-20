@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:ng="http://angularjs.org" id="ng-app" ng-app="evasionVisiteurApp" ng-controller="AppCtrl">
+<html xmlns:ng="http://angularjs.org" id="ng-app" class="ng-app: evasionVisiteurApp;" ng-controller="AppCtrl">
     <head>
         <!--[if lte IE 8]>
             <script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.2.6/json3.min.js"></script>
@@ -10,7 +10,8 @@
 
             </script>
         <![endif]-->
-        <meta http-EQUIV="content-type" CONTENT="text/html">
+        <meta http-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+        <meta charset="utf-8">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/2.3.1/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="/css/app.css"/>
         <link rel="shortcut icon" href="img/favicon.ico" />
@@ -23,8 +24,8 @@
         <meta name="date-creation-yyyymmdd" content="{{site.dateCreation}}">
         <meta name="Date-Revision-yyyymmdd" content="{{site.dateRevision}}">
         <meta  content="--allow-file-access-from-files" />
-        <base href="/" />
-        <!-- A supprimer après mise en page du site -->
+        <meta name="fragment" content="!" />
+        <!-- A supprimer apres mise en page du site -->
         <style>
             [class*="span"] {
                 background-color: lightgreen;
@@ -61,8 +62,8 @@
                         <div ng-show="auth.token && auth.user && auth.user.name">
                             <div class="pull-right">
                                 <div>Bonjour {{auth.user.name}}</div>
-                                <div>Faire une demande de <a ng-click="" >cr&eacute;ation de site</a></div>
-                                <a type="button" class="" ng-click="logoutForm()">Me d&eacute;connecter</a>
+                                <div>Faire une demande de <a>création de site</a></div>
+                                <a type="button" class="" ng-click="logoutForm()">Me déconnecter</a>
                             </div>
 
                         </div>
@@ -99,7 +100,7 @@
                         </div>
                         <div class="row-fluid">
                             <div class="bloc-titre">Publicité</div>
-                            <script type="text/javascript"><!--
+                            <script><!--
                                 google_ad_client = "ca-pub-0255871830960911";
                                     /* bloc latéral */
                                     google_ad_slot = "1216541160";
@@ -107,7 +108,7 @@
                                     google_ad_height = 250;
 //-->
                             </script>
-                            <script type="text/javascript"
+                            <script
                                     src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                             </script>
                         </div>
@@ -116,7 +117,7 @@
                     <div class="span9 content" ng-view> Default content</div>
                 </div>
                 <div class="row-fluid">
-                    <div class="span12">Evasion-en-ligne&copy; version: {{app - version}} tous droits r&eacute;serv&eacute;s</div>
+                    <div class="span12">Evasion-en-ligne©; version: {{app - version}} tous droits réservés</div>
                 </div>
 
 
@@ -143,7 +144,7 @@
                 <div class="control-group">
                 <label class="control-label text-right" for="inputType">Description</label>
                 <div class="controls text-left">
-                <textarea required ng-model="esc.description" placeholder="Description pouvant être utilisé sur les moteurs de recherche pour donner envie au visiteur"></textarea>
+                <textarea required ng-model="esc.description" placeholder="Description pouvant être utilisé; sur les moteurs de recherche pour donner envie au visiteur"></textarea>
                 </div>
                 </div>                    
                 <textarea name="staticContent" ui-tinymce="esc.tinymceOptions" ng-model="esc.content" required ></textarea>
@@ -172,11 +173,12 @@
         <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
         <script src="/js/tinymce.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap.min.js"></script>
-        <script type="text/javascript" src="/js/app.js"></script>
-        <script type="text/javascript" src="/js/services.js"></script>
-        <script type="text/javascript" src="/js/controllers.js"></script>
-        <script type="text/javascript" src="/js/googleapi.js"></script>
-        <script type="text/javascript" src="/js/directives.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script>
+        <script src="/js/app.js"></script>
+        <script src="/js/services.js"></script>
+        <script src="/js/controllers.js"></script>
+        <script src="/js/googleapi.js"></script>
+        <script src="/js/directives.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
     </body>
 </html>

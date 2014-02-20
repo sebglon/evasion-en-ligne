@@ -112,6 +112,37 @@ angular.module('evasionVisiteurApp.services', []).
                             return deferred.promise;
                         };
 
+                        var bookById = function(id) {
+                            var deferred = $q.defer();
+                            $http({
+                                method: 'GET',
+                                url: serverUrl + '/ws/booktravel/byid/' + id
+                            }).
+                                    success(function(data) {
+                                        deferred.resolve(data);
+                                    }).
+                                    error(function() {
+                                        deferred.reject("error");
+                                    });
+                            return deferred.promise;
+                        };
+
+                        var bookUpdate = function(book) {
+                            var deferred = $q.defer();
+                            $http({
+                                method: 'PUT',
+                                url: serverUrl + '/ws/booktravel',
+                                data: book
+                            }).
+                                    success(function(data) {
+                                        deferred.resolve(data);
+                                    }).
+                                    error(function(data) {
+                                        deferred.reject(data);
+                                    });
+                            return deferred.promise;
+                        };
+
                         return {
                             getServerUrl: serverUrl,
                             user: {
@@ -123,6 +154,10 @@ angular.module('evasionVisiteurApp.services', []).
                             site: {
                                 bySubdomain: siteBySubDomain,
                                 update: siteUpdate
+                            },
+                            booktravel: {
+                                byId: bookById,
+                                update: bookUpdate
                             }
 
                         };

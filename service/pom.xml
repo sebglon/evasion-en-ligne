@@ -104,6 +104,10 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>            
         </dependency> 

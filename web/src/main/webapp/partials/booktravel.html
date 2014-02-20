@@ -1,29 +1,14 @@
 <div ng-controller="BooktravelCtrl">
     <ev-editor edit="esc.edit()" auth="auth && auth.token && !auth.token.error">
-        <ev-text type="title-h2" class="row-fluid" value="book.titre"></ev-text>
+        <h2 class="row-fluid">
+            <ev-text type="text" class="" value="book.titre" label="Titre de votre carnet de voyage"></ev-text>
+            <ev-text type="date" class="" value="book.dateDebut" label="date de départ" name="dateDebut"></ev-text>
+            <ev-text type="date" class="" value="book.dateFin" label="date de retour" name="dateFin"></ev-text>
+
+        </h2>
         <div class="row-fluid" >
-            <div class="span9">
-                <div> contenux
-                    w<br>
-                    w<br>
-                    w<br>
-                    w<br>
-                    w<br>
-                    w<br>
-                    w<br>
-                    w<br>
-                    w<br>
-                    w<br>
-                    w<br>
-                    w<br></div>
-            </div>
+            <ev-text type="htmlarea" class="span9" value="book.description" label="Description" name="testContent"></ev-text>
             <div class="span3">
-                <div>Date de départ 
-                    <br> Date de retour
-                    <br>Distance parcourue 
-                    <br> Nbr d'étapes 
-                    <br> 
-                </div>
                 <div>Pays traversés <br> xxx<br>yyy </div>
             </div>
         </div>
