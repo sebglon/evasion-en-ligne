@@ -122,6 +122,9 @@ public class Site {
     }
 
     public List<View> getViews() {
+        if (views==null ) {
+            views = new ArrayList<View>();
+        }
         return views;
     }
 

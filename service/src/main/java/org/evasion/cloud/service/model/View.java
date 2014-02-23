@@ -39,10 +39,11 @@ public class View implements Comparable<View>{
     @Persistent
     private String description;
 
-    @Persistent
+    @Persistent(defaultFetchGroup = "true")
+    @Element(dependent = "true")
     private Content contents;
 
-    @Persistent 
+    @Persistent(defaultFetchGroup = "true")
     @Element(dependent = "true")
     private SortedSet<Bloc> blocs;
     

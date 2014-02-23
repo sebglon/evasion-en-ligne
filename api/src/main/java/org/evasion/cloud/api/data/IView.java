@@ -14,6 +14,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.evasion.cloud.api.data.adapter.MapAdapter;
 
 /**
  *
@@ -61,14 +63,13 @@ public class IView implements Serializable, Comparable<IView> {
         this.description = description;
     }
 
-    private Map contents = new HashMap();
+    private Map<String, String> contents = new HashMap();
 
-    @XmlElementWrapper
-    public Map getContents() {
+    public Map<String, String> getContents() {
         return this.contents;
     }
 
-    public void setContents(Map contents) {
+    public void setContents(Map<String, String> contents) {
         this.contents = contents;
     }
 

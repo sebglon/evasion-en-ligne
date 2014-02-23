@@ -6,7 +6,7 @@
     <configuration>
         
         <custom-converters>
-            <converter type="org.evasion.cloud.service.mapper.EnumToStringConverter">
+            <converter  type="org.evasion.cloud.service.mapper.EnumToStringConverter" >
                 <class-a>java.lang.Enum</class-a>
                 <class-b>java.lang.String</class-b>
             </converter>
@@ -25,21 +25,22 @@
             <b>userId</b>
         </field>   
     </mapping>
+    
+    <mapping >
+        <class-a>org.evasion.cloud.service.model.Content</class-a>    
+        <class-b>java.util.Map</class-b>
+        <field custom-converter="org.evasion.cloud.service.mapper.EnumToStringConverter">
+            <a>type</a>
+            <b>type</b>
+        </field>
+    </mapping>
     <mapping map-null="false" > 
         <class-a>org.evasion.cloud.service.model.View</class-a>
         <class-b>org.evasion.cloud.api.data.IView</class-b>
         <field>
             <a>encodedKey</a>
             <b>id</b>
-        </field> 
-        <field>
-            <a>contents</a>
-            <b>contents</b>
-            <a-hint>
-                org.evasion.cloud.service.model.Content
-            </a-hint>
-            <b-hint>java.util.Map</b-hint>
-        </field>      
+        </field>   
     </mapping> 
     <mapping>
         <class-a>org.evasion.cloud.service.model.booktravel.Book</class-a>

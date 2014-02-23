@@ -7,6 +7,7 @@ package org.evasion.cloud.service.model;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -17,7 +18,7 @@ import javax.jdo.annotations.PrimaryKey;
  *
  * @author sgl
  */
-@PersistenceCapable
+@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Content {
 
     @PrimaryKey

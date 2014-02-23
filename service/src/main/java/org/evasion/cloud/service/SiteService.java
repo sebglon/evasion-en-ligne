@@ -58,16 +58,16 @@ public class SiteService extends AbstractService<ISite, Site> implements ISiteSe
         Query query = pm.newQuery(Site.class, ":p.contains(subdomain)");
         query.setUnique(true);
         Site site = (Site) query.execute(subdmain);
-        if (site.getVersion() == null) {
+     /*   if (site.getVersion() == null) {
             try {
                 site = updator.upgrade(site);
                 pm.makePersistent(site);
             } catch (EntityNotFoundException ex) {
                 LOG.error("Fail to upgrade site {}", site.getSubdomain());
             }
-        }
+        }*/
         
-        return MapperUtils.convertFromSite(pm.detachCopy(site));
+        return MapperUtils.convertFromSite(site);
 
     }
 
@@ -81,7 +81,7 @@ public class SiteService extends AbstractService<ISite, Site> implements ISiteSe
         }
         PersistenceManager pm = PMF.get().getPersistenceManager();
         Site site;
-
+        ISite result;
         try {
             site = new Site();
             View defaultView = new View();
@@ -113,12 +113,12 @@ public class SiteService extends AbstractService<ISite, Site> implements ISiteSe
             site.setDateRevision(new Date());
 
             LOG.debug("Site to create :{}", site);
-            pm.makePersistent(site);
+            result = MapperUtils.convertFromSite(pm.makePersistent(site));
         } finally {
             pm.close();
         }
 
-        return MapperUtils.convertFromSite(site);
+        return result;
     }
 
     @Override
