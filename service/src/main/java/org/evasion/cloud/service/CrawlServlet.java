@@ -6,6 +6,7 @@
 package org.evasion.cloud.service;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.SilentCssErrorHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebClientOptions;
@@ -15,6 +16,10 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -59,7 +64,7 @@ public class CrawlServlet implements Filter {
         final String requestURI = httpRequest.getRequestURI();
         final String queryString = httpRequest.getQueryString();
 
-        if ((queryString != null) && queryString.contains("_escaped_fragment_") &&  !queryString.contains("/ws/")) {
+        if ((queryString != null) && queryString.contains("_escaped_fragment_") && !queryString.contains("/ws/")) {
 
             final String domain = httpRequest.getServerName();
             final int port = httpRequest.getServerPort();
@@ -77,7 +82,7 @@ public class CrawlServlet implements Filter {
             WebClientOptions options = webClient.getOptions();
             options.setCssEnabled(true);
             webClient.setCssErrorHandler(new SilentCssErrorHandler());
-            
+webClient.setAjaxController(new NicelyResynchronizingAjaxController());
             options.setThrowExceptionOnScriptError(true);
             options.setThrowExceptionOnFailingStatusCode(false);
             options.setRedirectEnabled(false);
@@ -88,17 +93,29 @@ public class CrawlServlet implements Filter {
 
             final HtmlPage page = webClient.getPage(urlWithHashFragment);
 
+            try {
             // important!  Give the headless browser enough time to execute JavaScript
-            // The exact time to wait may depend on your application.
-            webClient.setJavaScriptTimeout(20000);
-            webClient.waitForBackgroundJavaScript(20000);
-            // return the snapshot
-            final PrintWriter out = httpResponse.getWriter();
-            out.write(page.asXml());
-            webClient.closeAllWindows();
+                // The exact time to wait may depend on your application.
+                webClient.setJavaScriptTimeout(20000);
+                webClient.waitForBackgroundJavaScript(2000);
+                //just wait
+                for (int i = 0; i < 20; i++) {
+                    synchronized (page) {
+                        page.wait(500);
+                    }
+                }
+                // return the snapshot
+                final PrintWriter out = httpResponse.getWriter();
+                httpResponse.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
+                out.write(page.asXml());
+            } catch (InterruptedException ex) {
+                Logger.getLogger(CrawlServlet.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                webClient.closeAllWindows();
+            }
         } else {
-                // not an _escaped_fragment_ URL, so move up the chain of servlet (filters)
-                chain.doFilter(request, response);
+            // not an _escaped_fragment_ URL, so move up the chain of servlet (filters)
+            chain.doFilter(request, response);
         }
     }
 

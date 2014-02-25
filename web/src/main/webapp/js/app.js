@@ -16,9 +16,9 @@ evasionVisiteurApp.config(['$routeProvider', '$locationProvider', function($rout
 angular.injector(['ng', 'ngRoute', 'ngCookies']).invoke(function($rootScope) {
     evasionVisiteurApp.run(function($rootScope, api, $route, $location, $cookies) {
         console.log('run app');
-        if ($cookies.eelid != undefined) {
+        if ($cookies.eelid !== undefined) {
             api.user.token(true).then(function(data) {
-                var auth = {token: data}
+                var auth = {token: data};
                 $rootScope.auth = auth;
                 if (data !== undefined) {
                     api.user.info().then(function(data) {
@@ -32,6 +32,7 @@ angular.injector(['ng', 'ngRoute', 'ngCookies']).invoke(function($rootScope) {
         // Récupération du subdomain
         $rootScope.subdomain = $location.host().split('.').shift();
         api.site.bySubdomain($rootScope.subdomain).then(function(response) {
+            console.log('get site data')
             $rootScope.site = response;
             function createRoute(views) {
                 angular.forEach(views, function(view) {
@@ -58,8 +59,7 @@ angular.injector(['ng', 'ngRoute', 'ngCookies']).invoke(function($rootScope) {
                     }
                 }
                 );
-            }
-            ;
+            };
             createRoute(response.views);
             $route.reload();
         });
