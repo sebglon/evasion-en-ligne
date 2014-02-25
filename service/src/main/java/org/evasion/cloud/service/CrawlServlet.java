@@ -96,8 +96,8 @@ webClient.setAjaxController(new NicelyResynchronizingAjaxController());
             try {
             // important!  Give the headless browser enough time to execute JavaScript
                 // The exact time to wait may depend on your application.
-                webClient.setJavaScriptTimeout(20000);
-                webClient.waitForBackgroundJavaScript(2000);
+                webClient.setJavaScriptTimeout(2000);
+                webClient.waitForBackgroundJavaScript(1000);
                 //just wait
                 for (int i = 0; i < 20; i++) {
                     synchronized (page) {
