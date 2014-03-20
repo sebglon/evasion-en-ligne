@@ -20,7 +20,7 @@ angular.module('evasionVisiteurApp.services', []).
                                 popup.focus();
                             }
                             angular.element($window).bind('message', function(event) {
-                                if (event.source == popup && event.origin == serverUrl) {
+                                if (event.source === popup && event.origin === serverUrl) {
                                     callback(event.data);
                                 }
                             });
@@ -142,6 +142,21 @@ angular.module('evasionVisiteurApp.services', []).
                                     });
                             return deferred.promise;
                         };
+                        
+                        var bookCreate = function(siteid, book) {
+                            var deferred = $q.defer();
+                            $http({
+                                method: 'POST',
+                                url: serverUrl + '/ws/booktravel/'+siteid,
+                                data: book
+                            }).
+                                    success(function(data) {
+                                        deferred.resolve(data);
+                                    }).
+                                    error(function(data) {
+                                        deferred.reject(data);
+                                    });
+                            return deferred.promise;                        }
 
                         return {
                             getServerUrl: serverUrl,
@@ -156,6 +171,7 @@ angular.module('evasionVisiteurApp.services', []).
                                 update: siteUpdate
                             },
                             booktravel: {
+                                create: bookCreate,
                                 byId: bookById,
                                 update: bookUpdate
                             }

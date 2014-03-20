@@ -1,6 +1,5 @@
 <!doctype html>
-<html xmlns:ng="http://angularjs.org" id="ng-app" class="ng-app: evasionVisiteurApp;" ng-controller="AppCtrl">
-    <head>
+<html xmlns:ng="http://angularjs.org" id="ng-app" class="ng-app: evasionVisiteurApp;" ng-controller="AppCtrl"><head>
         <!--[if lte IE 8]>
             <script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.2.6/json3.min.js"></script>
             <script>
@@ -10,11 +9,12 @@
 
             </script>
         <![endif]-->
-        <meta http-EQUIV="content-type" CONTENT="text/html; charset=UTF-8">
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/2.3.1/css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="/css/app.css"/>
-        <link rel="shortcut icon" href="img/favicon.ico" />
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/app.css">
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="shortcut icon" href="img/favicon.ico">
         <title ng:bind-template="Evasion en ligne - {{site.title}} - {{view.title}}"></title>
         <meta name="title" content="{{site.title}}">
         <meta name="description" content="{{site.description}} - {{view.description}}">
@@ -23,22 +23,9 @@
         <meta name="author" lang="fr" content="{{site.author}}"> 
         <meta name="date-creation-yyyymmdd" content="{{site.dateCreation}}">
         <meta name="Date-Revision-yyyymmdd" content="{{site.dateRevision}}">
-        <meta  content="--allow-file-access-from-files" />
-        <meta name="fragment" content="!" />
-        <base  href=""/>
-        <!-- A supprimer apres mise en page du site -->
-        <style>
-            [class*="span"] {
-                background-color: lightgreen;
-                margin-bottom: 5px;
-                border-radius: 5px 5px 5px 5px;
-                /*line-height: 80px;*/
-                text-align: center;
-            }
-            [class="span10"] {
-                background-color: green;
-            }
-        </style>        
+        <meta content="--allow-file-access-from-files">
+        <meta name="fragment" content="!">
+        <base href="">  
     </head>
     <body class="ng-cloak" ng-controller="AppCtrl" ng-init="init()">
         <!-- Transparent toolbar with fixed position - application status -->
@@ -50,75 +37,70 @@
 
         <div class="container">
             <!-- Gray Header with page title -->
-            <div class="row-fluid">
-                <div class="span12 cadreLogo">
-                    <h1></h1>
+            <div class="row" >
+                <div class=" col-sm-12 col-md-12 cadreLogo">
                     <div ng-controller="LoginCtrl">
                         <div ng-show="!auth.token">
-                            <div class="pull-right"><div id="googleSignIn" > </div></div>
+                            <div class="pull-right"><div id="googleSignIn"> </div></div>
 
-                            <a type="button" class="btn pull-right" ng-click="loginForm()">Me connecter</a>
+                            <a type="button" class="btn pull-right btn-default" ng-click="loginForm()">Me connecter</a>
                             <!--<div class="pull-right"><button gsignin></button></div>-->
                         </div>
-                        <div ng-show="auth.token && auth.user && auth.user.name">
+                        <div ng-show="auth.token &amp;&amp; auth.user &amp;&amp; auth.user.name">
                             <div class="pull-right">
                                 <div>Bonjour {{auth.user.name}}</div>
-                                <div>Faire une demande de <a>création de site</a></div>
-                                <a type="button" class="" ng-click="logoutForm()">Me déconnecter</a>
+                                <div>Faire une demande de <a>cr&eacute;ation de site</a></div>
+                                <a type="button" class="" ng-click="logoutForm()">Me d&eacute;connecter</a>
                             </div>
 
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <!-- Nav bar -->
-                <div class="navbar">
-                    <div class="navbar-inner">
-                        <ul class="nav" ng-repeat="view in site.views">
+                <div class="navbar navbar-default">
+                    <div class="container">
+                        <ul class="nav navbar-nav" ng-repeat="view in site.views">
                             <li ng-class="{active : $location.path() === view.url}" class="divider-vertical"><a href="{{view.url}}">{{view.title}}</a></li>
                         </ul>
                         <form class="navbar-form  pull-right">
-                            <input type="text" class="search-query" placeholder="Search">
+                            <input type="text" class="search-query form-control" placeholder="Search">
                         </form>
                     </div>
                 </div>
-
-                <div id="containerLeft" class="row-fluid">
-                    <div class="span3">
-                        <div class="row-fluid">
+            </div>
+            <div class="row menu">
+                    <div class="col-sm-3 col-md-3">
+                        <div class="row" ng-hide="!view.views.length">
                             <ul>
                                 <li ng-repeat="subview in view.views"><a ng-href="{{subview.url}}">{{subview.title}}</a></li>
                             </ul>
                         </div>
-                        <div>
+                        <div class="row">
                             <a href="/test">test</a>
                         </div>
-                        <div class="row-fluid" ng-repeat="bloc in view.blocs">
-                            <div ng-switch on="bloc.type">
+                        <div class="row" ng-repeat="bloc in view.blocs">
+                            <div ng-switch="" on="bloc.type">
                                 <div ng-switch-when="linkList">linkList : {{bloc.title}}</div>
                                 <div ng-switch-when="pub">pub : {{bloc.title}}</div>
-                                <div ng-switch-default><ng-include src="'block-'+bloc.type+'.html'"></ng-include></div>
+                                <div ng-switch-default=""><ng-include src="'block-'+bloc.type+'.html'"></ng-include></div>
                             </div>
                         </div>
-                        <div class="row-fluid">
-                            <div class="bloc-titre">Publicité</div>
-                            <script><!--
-                                google_ad_client = "ca-pub-0255871830960911";
-                                    /* bloc latéral */
-                                    google_ad_slot = "1216541160";
-                                    google_ad_width = 250;
-                                    google_ad_height = 250;
-//-->
-                            </script>
-                            <script
-                                    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-                            </script>
+                        <div class="row">
+                            <div class="bloc-titre">Publicit&eacute;</div>
+				<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+				<!-- bloc latéral -->
+				<ins class="adsbygoogle" style="display:inline-block;width:250px;height:250px" data-ad-client="ca-pub-0255871830960911" data-ad-slot="1216541160"></ins>
+				<script>
+				(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
                         </div>
-
                     </div>
-                    <div class="span9 content" ng-view> Default content</div>
+                    <div class="col-sm-9 col-md-9" ng-view=""> Default content</div>
                 </div>
-                <div class="row-fluid">
-                    <div class="span12">Evasion-en-ligne©; version: {{app - version}} tous droits réservés</div>
+                <div class="row footer">
+                    <div class="col-sm-12 col-md-12">Evasion-en-ligne&copy; version: {{app - version}} tous droits r&eacute;serv&eacute;s</div>
                 </div>
 
 
@@ -158,9 +140,7 @@
                 </div>
                 </div>
             </script>
-
-
-        </div>         
+       
         <!-- In production use: 
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
         -->
@@ -180,6 +160,6 @@
         <script src="/js/controllers.js"></script>
         <script src="/js/googleapi.js"></script>
         <script src="/js/directives.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-    </body>
-</html>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
+    
+</body></html>

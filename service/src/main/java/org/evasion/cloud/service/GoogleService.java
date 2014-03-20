@@ -4,14 +4,11 @@
  */
 package org.evasion.cloud.service;
 
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.StoredCredential;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.services.oauth2.model.Userinfo;
-import com.google.appengine.api.utils.SystemProperty;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import javax.annotation.security.DeclareRoles;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

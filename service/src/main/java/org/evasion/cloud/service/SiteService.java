@@ -9,6 +9,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.KeyFactory;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
 import javax.annotation.security.DeclareRoles;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -129,15 +130,22 @@ public class SiteService extends AbstractService<ISite, Site> implements ISiteSe
         try {
             // recuperation du site en base pour verification du proprietaire
             Site siteBdd = (Site) pm.getObjectById(Site.class, KeyFactory.stringToKey(eSite.getEncodedKey()));
+            try {
+                updator.upgrade(siteBdd);
+            } catch (EntityNotFoundException ex) {
+                java.util.logging.Logger.getLogger(SiteService.class.getName()).log(Level.SEVERE, null, ex);
+            }
             if (siteBdd == null || siteBdd.getUserId() == null) {
                 LOG.warn("Site not found or no author for user: {} {}", siteBdd, user);
                 throw new WebApplicationException(Response.Status.NOT_FOUND);
             }
-            if (null == user || !siteBdd.getUserId().equals(user)|| securityContext.isUserInRole("ADMIN")) {
+            if (null == user || !siteBdd.getUserId().equals(user)|| securityContext.isUserInRole("admin")) {
                 LOG.warn("Not same user on update site: {}/ {}", siteBdd.getUserId(), user);
                 throw new WebApplicationException(Response.Status.FORBIDDEN);
             }
 
+
+            
             // Reset du sous domain pour s'assurer qu'il ne soit pas changer
             eSite.setSubdomain(siteBdd.getSubdomain());
             eSite.setUserId(siteBdd.getUserId());

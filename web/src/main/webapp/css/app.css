@@ -1,6 +1,11 @@
 
+
 .container {
     width: 1200px;
+}
+
+.footer {
+    text-align: center;
 }
 .cadreLogo{
     background-image:url(../img/logo.png);
@@ -11,6 +16,10 @@
 
 .active {
     background-color: green;
+}
+.menu {
+    text-align: center;
+    padding: 0px 10px;
 }
 .options {
     position: absolute;
@@ -30,34 +39,68 @@
 }
 
 // Style pour le bouton signin de Google
-    #gSignIn {
-      display: inline-block;
-      background: #cc3732;
-      color: white;
-      width: 175px;
-      border-radius: 5px;
-    }
-    #gSignIn:hover {
-      background: #e74b37;
-      cursor: hand;
-    }
-    #gSignIn span.label {
-      font-weight: bold;
-    }
-    #gSignIn span.icon {
-      background: url('/+/images/branding/btn_red_32.png') transparent 10px 50% no-repeat;
-      display: inline-block;
-      vertical-align: middle;
-      width: 40px;
-      height: 40px;
-    }
-    #gSignIn span.buttonText {
-      display: inline-block;
-      vertical-align: middle;
-      padding-left: 40px;
-      padding-right: 40px;
-    }
-    .min-maps {
-        height: 200px;
-        width: 200px;
-    }
+#gSignIn {
+    display: inline-block;
+    background: #cc3732;
+    color: white;
+    width: 175px;
+    border-radius: 5px;
+}
+#gSignIn:hover {
+    background: #e74b37;
+    cursor: hand;
+}
+#gSignIn span.label {
+    font-weight: bold;
+}
+#gSignIn span.icon {
+    background: url('/+/images/branding/btn_red_32.png') transparent 10px 50% no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+}
+#gSignIn span.buttonText {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.min-maps {
+    height: 200px;
+    width: 200px;
+}
+
+input.text, input.date {
+    width: 88%;
+    padding: 1px 2px 0px 2px;
+    margin: 0px 5px 0px 2px;
+    border: 1px solid #DDDDDD;
+    color: black;
+    overflow: hidden;
+}
+
+.widget-BookTravel input.text {
+    position: absolute;
+    top: 23px !important;
+    left: 5px;
+    height: 22px !important;
+    width: 88%;
+    margin: 0px;
+    padding: 0px 5px;
+}
+
+.widget-BookTravel form .label-value.big {
+    color: #898989;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    height: 20px;
+}
+
+.field {
+    float: left;
+}
+.options2 {
+    clear: both;
+}

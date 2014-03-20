@@ -9,18 +9,18 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
             return {
                 restrict: 'E',
                 transclude: true,
-                scope: {auth: '=auth', name:'='},
-                template: '<div>' +
+                scope: {auth: '=auth', name: '@', update:'='},
+                template: '<div name="{{name}}" class="content">' +
                         '<div ng-switch on="auth">' +
                         '<div ng-switch-when="true">' +
                         '<div class="options">' +
-                        '<a class="icon icon-edit" href="" ng-click="edit()"></a>' +
-                        '<a class="icon icon-move" href=""></a>' +
-                        '<a class="icon-black icon-trash" href=""></a>' +
+                        '<a class="glyphicon glyphicon-edit" href="" ng-click="edit()"></a>' +
+                        '<a class="glyphicon glyphicon-move" href=""></a>' +
+                        '<a class="glyphicon glyphicon-trash" href=""></a>' +
                         '</div></div></div>' +
-                        '<form name="{{name}}" novalidate><div ng-transclude></div><div>' +
+                        '<form name="{{name}}" novalidate ng-submit="update()"><div ng-transclude class=></div><div class="options2">' +
                         '<button ng-show="getEditMode()" ng-click="reset()" >Annuler</button>' +
-                        '<button type="submit" class="btn btn-primary" ng-show="getEditMode()" ng-disabled="!{{name}}.$valid" title="Enregistrer">Enregistrer</button>' +
+                        '<button type="submit" class="btn btn-primary" ng-show="getEditMode()" ng-disabled="{{name}}.$invalid" title="Enregistrer">Enregistrer</button>' +
                         '</div></form>' +
                         '</div>',
                 controller: function($scope, $attrs) {
@@ -29,7 +29,21 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                         if ($scope.auth) {
                             $scope.editMode = true;
                         }
+
+                        angular.forEach(entries, function(entry) {
+                            entry.oldValue = angular.copy(entry.value);
+                        });
+
                         $scope.changeMode();
+
+                    };
+                    $scope.update = function() {
+                        // call save passed on param
+                        $scope.editMode = false;
+                        $scope.changeMode();
+                        if ($attrs.update != undefined) {
+                           $attrs.update();
+                        }
 
                     };
 
@@ -62,40 +76,38 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                     };
 
                     $scope.reset = function() {
+                        angular.forEach(entries, function(entry) {
+                            entry.reset();
+                        });
                         $scope.editMode = false;
                         $scope.changeMode();
                     };
-
-                    $scope.$watch('directiveModel', function() {
-                        $scope.$parent[$attrs.value] = $scope.directiveModel;
-                    });
-                    $scope.directiveModel = $attrs.value;
                 }
             };
         })
         .directive('evText', ['$compile', '$templateCache', function($compile) {
                 var getTemplate = function(contentType, onEdit) {
-                    var startTpl = '<div class="form-group ">' +
-                            '<label for="{{name}}" class="label-value">{{label}}</label>';
-                    var endTpl = '<span class="{{statusClass}}">{{errorMessage}}</span>' +
+                    var startTpl = '<div class="field ">' +
+                            '<label for="{{name}}" class="label-value {{classes}}">{{label}}</label>';
+                    var endTpl = '<span class="invalid" ng-show="">{{errorMessage}}</span>' +
                             '</div>';
-                    var inputText = '<input class="form-control text {{class}} ' + contentType + ' name="{{name}}" id="{{name}}" type="text" value="{{value}}">';
-                    var inputTextarea = '<textarea class="form-control textarea {{class}}" name="{{name}}" id="{{name}}" type="text" value="{{value}}">';
-                    var inputHTMLarea = '<textarea ui-tinymce="{{tinymceOptions}}" class="form-control textarea {{class}}" name="{{name}}" id="{{name}}" ng-model="directiveModel"></textarea>';
-                    var inputDate = '<input type="text" class="form-control date" datepicker-popup="dd/MM/yyyy" ng-model="directiveModel" is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />';
+                    var inputText = '<input class="text {{classes}} " name="{{name}}" id="{{name}}" type="text"  ng-model="value" ng-required="true">';
+                    var inputTextarea = '<textarea class="form-control textarea {{clssses}}" name="{{name}}" id="{{name}}" type="text" ng-model="value" required>';
+                    var inputHTMLarea = '<textarea ui-tinymce="{{tinymceOptions}}" class="form-control textarea {{classes}}" name="{{name}}" id="{{name}}" ng-model="value" required>';
+                    var inputDate = '<input type="text" class="form-control date {{classes}}" datepicker-popup="{{format}}" ng-model="value" is-open="opened" datepicker-options="dateOptions" required close-text="Close" />';
                     var tpl;
                     switch (contentType) {
                         case 'text':
-                            tpl = onEdit ? (startTpl + inputText + endTpl) : '<span class={{class}}>{{value}}</span>';
+                            tpl = onEdit ? (startTpl + inputText + endTpl) : '<span class={{classes}}>{{value}}</span>';
                             break;
                         case 'textarea':
-                            tpl = onEdit ? (startTpl + inputTextarea + endTpl) : '<div class={{class}}>{{value}}</div>';
+                            tpl = onEdit ? (startTpl + inputTextarea + endTpl) : '<div class={{classes}}>{{value}}</div>';
                             break;
                         case 'htmlarea':
-                            tpl = onEdit ? (startTpl + inputHTMLarea + endTpl) : '<div class={{class}}>{{value}}</div>';
+                            tpl = onEdit ? (startTpl + inputHTMLarea + endTpl) : '<div class={{classes}}>{{value}}</div>';
                             break;
                         case 'date':
-                            tpl = onEdit ? (startTpl + inputDate + endTpl) : '<div class={{class}}>{{value}}</div>';
+                            tpl = onEdit ? (startTpl + inputDate + endTpl) : '<span class={{classes}}>{{value | date:format}}</span>';
                             break;
                     }
                     ;
@@ -109,11 +121,16 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                         $compile(element.contents())(scope);
                     });
 
+                    scope.reset = function() {
+                        if (scope.oldValue !== undefined) {
+                            scope.value = scope.oldValue;
+                        }
+                    };
                 };
                 return {
                     restrict: 'E',
                     require: '^evEditor',
-                    scope: {type: '@type', label: '@', style: '@', name: '@', value: '='},
+                    scope: {type: '@type', label: '@', style: '@', name: '@', value: '=', classes: '@', format: '='},
                     link: linker
                 };
             }]);

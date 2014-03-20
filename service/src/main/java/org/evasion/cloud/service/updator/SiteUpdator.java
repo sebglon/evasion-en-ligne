@@ -28,7 +28,9 @@ public class SiteUpdator {
     }
 
     public Site upgrade(Site site) throws EntityNotFoundException {
-
+         if(site.getUserId()==null) {
+             site.setUserId("xxxx");
+         }
         for (View view : site.getViews()) {
             Entity oldView = datastore.get(KeyFactory.stringToKey(view.getEncodedKey()));
             String value = (String) oldView.getProperty("content");
