@@ -3,10 +3,13 @@
                    xsi:schemaLocation="http://appengine.google.com/ns/1.0 http://googleappengine.googlecode.com/svn/branches/1.2.1/java/docs/appengine-web.xsd">   
     <threadsafe>true</threadsafe>
     <application>evasion-en-ligne</application>
-    <version>test</version>
+    <version>1</version>
     
     <sessions-enabled>false</sessions-enabled>
     <system-properties>
         <property name="java.util.logging.config.file" value="WEB-INF/classes/log4j.properties"></property> 
     </system-properties>
+    <admin-console>
+        <page name="admin site" url="/index.html"/>
+    </admin-console>
 </appengine-web-app>

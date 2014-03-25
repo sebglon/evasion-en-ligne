@@ -27,7 +27,7 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                     this.content = angular.copy($rootScope.view.contents.value);
                     this.description = angular.copy($rootScope.view.description);
                     this.onEditContent = true;
-                }
+                };
                 this.update = function() {
                     var i;
                     // Mise à jour du site;
@@ -86,6 +86,15 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                     });
                 };
             }])
-        .controller('BooktravelCtrl', ['$scope', function($scope) {
-                $scope.book = {titre: "Titre du carnet"};
+        .controller('BooktravelCtrl', ['$scope', 'api', '$rootScope', function($scope, api, $rootScope) {
+                $scope.init = function() {
+                    $scope.book = api.booktravel.byId($rootScope.view.contents.dataKey);
+                };
+
+                $scope.update = function() {
+                    api.booktravel.update($scope.book);
+                };
+                $scope.create = function() {
+                    api.booktravel.create($rootScope.site.id,$scope.book)
+                }
             }]);

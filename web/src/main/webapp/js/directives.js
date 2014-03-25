@@ -9,7 +9,7 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
             return {
                 restrict: 'E',
                 transclude: true,
-                scope: {auth: '=auth', name: '@', update:'='},
+                scope: {auth: '=auth', name: '@', update:'&'},
                 template: '<div name="{{name}}" class="content">' +
                         '<div ng-switch on="auth">' +
                         '<div ng-switch-when="true">' +
@@ -18,7 +18,7 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                         '<a class="glyphicon glyphicon-move" href=""></a>' +
                         '<a class="glyphicon glyphicon-trash" href=""></a>' +
                         '</div></div></div>' +
-                        '<form name="{{name}}" novalidate ng-submit="update()"><div ng-transclude class=></div><div class="options2">' +
+                        '<form name="{{name}}" novalidate ng-submit="updateData()"><div ng-transclude class=></div><div class="options2">' +
                         '<button ng-show="getEditMode()" ng-click="reset()" >Annuler</button>' +
                         '<button type="submit" class="btn btn-primary" ng-show="getEditMode()" ng-disabled="{{name}}.$invalid" title="Enregistrer">Enregistrer</button>' +
                         '</div></form>' +
@@ -37,12 +37,12 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                         $scope.changeMode();
 
                     };
-                    $scope.update = function() {
+                    $scope.updateData = function() {
                         // call save passed on param
                         $scope.editMode = false;
                         $scope.changeMode();
-                        if ($attrs.update != undefined) {
-                           $attrs.update();
+                        if ($scope.update !== undefined) {
+                           $scope.update();
                         }
 
                     };
@@ -85,7 +85,7 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                 }
             };
         })
-        .directive('evText', ['$compile', '$templateCache', function($compile) {
+        .directive('evText', ['$compile', '$sce', function($compile, $sce) {
                 var getTemplate = function(contentType, onEdit) {
                     var startTpl = '<div class="field ">' +
                             '<label for="{{name}}" class="label-value {{classes}}">{{label}}</label>';
@@ -104,7 +104,7 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                             tpl = onEdit ? (startTpl + inputTextarea + endTpl) : '<div class={{classes}}>{{value}}</div>';
                             break;
                         case 'htmlarea':
-                            tpl = onEdit ? (startTpl + inputHTMLarea + endTpl) : '<div class={{classes}}>{{value}}</div>';
+                            tpl = onEdit ? (startTpl + inputHTMLarea + endTpl) : '<div class={{classes}} ng-bind-html="trustedContent()"></div>';
                             break;
                         case 'date':
                             tpl = onEdit ? (startTpl + inputDate + endTpl) : '<span class={{classes}}>{{value | date:format}}</span>';
@@ -127,10 +127,19 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                         }
                     };
                 };
+                
+                var controller = function($scope) {
+                    $scope.trustedContent = function() {
+                        return   $sce.trustAsHtml($scope.value);
+                    };
+                    
+                };
+                
                 return {
                     restrict: 'E',
                     require: '^evEditor',
                     scope: {type: '@type', label: '@', style: '@', name: '@', value: '=', classes: '@', format: '='},
-                    link: linker
+                    link: linker,
+                    controller:  controller
                 };
             }]);
