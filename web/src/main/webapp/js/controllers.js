@@ -86,15 +86,21 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                     });
                 };
             }])
-        .controller('BooktravelCtrl', ['$scope', 'api', '$rootScope', function($scope, api, $rootScope) {
+        .controller("BooktravelCtrl", ['$scope', 'api', '$rootScope', function($scope, api, $rootScope) {
                 $scope.init = function() {
-                    $scope.book = api.booktravel.byId($rootScope.view.contents.dataKey);
+                    api.booktravel.byId($rootScope.view.contents.dataKey).then(function(data) {
+                        $scope.book = data;
+                    }, function(reason) {
+                        $scope.book ={};
+                        console.log("Failed to get book: "+reason);
+                    });
                 };
 
                 $scope.update = function() {
+                    console.log("book: "+angular.toJson($scope.book));
                     api.booktravel.update($scope.book);
                 };
                 $scope.create = function() {
-                    api.booktravel.create($rootScope.site.id,$scope.book)
-                }
+                    api.booktravel.create($rootScope.site.id,$scope.book);
+                };
             }]);

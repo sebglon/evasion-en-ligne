@@ -9,7 +9,7 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
             return {
                 restrict: 'E',
                 transclude: true,
-                scope: {auth: '=auth', name: '@', update:'&'},
+                scope: {auth: '=auth', name: '@', update: '&'},
                 template: '<div name="{{name}}" class="content">' +
                         '<div ng-switch on="auth">' +
                         '<div ng-switch-when="true">' +
@@ -37,14 +37,12 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                         $scope.changeMode();
 
                     };
+
                     $scope.updateData = function() {
                         // call save passed on param
                         $scope.editMode = false;
                         $scope.changeMode();
-                        if ($scope.update !== undefined) {
-                           $scope.update();
-                        }
-
+                        $scope.$eval($attrs.update);
                     };
 
                     $scope.getEditMode = function() {
@@ -94,7 +92,7 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                     var inputText = '<input class="text {{classes}} " name="{{name}}" id="{{name}}" type="text"  ng-model="value" ng-required="true">';
                     var inputTextarea = '<textarea class="form-control textarea {{clssses}}" name="{{name}}" id="{{name}}" type="text" ng-model="value" required>';
                     var inputHTMLarea = '<textarea ui-tinymce="{{tinymceOptions}}" class="form-control textarea {{classes}}" name="{{name}}" id="{{name}}" ng-model="value" required>';
-                    var inputDate = '<input type="text" class="form-control date {{classes}}" datepicker-popup="{{format}}" ng-model="value" is-open="opened" datepicker-options="dateOptions" required close-text="Close" />';
+                    var inputDate = '<input type="text" class="form-control date {{classes}}" ui-date-format={{format}}" datepicker-popup="{{format}}" ng-model="value" is-open="opened" datepicker-options="dateOptions" required close-text="Close" />';
                     var tpl;
                     switch (contentType) {
                         case 'text':
@@ -127,19 +125,19 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                         }
                     };
                 };
-                
+
                 var controller = function($scope) {
                     $scope.trustedContent = function() {
                         return   $sce.trustAsHtml($scope.value);
                     };
-                    
+
                 };
-                
+
                 return {
                     restrict: 'E',
                     require: '^evEditor',
                     scope: {type: '@type', label: '@', style: '@', name: '@', value: '=', classes: '@', format: '='},
                     link: linker,
-                    controller:  controller
+                    controller: controller
                 };
             }]);
