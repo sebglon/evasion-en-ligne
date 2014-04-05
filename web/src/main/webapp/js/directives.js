@@ -80,6 +80,9 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                         $scope.editMode = false;
                         $scope.changeMode();
                     };
+                },
+                link: function(scope) {
+                    scope.$$nextSibling.editMode= scope.editMode = false;
                 }
             };
         })
