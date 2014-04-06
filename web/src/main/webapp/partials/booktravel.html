@@ -1,5 +1,5 @@
 <div  ng-controller="BooktravelCtrl" class="row" ng-init="init()">
-    <ev-editor  edit="esc.edit()" auth="auth && auth.token && !auth.token.error" name="widgetBookTravel" update="update()">
+    <ev-editor  edit="esc.edit()" auth="auth && auth.token && !auth.token.error" name="widgetBookTravel" update="createOrUpdate()">
         <h1>
             <ev-text type="text" classes="big" value="book.title" label="Titre de votre carnet de voyage" name="titre" ng-required="true"></ev-text>
             <span ng-show="!$$prevSibling.getEditMode()">(du </span>
@@ -8,7 +8,9 @@
             <ev-text type="date" classes="subTitle end_date" value="book.dateFin" format="'dd/MM/yyyy'" label="date de retour" name="dateFin"></ev-text>
             <span ng-show="!$$prevSibling.getEditMode()">)</span>
         </h1>
-        <div></div>
+        <div>
+            
+        </div>
         <div>
             <ev-text type="htmlarea" class="col-md-9" value="book.description" label="Description" name="testContent"></ev-text>
             <div class="col-md-3">

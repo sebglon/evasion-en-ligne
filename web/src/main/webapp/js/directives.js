@@ -42,7 +42,7 @@ angular.module('evasionVisiteurApp.directives', ['ui.bootstrap'])
                         // call save passed on param
                         $scope.editMode = false;
                         $scope.changeMode();
-                        $scope.$eval($attrs.update);
+                        $scope.update();
                     };
 
                     $scope.getEditMode = function() {

@@ -91,16 +91,16 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                     api.booktravel.byId($rootScope.view.contents.dataKey).then(function(data) {
                         $scope.book = data;
                     }, function(reason) {
-                        $scope.book ={};
-                        console.log("Failed to get book: "+reason);
+                        $scope.book = {};
+                        console.log("Failed to get book: " + reason);
                     });
                 };
 
-                $scope.update = function() {
-                    console.log("book: "+angular.toJson($scope.book));
-                    api.booktravel.update($scope.book);
-                };
-                $scope.create = function() {
-                    api.booktravel.create($rootScope.site.id,$scope.book);
+                $scope.createOrUpdate = function() {
+                    if ($scope.book.id || $scope.book.shortName) {
+                        api.booktravel.create($scope.site.id, $scope.book);
+                    } else {
+                        api.booktravel.update($scope.book);
+                    }
                 };
             }]);
