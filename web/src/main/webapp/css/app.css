@@ -104,3 +104,24 @@ input.text, input.date {
 .options2 {
     clear: both;
 }
+
+
+#loading {
+    display: none;
+}
+.deferred-bootstrap-loading #loading {
+    display: block !important;
+    height: 100%;
+    width: 100%;
+    background: white;
+}
+
+#error {
+    display: none;
+}
+.deferred-bootstrap-error #error {
+    display: block !important;
+    background: red;
+    height: 100%;
+    width: 100%;
+}

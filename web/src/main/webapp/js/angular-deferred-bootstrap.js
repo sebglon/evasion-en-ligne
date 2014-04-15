@@ -42,6 +42,7 @@ function checkConfig(config) {
 function doBootstrap(element, module) {
     angular.element(document).ready(function() {
         angular.bootstrap(element, [module]);
+        removeLoadingClass();
     });
 }
 
@@ -84,7 +85,7 @@ function bootstrap(configParam) {
     forEach(config.resolve, callResolveFn);
 
     $q.all(promises)
-            .then(handleResults, handleResults)['finally'](removeLoadingClass);
+            .then(handleResults, handleResults);
 }
 
 // publish external API

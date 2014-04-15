@@ -27,37 +27,20 @@
         <meta content="--allow-file-access-from-files">
         <meta name="fragment" content="!">
         <base href="">  
-
-        <style type="text/css">
-            #loading {
-                display: none;
-            }
-            .deferred-bootstrap-loading #loading {
-                display: block !important;
-            }
-
-            #error {
-                display: none;
-            }
-            .deferred-bootstrap-error #error {
-                display: block !important;
-                background: red;
-            }
-        </style>
     </head>
-    <body>
+    <body class="deferred-bootstrap-loading">
         <div id="loading" class="modal">
-            <div class="modal-body">L o a d i n g . . .</div> 
+            L o a d i n g . . .
         </div>
 
         <!--<div id="error" class="modal">
             <div class="modal-body">Could not load configuration!</div> 
             
         </div>-->
-<!-- backgroud pour block modal -->
-       <!-- <div class="modal-backdrop fade in"></div>-->
-        
-        
+        <!-- backgroud pour block modal -->
+        <!-- <div class="modal-backdrop fade in"></div>-->
+
+
         <div class="container" ng-controller="AppCtrl" ng-init="init()">
             <!-- Gray Header with page title -->
             <div class="row" >
@@ -116,7 +99,7 @@
                         <!-- bloc latéral -->
                         <ins class="adsbygoogle" style="display:inline-block;width:250px;height:250px" data-ad-client="ca-pub-0255871830960911" data-ad-slot="1216541160"></ins>
                         <script>
-                                    (adsbygoogle = window.adsbygoogle || []).push({});
+                                        (adsbygoogle = window.adsbygoogle || []).push({});
                         </script>
                     </div>
                 </div>
