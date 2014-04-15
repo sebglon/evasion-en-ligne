@@ -8,7 +8,7 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
         .config(['apiProvider', function(apiProvider) {
                 apiProvider.setServerUrl('http://www.evasion-en-ligne.com:8080');
             }])
-        .controller('EditStaticContent', ['$scope', '$rootScope', 'api', '$sce', function($scope, $rootScope, api, $sce) {
+        .controller('EditStaticContent', ['$scope', '$rootScope', 'api', '$sce','APP_CONFIG', function($scope, $rootScope, api, $sce, APP_CONFIG) {
 
                 this.tinymceOptions = {
                     plugins: [
@@ -31,17 +31,17 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
                 this.update = function() {
                     var i;
                     // Mise à jour du site;
-                    for (i = 0; $rootScope.site.views.length; i++) {
-                        if ($rootScope.site.views[i].key === $rootScope.view.key) {
-                            $rootScope.site.views[i].title = angular.copy(this.title);
-                            $rootScope.site.views[i].contents.value = angular.copy(this.content);
-                            $rootScope.site.views[i].description = angular.copy(this.description);
-                            $rootScope.view = $rootScope.site.views[i];
+                    for (i = 0; APP_CONFIG.views.length; i++) {
+                        if (APP_CONFIG.views[i].key === $rootScope.view.key) {
+                            APP_CONFIG.views[i].title = angular.copy(this.title);
+                            APP_CONFIG.views[i].contents.value = angular.copy(this.content);
+                            APP_CONFIG.views[i].description = angular.copy(this.description);
+                            $rootScope.view = APP_CONFIG.views[i];
                             break;
                         }
                     }
                     // persistence 
-                    api.site.update($rootScope.site);
+                    api.site.update(APP_CONFIG);
                     this.onEditContent = false;
                 };
                 this.reset = function() {
@@ -98,9 +98,9 @@ angular.module('evasionVisiteurApp.controllers', ['ui.bootstrap', 'evasionVisite
 
                 $scope.createOrUpdate = function() {
                     if ($scope.book.id || $scope.book.shortName) {
-                        api.booktravel.create($scope.site.id, $scope.book);
+                        api.booktravel.update($scope.book);                        
                     } else {
-                        api.booktravel.update($scope.book);
+                        api.booktravel.create($scope.site.id, $scope.book);
                     }
                 };
             }]);
