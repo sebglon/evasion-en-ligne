@@ -4,7 +4,6 @@
  */
 package org.evasion.cloud.service;
 
-import org.evasion.cloud.service.updator.SiteUpdator;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.KeyFactory;
 import java.util.ArrayList;
@@ -14,8 +13,6 @@ import javax.annotation.security.DeclareRoles;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.ws.rs.Path;
-import org.evasion.cloud.service.common.PMF;
-import org.evasion.cloud.service.model.Site;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -23,10 +20,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import org.evasion.cloud.api.data.ISite;
 import org.evasion.cloud.api.service.ISiteService;
+import org.evasion.cloud.service.common.PMF;
+
+import static org.evasion.cloud.service.common.RolesConst.*;
 import org.evasion.cloud.service.mapper.MapperUtils;
 import org.evasion.cloud.service.model.Content;
 import org.evasion.cloud.service.model.ContentConst;
+import org.evasion.cloud.service.model.Site;
 import org.evasion.cloud.service.model.View;
+import org.evasion.cloud.service.updator.SiteUpdator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,17 +61,33 @@ public class SiteService extends AbstractService<ISite, Site> implements ISiteSe
         Query query = pm.newQuery(Site.class, ":p.contains(subdomain)");
         query.setUnique(true);
         Site site = (Site) query.execute(subdmain);
-     /*   if (site.getVersion() == null) {
-            try {
-                site = updator.upgrade(site);
-                pm.makePersistent(site);
-            } catch (EntityNotFoundException ex) {
-                LOG.error("Fail to upgrade site {}", site.getSubdomain());
-            }
-        }*/
-        
+        /*   if (site.getVersion() == null) {
+         try {
+         site = updator.upgrade(site);
+         pm.makePersistent(site);
+         } catch (EntityNotFoundException ex) {
+         LOG.error("Fail to upgrade site {}", site.getSubdomain());
+         }
+         }*/
+        if (site == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
         return MapperUtils.convertFromSite(site);
 
+    }
+
+    private View initAdminView() {
+        View admin = new View();
+        admin.setTitle("Administration");
+        admin.setUrl("/admin");
+        Content content = new Content();
+        content.setType(ContentConst.STATIC);
+        content.setValue("Contenu par défaut");
+        admin.setContents(content);
+        admin.setAccessRole(new String[]{ADMIN, AUTHOR});
+        admin.setIndex(9999);
+
+        return admin;
     }
 
     @Override
@@ -95,17 +113,8 @@ public class SiteService extends AbstractService<ISite, Site> implements ISiteSe
             defaultView.setIndex(0);
             site.setViews(new ArrayList<View>());
             site.getViews().add(defaultView);
+            site.getViews().add(initAdminView());
 
-            View booktravelView = new View();
-            booktravelView.setUrl("/voyage");
-            Content btContent = new Content();
-            btContent.setType(ContentConst.TEMPLATE_URL);
-            btContent.setValue("partials/booktravel.html");
-            btContent.setDataKey(Integer.toString(5));
-            booktravelView.setContents(btContent);
-            booktravelView.setTitle("carnet de voyage");
-            booktravelView.setIndex(1);
-            site.getViews().add(booktravelView);
             site.setUserId(getUser().getId());
             site.setFullName(getUser().getName());
             site.setSubdomain(subdomain);
@@ -139,13 +148,11 @@ public class SiteService extends AbstractService<ISite, Site> implements ISiteSe
                 LOG.warn("Site not found or no author for user: {} {}", siteBdd, user);
                 throw new WebApplicationException(Response.Status.NOT_FOUND);
             }
-            if (null == user || !siteBdd.getUserId().equals(user)|| securityContext.isUserInRole("admin")) {
+            if (null == user || !siteBdd.getUserId().equals(user) || securityContext.isUserInRole("admin")) {
                 LOG.warn("Not same user on update site: {}/ {}", siteBdd.getUserId(), user);
                 throw new WebApplicationException(Response.Status.FORBIDDEN);
             }
 
-
-            
             // Reset du sous domain pour s'assurer qu'il ne soit pas changer
             eSite.setSubdomain(siteBdd.getSubdomain());
             eSite.setUserId(siteBdd.getUserId());

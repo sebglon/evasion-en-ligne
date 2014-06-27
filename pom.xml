@@ -46,7 +46,7 @@
         <gae.application.version>test</gae.application.version>
 
         <github.global.server>github</github.global.server> 
-        <jersey.version>1.18</jersey.version>
+        <jersey.version>2.10</jersey.version>
     </properties>
     <modules>
         <module>web</module>
@@ -288,7 +288,7 @@
                         </dependency>
                     </dependencies>                        
                 </plugin>
-                <plugin>
+             <!--   <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>jarjar-maven-plugin</artifactId>
                     <executions>
@@ -311,28 +311,28 @@
                             </configuration>
                         </execution>
                     </executions>
-                </plugin>
+                </plugin>-->
             </plugins>
         </pluginManagement>
     </build>
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.sun.jersey.jersey-test-framework</groupId>
+                <groupId>org.glassfish.jersey.test-framework</groupId>
                 <artifactId>jersey-test-framework-core</artifactId>
                 <version>${jersey.version}</version>
                 <scope>test</scope>
             </dependency>
        
             <dependency>
-                <groupId>com.sun.jersey.jersey-test-framework</groupId>
-                <artifactId>jersey-test-framework-inmemory</artifactId>
+                <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+                <artifactId>jersey-test-framework-provider-inmemory</artifactId>
                 <version>${jersey.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-json</artifactId>
+                <groupId>org.glassfish.jersey.media</groupId>
+                <artifactId>jersey-media-json-jackson</artifactId>
                 <version>${jersey.version}</version>
             </dependency>
             <dependency>
@@ -401,13 +401,14 @@
                 <version>1.2.17</version>
             </dependency>
             <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-server</artifactId>
+                <groupId>org.glassfish.jersey.containers</groupId>
+                <!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core"  -->
+                <artifactId>jersey-container-servlet</artifactId>
                 <version>${jersey.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-servlet</artifactId>
+                <groupId>org.glassfish.jersey.core</groupId>
+                <artifactId>jersey-client</artifactId>
                 <version>${jersey.version}</version>
             </dependency>
             <!--
@@ -513,11 +514,6 @@
                 <artifactId>google-http-client-jackson</artifactId>
                 <version>1.17.0-rc</version>
             </dependency>
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-asl</artifactId>
-                <version>1.9.2</version>
-            </dependency>       
         </dependencies>
     </dependencyManagement>
     <profiles>

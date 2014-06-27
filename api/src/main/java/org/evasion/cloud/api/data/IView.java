@@ -10,12 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import org.evasion.cloud.api.data.adapter.MapAdapter;
 
 /**
  *
@@ -92,6 +87,27 @@ public class IView implements Serializable, Comparable<IView> {
     public void setIndex(int index) {
         this.index = index;
     }
+    
+    private String[] accessRole;
+    
+    private String relatedModule;
+
+    public String[] getAccessRole() {
+        return accessRole;
+    }
+
+    public void setAccessRole(String[] accessRole) {
+        this.accessRole = accessRole;
+    }
+
+    public String getRelatedModule() {
+        return relatedModule;
+    }
+
+    public void setRelatedModule(String relatedModule) {
+        this.relatedModule = relatedModule;
+    }
+    
 
     @Override
     public int compareTo(IView o) {

@@ -38,6 +38,12 @@ public class View implements Comparable<View>{
 
     @Persistent
     private String description;
+    
+    @Persistent
+    private String[] accessRole;
+    
+        @Persistent
+    private String relatedModule;
 
     @Persistent(defaultFetchGroup = "true")
     @Element(dependent = "true")
@@ -101,6 +107,22 @@ public class View implements Comparable<View>{
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public String[] getAccessRole() {
+        return accessRole;
+    }
+
+    public void setAccessRole(String[] accessRole) {
+        this.accessRole = accessRole;
+    }
+
+    public String getRelatedModule() {
+        return relatedModule;
+    }
+
+    public void setRelatedModule(String relatedModule) {
+        this.relatedModule = relatedModule;
     }
 
     @Override

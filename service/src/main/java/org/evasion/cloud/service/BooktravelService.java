@@ -9,14 +9,17 @@ import com.google.appengine.api.datastore.KeyFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import javax.jdo.PersistenceManager;
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import org.evasion.cloud.api.data.IModuleDescriptor;
 import org.evasion.cloud.api.data.booktravel.IBook;
 import org.evasion.cloud.api.service.IBookTravelService;
+import org.evasion.cloud.api.service.IModuleService;
 import org.evasion.cloud.service.common.PMF;
 import org.evasion.cloud.service.mapper.MapperUtils;
 import org.evasion.cloud.service.model.Content;
@@ -32,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * @author sgl
  */
 @Path("booktravel")
-public class BooktravelService extends AbstractService<IBook, Book> implements IBookTravelService {
+public class BooktravelService extends AbstractService<IBook, Book> implements IBookTravelService, IModuleService {
 
     @Context
     private SecurityContext securityContext;
@@ -40,6 +43,7 @@ public class BooktravelService extends AbstractService<IBook, Book> implements I
     private static final Logger LOG = LoggerFactory.getLogger(BooktravelService.class);
 
     private static final Integer API_VERSION = 1;
+    private static final String API_MODULE_KEY = "booktravel";
 
     @Override
     public String getVersion() {
@@ -49,7 +53,9 @@ public class BooktravelService extends AbstractService<IBook, Book> implements I
     @Override
     public IBook create(String siteid, IBook book) {
 
-        if (null == siteid || null == book || book.getTitle() == null || book.getTitle().isEmpty()) {
+        if (null == siteid || null == book || book.getTitle() == null || book.getTitle().isEmpty()
+                || book.getShortName() == null || book.getShortName().isEmpty()
+                || (book.getId() != null && !book.getId().isEmpty())) {
             throw new WebApplicationException(Response.Status.PRECONDITION_FAILED);
         }
         PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -73,6 +79,8 @@ public class BooktravelService extends AbstractService<IBook, Book> implements I
             booktravelView.setContents(btContent);
             booktravelView.setTitle("carnet de voyage");
             booktravelView.setIndex(site.getViews().size() + 1);
+            booktravelView.setAccessRole(new String[] {"ANONYMOUS","AUTHOR", "ADMIN"});
+            booktravelView.setRelatedModule(API_MODULE_KEY+"/"+API_VERSION);
             site.getViews().add(booktravelView);
 
             LOG.debug("Book to create :{}", bookBase);
@@ -101,7 +109,7 @@ public class BooktravelService extends AbstractService<IBook, Book> implements I
         if (null == securityContext.getUserPrincipal() || !site.getUserId().equals(getUser().getId())) {
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
-        
+
         // the shortName book can't be changed.
         if (!book.getShortName().equals(oldBook.getShortName())) {
             throw new WebApplicationException(Response.Status.NOT_ACCEPTABLE);
@@ -151,6 +159,21 @@ public class BooktravelService extends AbstractService<IBook, Book> implements I
             pm.close();
         }
         return MapperUtils.convertFromBook(book);
+    }
+
+    @Override
+    public IModuleDescriptor getModuleDescriptor() {
+
+        return descriptor;
+    }
+
+    private static final IModuleDescriptor descriptor;
+
+    static {
+        descriptor = new IModuleDescriptor("1",
+                "Booktravel",
+                "1.0",
+                new HashMap<String, String>());
     }
 
 }

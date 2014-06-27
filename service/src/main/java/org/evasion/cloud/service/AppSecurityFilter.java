@@ -7,18 +7,16 @@ package org.evasion.cloud.service;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.oauth2.Oauth2;
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerRequestFilter;
-import com.sun.jersey.spi.container.ContainerResponse;
-import com.sun.jersey.spi.container.ContainerResponseFilter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
 import java.util.regex.Pattern;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 import org.evasion.cloud.service.security.EvasionSecurityContext;
 import org.slf4j.LoggerFactory;
@@ -36,15 +34,16 @@ public class AppSecurityFilter implements ContainerRequestFilter, ContainerRespo
     private boolean isNew = true;
 
     @Override
-    public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
+    public void filter(ContainerRequestContext request, ContainerResponseContext response) {
         // Generation d'un Coockie de suivi pour tous nouveaux utilisateurs
-        if (isNew) {
-            LOG.debug("domain .{}", getDomain(request.getBaseUri()));
-            NewCookie userIdCookie = new NewCookie(Constant.COOKIE_NAME, userId, "/", getDomain(request.getBaseUri()), 1, "no comment", 999999, false);
-            javax.ws.rs.core.Response cookieResponse = Response.fromResponse(response.getResponse()).cookie(userIdCookie).build();
-            response.setResponse(cookieResponse);
+        if (!request.getCookies().containsKey(Constant.COOKIE_NAME)) {
+            userId = UUID.randomUUID().toString();
+            String domain = getDomain(request.getUriInfo().getBaseUri());
+            LOG.debug("domain .{}", domain);
+            NewCookie userIdCookie = new NewCookie(Constant.COOKIE_NAME, userId, "/", getDomain(request.getUriInfo().getBaseUri()), 1, "no comment", 999999, false);
+            response.getHeaders().add("Set-Cookie", userIdCookie);
+            //response.getCookies().put(Constant.COOKIE_NAME, userIdCookie);
         }
-        return response;
     }
 
     private String getDomain(URI url) {
@@ -60,12 +59,9 @@ public class AppSecurityFilter implements ContainerRequestFilter, ContainerRespo
     }
 
     @Override
-    public ContainerRequest filter(ContainerRequest request) {
+    public void filter(ContainerRequestContext request) {
         LOG.debug("user cookie: {} / ", request.getCookies().get(Constant.COOKIE_NAME), request.getCookies().get("X-"+Constant.COOKIE_NAME));
-        if (!request.getCookies().containsKey(Constant.COOKIE_NAME)) {
-            userId = UUID.randomUUID().toString();
-            isNew = true;
-        } else {
+        if (request.getCookies().containsKey(Constant.COOKIE_NAME)) {
             userId = request.getCookies().get(Constant.COOKIE_NAME).getValue();
             isNew = false;
             try {
@@ -73,7 +69,7 @@ public class AppSecurityFilter implements ContainerRequestFilter, ContainerRespo
                 if (credential != null) {
                     credential.refreshToken();
                     Oauth2 service = new Oauth2.Builder(OauthCodeFlow.HTTP_TRANSPORT, OauthCodeFlow.JSON_FACTORY, credential).build();
-                    request.setSecurityContext(new EvasionSecurityContext("https".equalsIgnoreCase(request.getBaseUri().getScheme()), userId, service.userinfo().get().execute()));
+                    request.setSecurityContext(new EvasionSecurityContext("https".equalsIgnoreCase(request.getUriInfo().getBaseUri().getScheme()), userId, service.userinfo().get().execute()));
                 }
             } catch (IOException ex) {
                 LOG.error("FAIL to load Google credential", ex);
@@ -81,6 +77,5 @@ public class AppSecurityFilter implements ContainerRequestFilter, ContainerRespo
             }
 
         }
-        return request;
     }
 }

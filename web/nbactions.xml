@@ -23,21 +23,6 @@
             </goals>
         </action>
         <action>
-            <actionName>run</actionName>
-            <packagings>
-                <packaging>war</packaging>
-                <packaging>ear</packaging>
-                <packaging>ejb</packaging>
-            </packagings>
-            <goals>
-                <goal>package</goal>
-                <goal>appengine:devserver</goal>
-            </goals>
-            <properties>
-                <netbeans.deploy>false</netbeans.deploy>
-            </properties>
-        </action>
-        <action>
             <actionName>debug</actionName>
             <packagings>
                 <packaging>war</packaging>
@@ -53,6 +38,8 @@
                 <netbeans.deploy>false</netbeans.deploy>
             </properties>
         </action>
+        
+        
         
         
         

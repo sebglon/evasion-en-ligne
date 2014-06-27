@@ -20,8 +20,8 @@
             <artifactId>jodd-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-server</artifactId>
+                <groupId>org.glassfish.jersey.containers</groupId>
+                <artifactId>jersey-container-servlet</artifactId>
         </dependency> 
     </dependencies>
 </project>
